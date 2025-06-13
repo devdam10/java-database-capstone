@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,10 @@ public class Admin {
 
     @NotNull(message = "Username is required!")
     private String username;
+
+    @NotNull(message = "Email is required!")
+    @Email
+    private String email;
 
     @NotNull(message = "Password is required!")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
