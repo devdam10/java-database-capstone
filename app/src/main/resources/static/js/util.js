@@ -32,3 +32,18 @@
    - Use `clearRole()` on logout to remove any potentially sensitive session information.
 
 */
+
+// Store the user's role in localStorage
+export function setRole(role) {
+    localStorage.setItem("userRole", role);
+}
+
+// Retrieve the user's role from localStorage
+export function getRole() {
+    return localStorage.getItem("userRole");
+}
+
+// Remove the user's role from localStorage
+export function clearRole() {
+    localStorage.removeItem("userRole");
+}

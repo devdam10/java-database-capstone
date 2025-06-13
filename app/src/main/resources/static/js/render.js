@@ -28,3 +28,72 @@
    - It ensures that users are sent to their respective dashboard based on their role and token validity.
 
 */
+
+// Handles redirection after user selects or logs in with a role
+export function selectRole(role) {
+    const token = localStorage.getItem("token");
+
+    switch (role) {
+        case "admin":
+            if (token) {
+                window.location.href = `adminDashboard.html?token=${token}`;
+            } else {
+                alert("Authentication token missing for admin access.");
+                window.location.href = "login.html";
+            }
+            break;
+
+        case "patient":
+            window.location.href = "patientDashboard.html";
+            break;
+
+        case "doctor":
+            if (token) {
+                window.location.href = `doctorDashboard.html?token=${token}`;
+            } else {
+                alert("Authentication token missing for doctor access.");
+                window.location.href = "login.html";
+            }
+            break;
+
+        case "loggedPatient":
+            window.location.href = "loggedPatientDashboard.html";
+            break;
+
+        default:
+            // If role unknown, redirect to home or login
+            window.location.href = "index.html";
+            break;
+    }
+}
+
+// Renders content or redirects based on user role
+export function renderContent() {
+    const role = getRole(); // Assume getRole() is globally available or imported
+
+    if (!role) {
+        // No role found, redirect to role selection or login page
+        window.location.href = "index.html";
+        return;
+    }
+
+    // Role-specific rendering logic here
+    // Example:
+    switch (role) {
+        case "admin":
+            // Load admin-specific content or redirect
+            break;
+        case "patient":
+            // Load patient-specific content or redirect
+            break;
+        case "doctor":
+            // Load doctor-specific content or redirect
+            break;
+        case "loggedPatient":
+            // Load logged-in patient content
+            break;
+        default:
+            window.location.href = "index.html";
+            break;
+    }
+}

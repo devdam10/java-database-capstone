@@ -48,3 +48,86 @@
     - If saving fails:
         - Show an error alert with the message
 */
+
+import { savePrescription, getPrescription } from "../services/prescriptionService.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+    // Get references to form elements
+    const heading = document.getElementById("form-heading");
+    const patientNameInput = document.getElementById("patientName");
+    const medicationInput = document.getElementById("medication");
+    const dosageInput = document.getElementById("dosage");
+    const notesInput = document.getElementById("notes");
+    const saveBtn = document.getElementById("saveBtn");
+
+    // Extract query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const appointmentId = urlParams.get("appointmentId");
+    const mode = urlParams.get("mode") || "add";
+    const patientName = urlParams.get("patientName") || "";
+
+    // Get stored token
+    const token = localStorage.getItem("token");
+
+    // Update heading text based on mode
+    if (heading) {
+        heading.textContent = mode === "view" ? "View Prescription" : "Add Prescription";
+    }
+
+    // Pre-fill patient name if available
+    if (patientNameInput && patientName) {
+        patientNameInput.value = patientName;
+    }
+
+    // Fetch and populate prescription data if available
+    if (appointmentId && token) {
+        try {
+            const response = await getPrescription(appointmentId, token);
+            if (response && Array.isArray(response.prescription) && response.prescription.length > 0) {
+                const data = response.prescription[0];
+                medicationInput.value = data.medication || "";
+                dosageInput.value = data.dosage || "";
+                notesInput.value = data.notes || "";
+            }
+        } catch (err) {
+            console.error("No prescription found or error retrieving it:", err);
+        }
+    }
+
+    // If view mode, disable inputs and hide the save button
+    if (mode === "view") {
+        if (patientNameInput) patientNameInput.disabled = true;
+        if (medicationInput) medicationInput.disabled = true;
+        if (dosageInput) dosageInput.disabled = true;
+        if (notesInput) notesInput.disabled = true;
+        if (saveBtn) saveBtn.style.display = "none";
+    }
+
+    // Save button click handler
+    if (saveBtn) {
+        saveBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            const prescription = {
+                appointmentId,
+                patientName: patientNameInput.value,
+                medication: medicationInput.value,
+                dosage: dosageInput.value,
+                notes: notesInput.value,
+            };
+
+            const result = await savePrescription(prescription, token);
+            if (result.success) {
+                alert("Prescription saved successfully.");
+                // Redirect or go back to doctor view
+                if (typeof selectRole === "function") {
+                    selectRole("doctor");
+                } else {
+                    window.location.href = "dashboard.html"; // fallback
+                }
+            } else {
+                alert("Error saving prescription: " + result.message);
+            }
+        });
+    }
+});

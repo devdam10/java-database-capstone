@@ -41,9 +41,9 @@ Import the overlay function for booking appointments from loggedPatient.js
 */
 
 // Import external functions assumed available from other modules
-import { showBookingOverlay } from "./loggedPatient.js";
-import { deleteDoctor } from "./doctorServices.js";
-import { getPatientData } from "./patientServices.js";
+import { showBookingOverlay } from "../loggedPatient.js";
+import { deleteDoctor } from "../services/doctorServices.js";
+import { getPatientData } from "../services/patientServices.js";
 
 export async function createDoctorCard(doctor) {
     // Main card container

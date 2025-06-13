@@ -46,3 +46,127 @@ Add filtering functionality for search and dropdown:
      - Re-render the filtered appointments using renderAppointments().
 
 */
+
+// Import required service functions
+import {
+    getPatientAppointments,
+    getPatientData,
+    filterAppointments,
+} from "../services/patientService.js";
+
+// DOM Elements & Variables
+const tableBody = document.querySelector("#appointmentsTable tbody");
+const searchInput = document.getElementById("searchBar");
+const filterDropdown = document.getElementById("appointmentFilter");
+
+let token = localStorage.getItem("token");
+let allAppointments = [];
+let filteredAppointments = [];
+let patientId = null;
+
+// Initialize on page load
+document.addEventListener("DOMContentLoaded", async () => {
+    if (!token) return; // Stop if no auth token
+
+    try {
+        // Fetch patient profile data
+        const patientData = await getPatientData(token);
+        patientId = patientData.id;
+
+        // Fetch all appointments linked to this patient
+        allAppointments = await getPatientAppointments(token);
+
+        // Filter only appointments for this patient
+        filteredAppointments = allAppointments.filter(
+            (appt) => appt.patientId === patientId
+        );
+
+        // Render initial appointments list
+        renderAppointments(filteredAppointments);
+    } catch (error) {
+        console.error("Failed to load patient data or appointments:", error);
+        tableBody.innerHTML = `<tr><td colspan="6" class="text-red-600">Failed to load appointments.</td></tr>`;
+    }
+});
+
+// Render appointment rows in the table
+function renderAppointments(appointments) {
+    tableBody.innerHTML = ""; // Clear previous rows
+
+    // Make sure Actions column is always visible (adjust CSS if needed)
+    const actionsHeader = document.querySelector("th.actions");
+    if (actionsHeader) actionsHeader.style.display = "";
+
+    if (!appointments.length) {
+        tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-gray-600">No Appointments Found.</td></tr>`;
+        return;
+    }
+
+    appointments.forEach((appt) => {
+        const tr = document.createElement("tr");
+
+        // Columns: Patient ("You"), Doctor, Date, Time, Status, Actions
+        tr.innerHTML = `
+      <td>You</td>
+      <td>${appt.doctorName}</td>
+      <td>${appt.date}</td>
+      <td>${appt.time}</td>
+      <td>${appt.status === 0 ? "Editable" : "Locked"}</td>
+      <td class="actions">
+        ${
+            appt.status === 0
+                ? `<button class="edit-btn" data-id="${appt.id}">✏️ Edit</button>`
+                : `<span>—</span>`
+        }
+      </td>
+    `;
+
+        // Attach click listener on edit button if editable
+        if (appt.status === 0) {
+            tr.querySelector(".edit-btn").addEventListener("click", () =>
+                redirectToEdit(appt)
+            );
+        }
+
+        tableBody.appendChild(tr);
+    });
+}
+
+// Redirect to appointment edit page with query params
+function redirectToEdit(appt) {
+    const params = new URLSearchParams({
+        appointmentId: appt.id,
+        patientId: patientId,
+        patientName: "You",
+        doctorName: appt.doctorName,
+        doctorId: appt.doctorId,
+        date: appt.date,
+        time: appt.time,
+    });
+
+    window.location.href = `updateAppointment.html?${params.toString()}`;
+}
+
+// Filtering on search input and dropdown change
+searchInput.addEventListener("input", handleFilterChange);
+filterDropdown.addEventListener("change", handleFilterChange);
+
+async function handleFilterChange() {
+    const searchTerm = searchInput.value.trim();
+    const filter = filterDropdown.value;
+
+    try {
+        const filtered = await filterAppointments(searchTerm, filter, token);
+
+        // Only show appointments for current patient
+        const patientFiltered = filtered.filter(
+            (appt) => appt.patientId === patientId
+        );
+
+        renderAppointments(patientFiltered);
+    } catch (error) {
+        console.error("Failed to filter appointments:", error);
+        tableBody.innerHTML = `<tr><td colspan="6" class="text-red-600">Failed to load filtered appointments.</td></tr>`;
+    }
+}
+

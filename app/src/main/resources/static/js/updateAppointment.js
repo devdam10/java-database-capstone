@@ -41,3 +41,93 @@
    - This script is used on the page that allows patients to update their existing appointments with a doctor. It ensures the correct data is pre-populated, the form is validated, and the update process is properly handled.
 
 */
+
+import { getDoctors, updateAppointment } from "./appointmentService.js";
+
+const urlParams = new URLSearchParams(window.location.search);
+const token = localStorage.getItem("token");
+
+const appointmentId = urlParams.get("appointmentId");
+const patientId = urlParams.get("patientId") || localStorage.getItem("patientId");
+const doctorId = urlParams.get("doctorId");
+const patientName = urlParams.get("patientName");
+const doctorName = urlParams.get("doctorName");
+const appointmentDate = urlParams.get("date");
+const appointmentTime = urlParams.get("time");
+
+const appointmentDateInput = document.getElementById("appointmentDate");
+const appointmentTimeSelect = document.getElementById("appointmentTime");
+const patientNameInput = document.getElementById("patientName");
+const doctorNameInput = document.getElementById("doctorName");
+const updateForm = document.getElementById("updateAppointmentForm");
+const errorMsg = document.getElementById("errorMessage");
+
+async function initializePage() {
+    if (!token || !patientId) {
+        window.location.href = "patientAppointments.html";
+        return;
+    }
+
+    patientNameInput.value = patientName || "";
+    doctorNameInput.value = doctorName || "";
+    appointmentDateInput.value = appointmentDate || "";
+
+    try {
+        const doctors = await getDoctors(token);
+        const doctor = doctors.find((doc) => doc.id === doctorId);
+
+        if (!doctor) {
+            alert("Selected doctor not found.");
+            return;
+        }
+
+        // Populate available times for selected doctor
+        appointmentTimeSelect.innerHTML = ""; // Clear existing options
+        doctor.availableTimes.forEach((time) => {
+            const option = document.createElement("option");
+            option.value = time;
+            option.textContent = time;
+            if (time === appointmentTime) option.selected = true;
+            appointmentTimeSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Failed to load doctors:", error);
+        alert("Failed to load doctor information. Please try again later.");
+    }
+}
+
+updateForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const updatedDate = appointmentDateInput.value;
+    const updatedTime = appointmentTimeSelect.value;
+
+    if (!updatedDate || !updatedTime) {
+        alert("Please select both appointment date and time.");
+        return;
+    }
+
+    const updatedAppointment = {
+        appointmentId,
+        patientId,
+        doctorId,
+        date: updatedDate,
+        time: updatedTime,
+    };
+
+    try {
+        const response = await updateAppointment(updatedAppointment, token);
+        if (response.success) {
+            alert("Appointment updated successfully.");
+            window.location.href = "patientAppointments.html";
+        } else {
+            alert(`Update failed: ${response.message || "Unknown error"}`);
+        }
+    } catch (error) {
+        console.error("Error updating appointment:", error);
+        alert("An error occurred while updating the appointment. Please try again.");
+    }
+});
+
+// Initialize page on DOM load
+document.addEventListener("DOMContentLoaded", initializePage);

@@ -27,3 +27,45 @@
 
   Return the constructed <tr> element so it can be appended to a table in the DOM
 */
+
+export function createPatientRow(patient, appointmentId, doctorId) {
+    // Create the table row
+    const row = document.createElement('tr');
+
+    // Set the row's inner HTML with the specified columns
+    row.innerHTML = `
+    <td class="patient-id" style="cursor: pointer; color: blue;">${patient.id}</td>
+    <td>${patient.name}</td>
+    <td>${patient.phone}</td>
+    <td>${patient.email}</td>
+    <td>
+      <img 
+        src="/assets/icons/prescription.svg" 
+        alt="Add Prescription" 
+        class="prescription-btn" 
+        data-id="${patient.id}" 
+        style="cursor: pointer; width: 20px;"
+      />
+    </td>
+  `;
+
+    // Add click event to patient-id cell to redirect to patientRecord.html
+    const patientIdCell = row.querySelector('.patient-id');
+    if (patientIdCell) {
+        patientIdCell.addEventListener('click', () => {
+            window.location.href = `patientRecord.html?patientId=${patient.id}&doctorId=${doctorId}`;
+        });
+    }
+
+    // Add click event to prescription icon to redirect to addPrescription.html
+    const prescriptionBtn = row.querySelector('.prescription-btn');
+    if (prescriptionBtn) {
+        prescriptionBtn.addEventListener('click', () => {
+            const patientNameEncoded = encodeURIComponent(patient.name);
+            window.location.href = `addPrescription.html?appointmentId=${appointmentId}&patientName=${patientNameEncoded}`;
+        });
+    }
+
+    // Return the constructed row
+    return row;
+}
