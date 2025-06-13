@@ -36,6 +36,10 @@ export function openModal(type) {
           </div>
         </div>
         <button class="dashboard-btn" id="saveDoctorBtn">Save</button>
+        <!--         <form id="addDoctorForm">
+          <button type="submit">Add Doctor</button>
+        </form>
+        -->
       `;
   } else if (type === 'patientLogin') {
     modalContent = `

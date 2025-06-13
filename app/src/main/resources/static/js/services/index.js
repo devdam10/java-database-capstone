@@ -48,10 +48,111 @@
     - Parse the JSON response to get the token
     - Store the token in localStorage
     - Call selectRole('doctor') to proceed with doctor-specific behavior
-*/
+
   Step 5: If login fails:
     - Show an alert for invalid credentials
 
   Step 6: Wrap in a try-catch block to handle errors gracefully
     - Log the error to the console
     - Show a generic error message
+*/
+
+// File: app/src/main/resources/static/js/services/index.js
+
+import { openModal } from "../components/modals.js";
+// Assuming base API URL is set elsewhere or use relative paths here
+const ADMIN_API = '/admin';
+const DOCTOR_API = '/doctor/login';
+
+window.onload = function () {
+  const adminBtn = document.getElementById('adminLogin');
+  if (adminBtn) {
+    adminBtn.addEventListener('click', () => {
+      openModal('adminLogin');
+    });
+  }
+
+  const doctorBtn = document.getElementById('doctorLogin');
+  if (doctorBtn) {
+    doctorBtn.addEventListener('click', () => {
+      openModal('doctorLogin');
+    });
+  }
+};
+
+// Admin Login Handler
+window.adminLoginHandler = async function () {
+  try {
+    const usernameInput = document.getElementById('adminUsername');
+    const passwordInput = document.getElementById('adminPassword');
+
+    if (!usernameInput || !passwordInput) {
+      alert("Login inputs not found");
+      return;
+    }
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    const admin = { username, password };
+
+    const response = await fetch(ADMIN_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(admin),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      selectRole('admin');
+    } else {
+      alert("Invalid credentials!");
+    }
+  } catch (error) {
+    alert("An error occurred during login. Please try again.");
+    console.error(error);
+  }
+};
+
+// Doctor Login Handler
+window.doctorLoginHandler = async function () {
+  try {
+    const emailInput = document.getElementById('doctorEmail');
+    const passwordInput = document.getElementById('doctorPassword');
+
+    if (!emailInput || !passwordInput) {
+      alert("Login inputs not found");
+      return;
+    }
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    const doctor = { email, password };
+
+    const response = await fetch(DOCTOR_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(doctor),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      selectRole('doctor');
+    } else {
+      alert("Invalid credentials!");
+    }
+  } catch (error) {
+    alert("An error occurred during login. Please try again.");
+    console.error(error);
+  }
+};
+
+// Helper function to save role and proceed (assumed imported or globally defined elsewhere)
+function selectRole(role) {
+  localStorage.setItem('userRole', role);
+  // Add any page redirection or UI changes needed after login here
+  // e.g. window.location.href = '/dashboard';
+}
