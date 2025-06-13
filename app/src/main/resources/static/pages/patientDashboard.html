@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/svg+xml" href="../assets/images/logo/logo.png" />
-    <title>PatientDashboard</title>
+    <title>Patient Dashboard</title>
     <link rel = "stylesheet" href = "../assets/css/adminDashboard.css">
     <link rel = "stylesheet" href = "../assets/css/style.css">
     <link rel = "stylesheet" href = "../assets/css/patientDashboard.css">
@@ -14,6 +14,7 @@
     <script src = "../js/components/footer.js" defer></script>
     <script type = "module" src="../js/components/modals.js"></script>
 </head>
+
 <body onload="renderContent()">
     <div class="container">
         <div class="wrapper">
@@ -49,12 +50,14 @@
             <div id="footer"></div>
         </div>
     </div>
+
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeModal">&times;</span>
             <div id="modal-body"></div>
         </div>
     </div>
+
     <script type = "module" src = "../js/patientDashboard.js" defer></script>
 </body> 
 </html>

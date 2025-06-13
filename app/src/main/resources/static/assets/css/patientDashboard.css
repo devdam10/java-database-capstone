@@ -1,4 +1,4 @@
-.card-actions {
+/*.card-actions {
     background-color: #244557;
     padding: 10px;
     text-align: center;
@@ -7,6 +7,7 @@
   .card-actions:hover{
     background-color: #1c3745;
   }
+
   .ripple-overlay {
     position: fixed;
     width: 20px;
@@ -25,17 +26,17 @@
   
   .modalApp {
     position: fixed;
-  bottom: -100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50%;
-  background: #fff;
-  padding: 20px;
-  z-index: 10000;
-  transition: bottom 1.5s ease-in;
-  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 10px 10px 0 0;
-  text-align: center;
+    bottom: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    background: #fff;
+    padding: 20px;
+    z-index: 10000;
+    transition: bottom 1.5s ease-in;
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px 10px 0 0;
+    text-align: center;
   }
   
   .modalApp.active {
@@ -48,18 +49,16 @@
   
   .modalApp input {
     display: block;
-    margin: 10px auto;
     padding: 10px;
     width: 90%;
-    margin-bottom: 40px;
+    margin: 10px auto 40px;
   }
 
   .modalApp select {
     display: block;
-    margin: 10px auto;
     padding: 10px;
     width: 90%;
-    margin-bottom: 40px;
+    margin: 10px auto 40px;
   }
   
   .confirm-booking {
@@ -68,12 +67,170 @@
     color: #fff;
     border: none;
     cursor: pointer;
-    
-  
-    
   }
+
   .confirm-booking:hover {
     filter: brightness(1.2);
     background-color: #1c3745;
   }
-  
+  */
+
+/* patientDashboard.css – Styles for patientDashboard.html */
+
+/* === 1. Global Reset & Base Styles === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f9;
+}
+
+/* === 2. Layout Wrapper === */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* === 3. Search Bar === */
+.searchBar {
+  width: 60%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+/* === 4. Filter Section === */
+.filter-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+  justify-content: center;
+}
+
+.filter-select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 200px;
+}
+
+/* === 5. Doctor Card Actions === */
+.card-actions {
+  background-color: #015c5d;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.card-actions:hover {
+  background-color: #014446;
+}
+
+/* === 6. Ripple Overlay Animation === */
+.ripple {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-effect 0.6s ease-out forwards;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(20);
+    opacity: 0;
+  }
+}
+
+/* === 7. Modal Booking Popup === */
+.modalApp {
+  position: fixed;
+  bottom: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+  transition: bottom 0.4s ease;
+  z-index: 999;
+}
+
+.modalApp.active {
+  bottom: 0;
+}
+
+/* === 8. Form Fields in Modal === */
+.modalApp input,
+.modalApp select {
+  width: 90%;
+  padding: 10px;
+  margin: 10px auto;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* === 9. Booking Confirmation Button === */
+.book-btn {
+  background-color: #015c5d;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.book-btn:hover {
+  filter: brightness(1.2);
+}
+
+/* === 10. Responsive Design === */
+@media (max-width: 768px) {
+  .searchBar {
+    width: 90%;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .modalApp {
+    width: 95%;
+  }
+}
