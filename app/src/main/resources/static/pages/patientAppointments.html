@@ -97,3 +97,70 @@ This HTML file provides a structured interface for displaying and managing patie
 
    * Properly close all open elements to maintain valid and clean HTML.
  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="../assets/images/logo/logo.png" />
+    <title>Patient Appointments</title>
+
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="../assets/css/adminDashboard.css" />
+    <link rel="stylesheet" href="../assets/css/doctorDashboard.css" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+
+    <!-- JavaScript Files -->
+    <script src="../assets/js/render.js" defer></script>
+    <script src="../assets/js/util.js" defer></script>
+    <script src="../assets/js/header.js" defer></script>
+    <script src="../assets/js/footer.js" defer></script>
+    <script src="../assets/js/patientAppointment.js" defer></script>
+</head>
+<body onload="renderContent()">
+<div class="container">
+    <div class="wrapper">
+        <!-- Header will be dynamically injected here -->
+        <div id="header"></div>
+
+        <div class="main-content">
+            <h2>Patient <span>Appointment</span></h2>
+
+            <div class="filters">
+                <input
+                        type="text"
+                        id="searchBar"
+                        class="searchBar"
+                        placeholder="Search Bar for custom output"
+                        aria-label="Search appointments"
+                />
+
+                <select id="appointmentFilter" aria-label="Filter appointments">
+                    <option value="all">All Appointments</option>
+                    <option value="future">Future Appointments</option>
+                    <option value="past">Past Appointments</option>
+                </select>
+            </div>
+
+            <table class="appointment-table">
+                <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Doctor Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="patientTableBody">
+                <!-- Appointment rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer will be dynamically injected here -->
+        <div id="footer"></div>
+    </div>
+</div>
+</body>
+</html>

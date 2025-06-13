@@ -81,3 +81,115 @@ Fade In Animation (`@keyframes fadeIn`)
       - opacity: 1  
       - translateY: 0 (move it to the original position)
  */
+
+/* This is the stylesheet for the addPrescription.html */
+
+/* Form Container */
+.form-container {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffffc8; /* semi-transparent white */
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Form Heading */
+.container h2 {
+    text-align: center;
+    color: #222222;
+    font-size: 28px;
+    margin-bottom: 25px;
+}
+
+/* Highlighted Text in Heading */
+.container h2 span {
+    color: #a62b1f;
+}
+
+/* Label Styling */
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #333333;
+    text-align: left;
+    font-size: 13px;
+}
+
+/* Input and Textarea Styling */
+input,
+textarea {
+    width: 100%;
+    padding: 12px;
+    resize: vertical;
+    margin-bottom: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: Verdana, sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Focus Effects */
+input:focus,
+textarea:focus {
+    border-color: #015c5d;
+    box-shadow: 0 0 8px 2px #a7f3d0;
+    filter: brightness(1.05);
+}
+
+/* Special Styling for Patient Name Input */
+#patientName {
+    background-color: #bdbcbc80;
+}
+
+/* Primary Button */
+.btn.primary {
+    background-color: #047857;
+    color: white;
+    padding: 14px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn.primary:hover {
+    background-color: #065f46;
+}
+
+/* Secondary Button */
+.btn.secondary {
+    background-color: transparent;
+    color: grey;
+    border: 1px solid #d3d3d3;
+    padding: 12px;
+    width: 100%;
+    font-size: 15px;
+    border-radius: 8px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.btn.secondary:hover {
+    color: white;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
