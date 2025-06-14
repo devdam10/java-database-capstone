@@ -586,7 +586,8 @@ nav a:hover {
 /* Content Grid */
 #content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));
+    /*grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));*/
+    grid-template-columns: repeat(3, 1fr); /* Exactly 3 columns */
     gap: 40px;
     padding: 20px;
 }
@@ -629,7 +630,8 @@ nav a:hover {
 /* Card Actions */
 .card-actions {
     background-color: #e28282;
-    padding: 10px;
+    /*padding: 10px;*/
+    border-radius: 5px;
     text-align: center;
 }
 
