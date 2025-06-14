@@ -1,46 +1,49 @@
 // modals.js
+import { saveDoctor } from "../services/doctorServices.js";
+import { refreshDoctorList } from "../adminDashboard.js";
+
 export function openModal(type) {
   let modalContent = '';
 
   if (type === 'addDoctor') {
     modalContent = `
-         <h2>Add Doctor</h2>
-         <input type="text" id="doctorName" placeholder="Doctor Name" class="input-field">
-         <select id="specialization" class="input-field select-dropdown">
-             <option value="">Specialization</option>
-                        <option value="cardiologist">Cardiologist</option>
-                        <option value="dermatologist">Dermatologist</option>
-                        <option value="neurologist">Neurologist</option>
-                        <option value="pediatrician">Pediatrician</option>
-                        <option value="orthopedic">Orthopedic</option>
-                        <option value="gynecologist">Gynecologist</option>
-                        <option value="psychiatrist">Psychiatrist</option>
-                        <option value="dentist">Dentist</option>
-                        <option value="ophthalmologist">Ophthalmologist</option>
-                        <option value="ent">ENT Specialist</option>
-                        <option value="urologist">Urologist</option>
-                        <option value="oncologist">Oncologist</option>
-                        <option value="gastroenterologist">Gastroenterologist</option>
-                        <option value="general">General Physician</option>
-
-        </select>
-        <input type="email" id="doctorEmail" placeholder="Email" class="input-field">
-        <input type="password" id="doctorPassword" placeholder="Password" class="input-field">
-        <input type="text" id="doctorPhone" placeholder="Mobile No." class="input-field">
-        <div class="availability-container">
-        <label class="availabilityLabel">Select Availability:</label>
-          <div class="checkbox-group">
-              <label><input type="checkbox" name="availability" value="09:00-10:00"> 9:00 AM - 10:00 AM</label>
-              <label><input type="checkbox" name="availability" value="10:00-11:00"> 10:00 AM - 11:00 AM</label>
-              <label><input type="checkbox" name="availability" value="11:00-12:00"> 11:00 AM - 12:00 PM</label>
-              <label><input type="checkbox" name="availability" value="12:00-13:00"> 12:00 PM - 1:00 PM</label>
-          </div>
-        </div>
-        <button class="dashboard-btn" id="saveDoctorBtn">Save</button>
-        <!--         <form id="addDoctorForm">
-          <button type="submit">Add Doctor</button>
+        <form id="addDoctorForm">
+             <h2>Add Doctor</h2>
+             <input type="text" id="doctorName" placeholder="Doctor Name" class="input-field">
+             
+             <select id="specialization" class="input-field select-dropdown">
+                  <option value="">Specialization</option>
+                  <option value="cardiology">Cardiology</option>
+                  <option value="dentistry">Dentistry</option>
+                  <option value="dermatology">Dermatology</option>
+                  <option value="ent">ENT Specialist</option>
+                  <option value="gastroenterology">Gastroenterology</option>
+                  <option value="general">General Physician</option>
+                  <option value="gynecology">Gynecology</option>
+                  <option value="neurology">Neurology</option>
+                  <option value="oncology">Oncology</option>
+                  <option value="ophthalmology">Ophthalmology</option>
+                  <option value="orthopedics">Orthopedics</option>
+                  <option value="pediatrics">Pediatrics</option>
+                  <option value="psychiatry">Psychiatry</option>
+                  <option value="urology">Urology</option>
+            </select>
+            
+            <input type="email" id="doctorEmail" placeholder="Email" class="input-field">
+            <input type="password" id="doctorPassword" placeholder="Password" class="input-field">
+            <input type="text" id="doctorPhone" placeholder="Mobile No." class="input-field">
+            <div class="availability-container">
+                <label class="availabilityLabel">Select Availability:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="availability" value="09:00-10:00"> 9:00 AM - 10:00 AM</label>
+                    <label><input type="checkbox" name="availability" value="10:00-11:00"> 10:00 AM - 11:00 AM</label>
+                    <label><input type="checkbox" name="availability" value="11:00-12:00"> 11:00 AM - 12:00 PM</label>
+                    <label><input type="checkbox" name="availability" value="12:00-13:00"> 12:00 PM - 1:00 PM</label>
+                </div>
+            </div>
+            
+            <button class="dashboard-btn" type="submit" id="saveDoctorBtn">Save</button>
         </form>
-        -->
       `;
   }
   else if (type === 'patientLogin') {
@@ -107,3 +110,52 @@ export function openModal(type) {
     document.getElementById('doctorLoginBtn').addEventListener('click', doctorLoginHandler);
   }
 }
+
+
+async function adminAddDoctor(event) {
+  event.preventDefault(); // Prevent default form submission
+
+  // Get values from form inputs
+  const name = document.getElementById('doctorName').value.trim();
+  const email = document.getElementById('doctorEmail').value.trim();
+  const password = document.getElementById('doctorPassword').value;
+  const phone = document.getElementById('doctorPhone').value.trim();
+  const specialty = document.getElementById('specialization').value;
+
+  // Collect availability values
+  const availableTimes = Array.from(document.querySelectorAll('input[name="availability"]:checked')).map(cb => cb.value);
+
+  // You can retrieve token from local storage or session
+  const token = localStorage.getItem('token'); // Example
+
+  // Validation (basic)
+  if (!name || !email || !password || !phone || !specialty || availableTimes.length === 0) {
+    alert("Please fill out all required fields.");
+    return;
+  }
+
+  // Create doctor object
+  const doctor = {
+    name,
+    email,
+    password,
+    phone,
+    specialty,
+    availableTimes
+  };
+
+  // Call saveDoctor API
+  const result = await saveDoctor(doctor, token);
+
+  if (result.success) {
+    alert("Doctor added successfully!");
+    document.getElementById('modal').style.display = 'none'; // Close modal
+    // Optionally refresh doctor list
+
+    await refreshDoctorList();
+  }
+  else {
+    alert("Failed to add doctor: " + result.message);
+  }
+}
+

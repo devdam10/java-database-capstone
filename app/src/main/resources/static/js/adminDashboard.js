@@ -124,11 +124,6 @@ async function filterDoctorsOnChange() {
         contentDiv.innerHTML = '';
 
         if (filteredDoctors && filteredDoctors.doctors.length > 0) {
-            // filteredDoctors.forEach(doctor => {
-            //     const card = createDoctorCard(doctor);
-            //     contentDiv.appendChild(card);
-            // });
-
             for (const doctor of filteredDoctors.doctors) {
                 const card = await createDoctorCard(doctor); // ✅ await the async function
                 contentDiv.appendChild(card);
@@ -216,6 +211,11 @@ async function adminAddDoctor(event) {
     }
 }
 
+
+async function refreshDoctorList(){
+    await filterDoctorsOnChange();
+}
+
 // Expose adminAddDoctor if you need to bind it from outside this file, e.g.:
 //document.getElementById('addDoctorForm').addEventListener('submit', adminAddDoctor);
-export { adminAddDoctor };
+export { adminAddDoctor, refreshDoctorList };

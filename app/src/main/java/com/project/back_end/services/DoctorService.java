@@ -98,6 +98,7 @@ import com.project.back_end.models.Doctor;
 import com.project.back_end.DTO.Login;
 import com.project.back_end.repo.DoctorRepository;
 import com.project.back_end.repo.AppointmentRepository;
+import com.project.back_end.util.HelperUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -136,10 +137,16 @@ public class DoctorService {
 
     public int saveDoctor(Doctor doctor) {
         try {
+            doctor.setName(HelperUtil.titleCase(doctor.getName()));
+            doctor.setSpecialty(HelperUtil.titleCase(doctor.getSpecialty()));
+            doctor.setEmail(doctor.getEmail().toLowerCase());
+
             if (doctorRepository.findByEmail(doctor.getEmail()) != null) return -1;
+
             doctorRepository.save(doctor);
             return 1;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return 0;
         }
     }

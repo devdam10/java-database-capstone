@@ -114,7 +114,8 @@ export async function deleteDoctor(id, token) {
  */
 export async function saveDoctor(doctor, token) {
     try {
-        const url = `${DOCTORS_API}/save/${token}`;
+        // const url = `${DOCTORS_API}/save/${token}`;
+        const url = `${DOCTORS_API}/${token}`;
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -132,7 +133,8 @@ export async function saveDoctor(doctor, token) {
             success: data.success || true,
             message: data.message || 'Doctor saved successfully',
         };
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Error saving doctor:', error);
         return { success: false, message: 'Error saving doctor' };
     }

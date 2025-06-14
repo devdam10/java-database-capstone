@@ -117,12 +117,19 @@ public class DoctorController {
     public ResponseEntity<Map<String, String>> saveDoctor(@RequestBody @Valid Doctor doctor, @PathVariable String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "admin");
 
-        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty()) {
+//        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty()) {
+//            System.out.println("flag 2");
+//            return tempMap;
+//        }
+
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
             return tempMap;
         }
 
         int result = doctorService.saveDoctor(doctor);
         Map<String, String> response = new HashMap<>();
+
+        System.out.println("Result: " + result);
 
         if (result == 1) {
             response.put("message", "Doctor added to db");

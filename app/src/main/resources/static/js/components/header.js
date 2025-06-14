@@ -167,7 +167,7 @@ export function renderHeader() {
     // Add role-specific navigation buttons
     if (role === "admin") {
         headerContent += `
-      <button id="addDocBtn" class="adminBtn" onclick="openModal('addDoctor')">Add Doctor</button>
+      <button id="addDocBtn" class="adminBtn">Add Doctor</button>
       <a href="#" id="logoutBtn">Logout</a>`;
     }
     else if (role === "doctor") {
