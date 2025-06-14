@@ -44,7 +44,7 @@ h2 {
 
 /* 5. Buttons */
 button {
-    background-color: #A62B1F;
+    background-color: #015c5d;
     color: white;
     border: none;
     border-radius: 12px;
@@ -61,18 +61,22 @@ button:hover {
 
 /* 6. Admin Button */
 .adminBtn {
-    background-color: #f4f4f4;
+    background-color: transparent;
     color: #333;
     font-weight: bold;
-    width: 110px;
-    padding: 10px 0;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: 200px;
     border: none;
     cursor: pointer;
+
+    transition: background-color 0.3s ease;
 }
 
 .adminBtn:hover {
-    color: #f4f4f4;
-    background: #01adad;
+    color: white;
+    background-color: #003e3e;
+    /*background-color: #A62B1F;*/
 }
 
 /* 7. Search and Filters */
@@ -109,6 +113,7 @@ button:hover {
     align-items: center;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
+    overflow: auto; /* In case modal-content height exceeds viewport */
 }
 
 .modal-content {
@@ -117,6 +122,8 @@ button:hover {
     border-radius: 12px;
     width: 400px;
     max-width: 90%;
+    max-height: 90vh; /* Prevents stretching off screen */
+    overflow-y: auto; /* Enables scrolling inside the modal if needed */
     position: relative;
 }
 
@@ -129,8 +136,20 @@ button:hover {
     cursor: pointer;
 }
 
+
 /* Modal Inputs */
-.modal-content input,
+/*.modal-content input,*/
+/*.modal-content select {*/
+/*    width: 100%;*/
+/*    padding: 10px;*/
+/*    margin: 10px 0 20px;*/
+/*    border-radius: 8px;*/
+/*    border: 1px solid #ccc;*/
+/*}*/
+.modal-content input[type="text"],
+.modal-content input[type="password"],
+.modal-content input[type="email"],
+.modal-content input[type="tel"],
 .modal-content select {
     width: 100%;
     padding: 10px;
@@ -138,6 +157,7 @@ button:hover {
     border-radius: 8px;
     border: 1px solid #ccc;
 }
+
 
 .modal-content input:focus,
 .modal-content select:focus {
@@ -188,3 +208,21 @@ button:hover {
         width: 95%;
     }
 }
+
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    align-items: flex-start; /* Push everything to the left */
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 50%;
+    font-size: 14px;
+}
+
