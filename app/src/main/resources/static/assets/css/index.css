@@ -124,7 +124,16 @@ button:hover {
 /* ===========================================
    8. Header and Footer Styling
    =========================================== */
-.header, .footer {
+/*.header, .footer {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    padding: 20px;*/
+/*    background-color: #015c5d;*/
+/*    color: white;*/
+/*}*/
+
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -137,10 +146,10 @@ button:hover {
     height: 40px;
 }
 
-.footer {
-    flex-wrap: wrap;
-    text-align: center;
-}
+/*.footer {*/
+/*    flex-wrap: wrap;*/
+/*    text-align: center;*/
+/*}*/
 
 /* ===========================================
    9. Interactive Elements

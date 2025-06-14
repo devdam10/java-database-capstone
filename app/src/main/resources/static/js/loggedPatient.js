@@ -74,13 +74,19 @@ const searchInput = document.getElementById("searchBar");
 const timeDropdown = document.getElementById("timeFilter");
 const specialtyDropdown = document.getElementById("specialtyFilter");
 
-// Load all doctor cards on page load
-document.addEventListener("DOMContentLoaded", loadDoctorCards);
-
 // Fetch and display all doctors
 async function loadDoctorCards() {
     try {
         const doctors = await getDoctors();
+
+        const contentDiv = document.getElementById('content');
+        if (!contentDiv) {
+            //console.log('Element with id="content" not found in DOM.');
+            return;
+        }
+
+        contentDiv.innerHTML = '';
+
         await renderDoctorCards(doctors);
     }
     catch (error) {
@@ -182,15 +188,17 @@ export function showBookingOverlay(doctor, event) {
 }
 
 // Filtering logic
-function filterDoctorsOnChange() {
+async function filterDoctorsOnChange() {
     const name = searchInput.value.trim() || null;
     const time = timeDropdown.value || null;
     const specialty = specialtyDropdown.value || null;
 
     filterDoctors(name, time, specialty)
-        .then((doctors) => {
-            if (doctors && doctors.length > 0) {
-                renderDoctorCards(doctors);
+        .then((data) => {
+            console.log("data: " + data);
+
+            if (data.doctors && data.doctors.length > 0) {
+                renderDoctorCards(data.doctors);
             }
             else {
                 contentContainer.innerHTML = `<p class="text-gray-500">No doctors found with the given filters.</p>`;
@@ -202,7 +210,19 @@ function filterDoctorsOnChange() {
         });
 }
 
-// Event listeners for filters
-searchInput.addEventListener("input", filterDoctorsOnChange);
-timeDropdown.addEventListener("change", filterDoctorsOnChange);
-specialtyDropdown.addEventListener("change", filterDoctorsOnChange);
+
+// Load all doctors on page load
+// Attach listeners for search and filters
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("searchBar");
+    const timeDropdown = document.getElementById("timeFilter");
+    const specialtyDropdown = document.getElementById("specialtyFilter");
+
+    if (searchInput) searchInput.addEventListener("input", filterDoctorsOnChange);
+    if (timeDropdown) timeDropdown.addEventListener("change", filterDoctorsOnChange);
+    if (specialtyDropdown) specialtyDropdown.addEventListener("change", filterDoctorsOnChange);
+
+    loadDoctorCards();
+});
+
+

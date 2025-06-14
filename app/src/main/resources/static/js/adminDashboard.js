@@ -76,18 +76,6 @@ import { openModal } from './components/modals.js';
 import { getDoctors, filterDoctors, saveDoctor } from './services/doctorServices.js';
 import { createDoctorCard } from './components/doctorCard.js';
 
-// Open "Add Doctor" modal on button click
-document.getElementById('addDocBtn').addEventListener('click', () => {
-    openModal('addDoctor');
-});
-
-// Load all doctors on page load
-window.addEventListener('DOMContentLoaded', loadDoctorCards);
-
-// Attach listeners for search and filters
-document.getElementById('searchBar').addEventListener('input', filterDoctorsOnChange);
-document.getElementById('timeFilter').addEventListener('change', filterDoctorsOnChange);
-document.getElementById('specialtyFilter').addEventListener('change', filterDoctorsOnChange);
 
 /**
  * Fetch all doctors and display them as cards
@@ -97,6 +85,12 @@ async function loadDoctorCards() {
         const doctors = await getDoctors();
 
         const contentDiv = document.getElementById('content');
+
+        if (!contentDiv) {
+            //console.log('Element with id="content" not found in DOM.');
+            return;
+        }
+
         contentDiv.innerHTML = '';
 
         for (const doctor of doctors) {
@@ -215,6 +209,25 @@ async function adminAddDoctor(event) {
 async function refreshDoctorList(){
     await filterDoctorsOnChange();
 }
+
+// Open "Add Doctor" modal on button click
+// Load all doctors on page load
+// Attach listeners for search and filters
+document.addEventListener('DOMContentLoaded', () => {
+    const addBtn = document.getElementById('addDocBtn');
+    const searchInput = document.getElementById('searchBar');
+    const timeFilter = document.getElementById('timeFilter');
+    const specialtyFilter = document.getElementById('specialtyFilter');
+
+    if (addBtn) addBtn.addEventListener('click', () => openModal('addDoctor'));
+    if (searchInput) searchInput.addEventListener('input', filterDoctorsOnChange);
+    if (timeFilter) timeFilter.addEventListener('change', filterDoctorsOnChange);
+    if (specialtyFilter) specialtyFilter.addEventListener('change', filterDoctorsOnChange);
+
+    loadDoctorCards(); // Only call after DOM is ready
+});
+
+
 
 // Expose adminAddDoctor if you need to bind it from outside this file, e.g.:
 //document.getElementById('addDoctorForm').addEventListener('submit', adminAddDoctor);

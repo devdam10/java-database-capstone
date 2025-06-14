@@ -71,7 +71,8 @@ button:hover {
 }
 
 .adminBtn:hover {
-    color: #A62B1F;
+    color: #f4f4f4;
+    background: #01adad;
 }
 
 /* 7. Search and Filters */
