@@ -144,36 +144,83 @@ public class CentralService {
         }
     }
 
-    public Map<String, Object> filterDoctor(String name, String specialty, String time) {
+    public Map<String, Object> filterDoctor(String name, String time, String specialty) {
+        //logger.info("Filter doctors called with name: {}, time: {}, speciality: {}", name.length(), time, specialty);
+
         Map<String, Object> response = new HashMap<>();
         try {
             Map <String, Object> doctors;
+            logger.info("flag 1");
 
-            if (name != null && specialty != null && time != null) {
+//            if (name != null && !name.isEmpty() && specialty != null && !specialty.isEmpty() && time != null && !time.isEmpty()) {
+//                logger.info("flag 2");
+//                doctors = doctorService.filterDoctorsByNameSpecialityAndTime(name, specialty, time);
+//            }
+//            else if (name != null && !name.isEmpty() && specialty != null && !specialty.isEmpty() ) {
+//                logger.info("flag 3");
+//                doctors = doctorService.filterDoctorByNameAndSpeciality(name, specialty);
+//            }
+//            else if (name != null && !name.isEmpty()  && time != null && !time.isEmpty()) {
+//                logger.info("flag 4");
+//                doctors = doctorService.filterDoctorByNameAndTime(name, time);
+//            }
+//            else if (specialty != null && !specialty.isEmpty() && time != null && !time.isEmpty() ) {
+//                logger.info("flag 5");
+//                doctors = doctorService.filterDoctorByTimeAndSpeciality(specialty, time);
+//            }
+//            else if (name != null && !name.isEmpty()) {
+//                logger.info("flag 6");
+//                doctors = doctorService.findDoctorByName(name);
+//            }
+//            else if (specialty != null && !specialty.isEmpty()) {
+//                logger.info("flag 7");
+//                doctors = doctorService.filterDoctorBySpeciality(specialty);
+//            }
+//            else if (time != null && !time.isEmpty()) {
+//                logger.info("flag 8");
+//                doctors = doctorService.filterDoctorsByTime(time);
+//            }
+//            else {
+//                logger.info("flag 9");
+//                doctors = new HashMap<>();
+//                doctors.put("doctors", doctorService.getDoctors());
+//            }
+
+            if (isNotNullOrEmpty(name) && isNotNullOrEmpty(time) && isNotNullOrEmpty(specialty)) {
+                logger.info("flag 2");
                 doctors = doctorService.filterDoctorsByNameSpecialityAndTime(name, specialty, time);
             }
-            else if (name != null && specialty != null) {
+            else if (isNotNullOrEmpty(name) && isNotNullOrEmpty(specialty)) {
+                logger.info("flag 3");
                 doctors = doctorService.filterDoctorByNameAndSpeciality(name, specialty);
             }
-            else if (name != null && time != null) {
+            else if (isNotNullOrEmpty(name) && isNotNullOrEmpty(time)) {
+                logger.info("flag 4");
                 doctors = doctorService.filterDoctorByNameAndTime(name, time);
             }
-            else if (specialty != null && time != null) {
+            else if (isNotNullOrEmpty(specialty) && isNotNullOrEmpty(time)) {
+                logger.info("flag 5");
                 doctors = doctorService.filterDoctorByTimeAndSpeciality(specialty, time);
             }
-            else if (name != null) {
+            else if (isNotNullOrEmpty(name)) {
+                logger.info("flag 6");
                 doctors = doctorService.findDoctorByName(name);
             }
-            else if (specialty != null) {
+            else if (isNotNullOrEmpty(specialty)) {
+                logger.info("flag 7");
                 doctors = doctorService.filterDoctorBySpeciality(specialty);
             }
-            else if (time != null) {
+            else if (isNotNullOrEmpty(time)) {
+                logger.info("flag 8");
                 doctors = doctorService.filterDoctorsByTime(time);
             }
             else {
+                logger.info("flag 9");
                 doctors = new HashMap<>();
                 doctors.put("doctors", doctorService.getDoctors());
             }
+
+            logger.info("flag 10");
 
             response.put("doctors", doctors.getOrDefault("doctors", new HashMap<>()));
         } catch (Exception e) {
@@ -284,5 +331,9 @@ public class CentralService {
             response.put("message", "Error filtering appointments.");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private boolean isNotNullOrEmpty(String text){
+        return text != null && !text.isEmpty() && !text.trim().equalsIgnoreCase("null");
     }
 }

@@ -99,11 +99,6 @@ async function loadDoctorCards() {
         const contentDiv = document.getElementById('content');
         contentDiv.innerHTML = '';
 
-        // doctors.forEach(doctor => {
-        //     const card = createDoctorCard(doctor);
-        //     contentDiv.appendChild(card);
-        // });
-
         for (const doctor of doctors) {
             const card = await createDoctorCard(doctor);
             contentDiv.appendChild(card);
@@ -120,23 +115,33 @@ async function loadDoctorCards() {
 async function filterDoctorsOnChange() {
     try {
         const name = document.getElementById('searchBar').value.trim() || null;
-        const time = document.getElementById('filterTime').value || null;
-        const specialty = document.getElementById('filterSpecialty').value || null;
+        const time = document.getElementById('timeFilter').value || null;
+        const specialty = document.getElementById('specialtyFilter').value || null;
 
         const filteredDoctors = await filterDoctors(name, time, specialty);
+
+        console.log('Filter inputs:', { name, time, specialty });
+        console.log('Filtered doctors:', filteredDoctors);
 
         const contentDiv = document.getElementById('content');
         contentDiv.innerHTML = '';
 
         if (filteredDoctors && filteredDoctors.length > 0) {
-            filteredDoctors.forEach(doctor => {
-                const card = createDoctorCard(doctor);
+            // filteredDoctors.forEach(doctor => {
+            //     const card = createDoctorCard(doctor);
+            //     contentDiv.appendChild(card);
+            // });
+
+            for (const doctor of filteredDoctors) {
+                const card = await createDoctorCard(doctor); // ✅ await the async function
                 contentDiv.appendChild(card);
-            });
-        } else {
+            }
+        }
+        else {
             contentDiv.innerHTML = '<p>No doctors found with the given filters.</p>';
         }
-    } catch (error) {
+    }
+    catch (error) {
         alert('Failed to filter doctors. Please try again.');
         console.error('Filter error:', error);
     }
@@ -146,14 +151,19 @@ async function filterDoctorsOnChange() {
  * Render an array of doctors as cards (utility)
  * @param {Array} doctors - Array of doctor objects
  */
-function renderDoctorCards(doctors) {
+async function renderDoctorCards(doctors) {
     const contentDiv = document.getElementById('content');
     contentDiv.innerHTML = '';
 
-    doctors.forEach(doctor => {
-        const card = createDoctorCard(doctor);
+    // doctors.forEach(doctor => {
+    //     const card = createDoctorCard(doctor);
+    //     contentDiv.appendChild(card);
+    // });
+
+    for (const doctor of doctors) {
+        const card = await createDoctorCard(doctor); // ✅ await the async function
         contentDiv.appendChild(card);
-    });
+    }
 }
 
 /**

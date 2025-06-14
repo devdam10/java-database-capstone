@@ -145,13 +145,15 @@ export async function saveDoctor(doctor, token) {
  * @param {string|null} specialty - Specialty filter (nullable).
  * @returns {Promise<{doctors: Array}>} Filtered list or empty list on error.
  */
-export async function filterDoctors(name = '', time = '', specialty = '') {
+export async function filterDoctors(name, time, specialty) {
     try {
         // Use 'null' string or empty if parameters are falsy to avoid breaking URLs
         const n = name || 'null';
         const t = time || 'null';
         const s = specialty || 'null';
 
+        //const url = `${DOCTORS_API}/filter/${encodeURIComponent(n)}/${encodeURIComponent(t)}/${encodeURIComponent(s)}`;
+        //const url = `${DOCTORS_API}/filter/${name}/${time}/${specialty}`;
         const url = `${DOCTORS_API}/filter/${encodeURIComponent(n)}/${encodeURIComponent(t)}/${encodeURIComponent(s)}`;
 
         const response = await fetch(url);
