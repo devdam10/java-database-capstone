@@ -101,6 +101,7 @@ import com.project.back_end.repo.AppointmentRepository;
 import com.project.back_end.util.HelperUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -163,7 +164,8 @@ public class DoctorService {
 
     @Transactional
     public List<Doctor> getDoctors() {
-        return doctorRepository.findAll();
+        // return doctorRepository.findAll();
+        return doctorRepository.findAll(Sort.by("name").ascending());
     }
 
     public int deleteDoctor(long id) {
@@ -194,13 +196,13 @@ public class DoctorService {
     @Transactional
     public Map<String, Object> findDoctorByName(String name) {
         Map<String, Object> res = new HashMap<>();
-        res.put("doctors", doctorRepository.findByNameLike(name));
+        res.put("doctors", doctorRepository.findByNameLikeOrderByName(name));
         return res;
     }
 
     @Transactional
     public Map<String, Object> filterDoctorsByNameSpecialityAndTime(String name, String specialty, String amOrPm) {
-        List<Doctor> doctors = doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(name, specialty);
+        List<Doctor> doctors = doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCaseOrderByName(name, specialty);
         Map<String, Object> map = new HashMap<>();
         map.put("doctors", filterDoctorByTime(doctors, amOrPm));
         return map;
@@ -208,7 +210,7 @@ public class DoctorService {
 
     @Transactional
     public Map<String, Object> filterDoctorByNameAndTime(String name, String amOrPm) {
-        List<Doctor> doctors = doctorRepository.findByNameLike(name);
+        List<Doctor> doctors = doctorRepository.findByNameLikeOrderByName(name);
 
         Map<String, Object> map = new HashMap<>();
         map.put("doctors", filterDoctorByTime(doctors, amOrPm));
@@ -218,13 +220,13 @@ public class DoctorService {
     @Transactional
     public Map<String, Object> filterDoctorByNameAndSpeciality(String name, String specialty) {
         Map<String, Object> map = new HashMap<>();
-        map.put("doctors", doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(name, specialty));
+        map.put("doctors", doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCaseOrderByName(name, specialty));
         return map;
     }
 
     @Transactional
     public Map<String, Object> filterDoctorByTimeAndSpeciality(String specialty, String amOrPm) {
-        List<Doctor> doctors = doctorRepository.findBySpecialtyIgnoreCase(specialty);
+        List<Doctor> doctors = doctorRepository.findBySpecialtyIgnoreCaseOrderByName(specialty);
         Map<String, Object> map = new HashMap<>();
         map.put("doctors", filterDoctorByTime(doctors, amOrPm));
         return map;
@@ -233,7 +235,7 @@ public class DoctorService {
     @Transactional
     public Map<String, Object> filterDoctorBySpeciality(String specialty) {
         Map<String, Object> map = new HashMap<>();
-        map.put("doctors", doctorRepository.findBySpecialtyIgnoreCase(specialty));
+        map.put("doctors", doctorRepository.findBySpecialtyIgnoreCaseOrderByName(specialty));
         return map;
     }
 
