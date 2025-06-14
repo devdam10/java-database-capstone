@@ -225,8 +225,6 @@ public class DoctorService {
 
     @Transactional
     public Map<String, Object> filterDoctorBySpeciality(String specialty) {
-        System.out.println("flag 7.5");
-
         Map<String, Object> map = new HashMap<>();
         map.put("doctors", doctorRepository.findBySpecialtyIgnoreCase(specialty));
         return map;

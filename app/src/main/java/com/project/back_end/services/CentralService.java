@@ -67,7 +67,6 @@
 
 package com.project.back_end.services;
 
-import com.project.back_end.DTO.AppointmentDTO;
 import com.project.back_end.DTO.Login;
 import com.project.back_end.models.*;
 import com.project.back_end.repo.*;
@@ -144,92 +143,88 @@ public class CentralService {
         }
     }
 
-    public Map<String, Object> filterDoctor(String name, String time, String specialty) {
-        //logger.info("Filter doctors called with name: {}, time: {}, speciality: {}", name.length(), time, specialty);
-
-        Map<String, Object> response = new HashMap<>();
-        try {
-            Map <String, Object> doctors;
-            logger.info("flag 1");
-
-//            if (name != null && !name.isEmpty() && specialty != null && !specialty.isEmpty() && time != null && !time.isEmpty()) {
-//                logger.info("flag 2");
+//    public Map<String, Object> filterDoctor(String name, String time, String specialty) {
+//        Map<String, Object> response = new HashMap<>();
+//        try {
+//            Map <String, Object> doctors;
+//
+//            if (isNotNullOrEmpty(name) && isNotNullOrEmpty(time) && isNotNullOrEmpty(specialty)) {
 //                doctors = doctorService.filterDoctorsByNameSpecialityAndTime(name, specialty, time);
 //            }
-//            else if (name != null && !name.isEmpty() && specialty != null && !specialty.isEmpty() ) {
-//                logger.info("flag 3");
+//            else if (isNotNullOrEmpty(name) && isNotNullOrEmpty(specialty)) {
 //                doctors = doctorService.filterDoctorByNameAndSpeciality(name, specialty);
 //            }
-//            else if (name != null && !name.isEmpty()  && time != null && !time.isEmpty()) {
-//                logger.info("flag 4");
+//            else if (isNotNullOrEmpty(name) && isNotNullOrEmpty(time)) {
 //                doctors = doctorService.filterDoctorByNameAndTime(name, time);
 //            }
-//            else if (specialty != null && !specialty.isEmpty() && time != null && !time.isEmpty() ) {
-//                logger.info("flag 5");
+//            else if (isNotNullOrEmpty(specialty) && isNotNullOrEmpty(time)) {
 //                doctors = doctorService.filterDoctorByTimeAndSpeciality(specialty, time);
 //            }
-//            else if (name != null && !name.isEmpty()) {
-//                logger.info("flag 6");
+//            else if (isNotNullOrEmpty(name)) {
 //                doctors = doctorService.findDoctorByName(name);
 //            }
-//            else if (specialty != null && !specialty.isEmpty()) {
-//                logger.info("flag 7");
+//            else if (isNotNullOrEmpty(specialty)) {
 //                doctors = doctorService.filterDoctorBySpeciality(specialty);
 //            }
-//            else if (time != null && !time.isEmpty()) {
-//                logger.info("flag 8");
+//            else if (isNotNullOrEmpty(time)) {
 //                doctors = doctorService.filterDoctorsByTime(time);
 //            }
 //            else {
-//                logger.info("flag 9");
 //                doctors = new HashMap<>();
 //                doctors.put("doctors", doctorService.getDoctors());
 //            }
+//
+//            response.put("doctors", doctors.getOrDefault("doctors", new HashMap<>()));
+//        }
+//        catch (Exception e) {
+//            logger.error("Error filtering doctors: {}", e.getMessage());
+//            response.put("message", "Failed to filter doctors.");
+//        }
+//
+//        return response;
+//    }
+
+    public List<Doctor> filterDoctor(String name, String time, String specialty) {
+        Map <String, Object> doctors;
+        List<Doctor> doctorList = new ArrayList<>();
+
+        try {
 
             if (isNotNullOrEmpty(name) && isNotNullOrEmpty(time) && isNotNullOrEmpty(specialty)) {
-                logger.info("flag 2");
                 doctors = doctorService.filterDoctorsByNameSpecialityAndTime(name, specialty, time);
             }
             else if (isNotNullOrEmpty(name) && isNotNullOrEmpty(specialty)) {
-                logger.info("flag 3");
                 doctors = doctorService.filterDoctorByNameAndSpeciality(name, specialty);
             }
             else if (isNotNullOrEmpty(name) && isNotNullOrEmpty(time)) {
-                logger.info("flag 4");
                 doctors = doctorService.filterDoctorByNameAndTime(name, time);
             }
             else if (isNotNullOrEmpty(specialty) && isNotNullOrEmpty(time)) {
-                logger.info("flag 5");
                 doctors = doctorService.filterDoctorByTimeAndSpeciality(specialty, time);
             }
             else if (isNotNullOrEmpty(name)) {
-                logger.info("flag 6");
                 doctors = doctorService.findDoctorByName(name);
             }
             else if (isNotNullOrEmpty(specialty)) {
-                logger.info("flag 7");
                 doctors = doctorService.filterDoctorBySpeciality(specialty);
             }
             else if (isNotNullOrEmpty(time)) {
-                logger.info("flag 8");
                 doctors = doctorService.filterDoctorsByTime(time);
             }
             else {
-                logger.info("flag 9");
                 doctors = new HashMap<>();
                 doctors.put("doctors", doctorService.getDoctors());
             }
 
-            logger.info("flag 10");
-
-            response.put("doctors", doctors.getOrDefault("doctors", new HashMap<>()));
-        } catch (Exception e) {
+            doctorList = (List<Doctor>) doctors.getOrDefault("doctors", new ArrayList<>());
+        }
+        catch (Exception e) {
             logger.error("Error filtering doctors: {}", e.getMessage());
-            response.put("message", "Failed to filter doctors.");
         }
 
-        return response;
+        return doctorList;
     }
+
 
     public int validateAppointment(Appointment appointment) {
         try {

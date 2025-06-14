@@ -152,8 +152,6 @@ export async function filterDoctors(name, time, specialty) {
         const t = time || 'null';
         const s = specialty || 'null';
 
-        //const url = `${DOCTORS_API}/filter/${encodeURIComponent(n)}/${encodeURIComponent(t)}/${encodeURIComponent(s)}`;
-        //const url = `${DOCTORS_API}/filter/${name}/${time}/${specialty}`;
         const url = `${DOCTORS_API}/filter/${encodeURIComponent(n)}/${encodeURIComponent(t)}/${encodeURIComponent(s)}`;
 
         const response = await fetch(url);
@@ -163,7 +161,7 @@ export async function filterDoctors(name, time, specialty) {
         }
 
         const data = await response.json();
-        return { doctors: data.doctors || [] };
+        return { doctors: data || [] };
     }
     catch (error) {
         alert('Failed to filter doctors. Please try again.');

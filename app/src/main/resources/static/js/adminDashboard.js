@@ -120,19 +120,16 @@ async function filterDoctorsOnChange() {
 
         const filteredDoctors = await filterDoctors(name, time, specialty);
 
-        console.log('Filter inputs:', { name, time, specialty });
-        console.log('Filtered doctors:', filteredDoctors);
-
         const contentDiv = document.getElementById('content');
         contentDiv.innerHTML = '';
 
-        if (filteredDoctors && filteredDoctors.length > 0) {
+        if (filteredDoctors && filteredDoctors.doctors.length > 0) {
             // filteredDoctors.forEach(doctor => {
             //     const card = createDoctorCard(doctor);
             //     contentDiv.appendChild(card);
             // });
 
-            for (const doctor of filteredDoctors) {
+            for (const doctor of filteredDoctors.doctors) {
                 const card = await createDoctorCard(doctor); // ✅ await the async function
                 contentDiv.appendChild(card);
             }

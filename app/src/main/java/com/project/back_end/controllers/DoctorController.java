@@ -192,9 +192,14 @@ public class DoctorController {
         }
     }
 
+//    @GetMapping("/filter/{name}/{time}/{speciality}")
+//    public ResponseEntity<Map<String, Object>> filterDoctors( @PathVariable String name, @PathVariable String time, @PathVariable String speciality) {
+//        Map<String, Object> response = centralService.filterDoctor(name, time, speciality);
+//        return ResponseEntity.ok(response);
+//    }
+
     @GetMapping("/filter/{name}/{time}/{speciality}")
-    public ResponseEntity<Map<String, Object>> filterDoctors( @PathVariable String name, @PathVariable String time, @PathVariable String speciality) {
-        Map<String, Object> response = centralService.filterDoctor(name, time, speciality);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<Doctor>> filterDoctors( @PathVariable String name, @PathVariable String time, @PathVariable String speciality) {
+        return ResponseEntity.ok(centralService.filterDoctor(name, time, speciality));
     }
 }
