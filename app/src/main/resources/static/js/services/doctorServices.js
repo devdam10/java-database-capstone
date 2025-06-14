@@ -86,7 +86,8 @@ export async function getDoctors() {
  */
 export async function deleteDoctor(id, token) {
     try {
-        const url = `${DOCTORS_API}/delete/${id}/${token}`;
+        //const url = `${DOCTORS_API}/delete/${id}/${token}`;
+        const url = `${DOCTORS_API}/${id}/${token}`;
         const response = await fetch(url, { method: 'DELETE' });
 
         if (!response.ok) {

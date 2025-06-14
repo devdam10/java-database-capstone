@@ -178,7 +178,11 @@ public class DoctorController {
     public ResponseEntity<Map<String, String>> deleteDoctor(@PathVariable Long id, @PathVariable String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "admin");
 
-        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty()) {
+//        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty()) {
+//            return tempMap;
+//        }
+
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
             return tempMap;
         }
 

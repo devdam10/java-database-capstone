@@ -90,7 +90,7 @@ export async function createDoctorCard(doctor) {
         const removeBtn = document.createElement("button");
         removeBtn.textContent = "Delete";
         removeBtn.addEventListener("click", async () => {
-            const confirmDelete = confirm(`Are you sure you want to delete Dr. ${doctor.name}?`);
+            const confirmDelete = confirm(`Are you sure you want to delete ${doctor.name}?`);
             if (!confirmDelete) return;
 
             const token = localStorage.getItem("token");
@@ -101,9 +101,10 @@ export async function createDoctorCard(doctor) {
 
             try {
                 await deleteDoctor(doctor.id, token);
-                alert(`Dr. ${doctor.name} has been deleted.`);
+                alert(`${doctor.name} has been deleted.`);
                 card.remove();
-            } catch (error) {
+            }
+            catch (error) {
                 alert("Failed to delete doctor. Please try again.");
                 console.error(error);
             }
