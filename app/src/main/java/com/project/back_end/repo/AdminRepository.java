@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
-
-    // Custom Query Method
     Admin findByUsername(String username);
 
     // Used in TokenService for token validation

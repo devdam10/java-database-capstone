@@ -58,9 +58,9 @@ const APPOINTMENT_API = `${API_BASE_URL}/appointments`;
   Step 3: Handle errors in a try-catch block, similar to the booking function
 */
 
-import { API_BASE_URL } from "../config/config.js";
+import { APPOINTMENTS_API } from "../config/config.js";
 
-const APPOINTMENT_API = `${API_BASE_URL}/appointments`;
+// const APPOINTMENT_API = `${BASE_API_URL}/appointments`;
 
 /**
  * Fetch all appointments for a doctor filtered by date and patient name.
@@ -71,7 +71,7 @@ const APPOINTMENT_API = `${API_BASE_URL}/appointments`;
  */
 export async function getAllAppointments(date, patientName, token) {
     try {
-        const url = `${APPOINTMENT_API}?date=${encodeURIComponent(date)}&patientName=${encodeURIComponent(patientName)}`;
+        const url = `${APPOINTMENTS_API}?date=${encodeURIComponent(date)}&patientName=${encodeURIComponent(patientName)}`;
         const response = await fetch(url, {
             method: "GET",
             headers: {
@@ -98,7 +98,7 @@ export async function getAllAppointments(date, patientName, token) {
  */
 export async function bookAppointment(appointment, token) {
     try {
-        const response = await fetch(APPOINTMENT_API, {
+        const response = await fetch(APPOINTMENTS_API, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -130,7 +130,7 @@ export async function bookAppointment(appointment, token) {
  */
 export async function updateAppointment(appointment, token) {
     try {
-        const response = await fetch(APPOINTMENT_API, {
+        const response = await fetch(APPOINTMENTS_API, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

@@ -53,7 +53,7 @@
 */
 
 // doctorServices.js
-import { BASE_API_URL } from './config.js';  // Adjust path as needed
+import { BASE_API_URL } from '../config/config.js';  // Adjust path as needed
 
 const DOCTOR_API = `${BASE_API_URL}/doctor`;
 

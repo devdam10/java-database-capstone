@@ -63,9 +63,9 @@
 */
 
 // patientServices.js
-import { BASE_API_URL } from './config.js';  // Adjust path if needed
+import { PATIENTS_API } from '../config/config.js';  // Adjust path if needed
 
-const PATIENT_API = `${BASE_API_URL}/patient`;
+// const PATIENT_API = `${BASE_API_URL}/patient`;
 
 /**
  * Register a new patient.
@@ -74,7 +74,7 @@ const PATIENT_API = `${BASE_API_URL}/patient`;
  */
 export async function patientSignup(data) {
     try {
-        const response = await fetch(PATIENT_API, {
+        const response = await fetch(PATIENTS_API, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
@@ -102,7 +102,7 @@ export async function patientLogin(data) {
     // Logging can be added here during development, but remove before production
     // console.log('Login data:', data);
 
-    return fetch(`${PATIENT_API}/login`, {
+    return fetch(`${PATIENTS_API}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -116,7 +116,7 @@ export async function patientLogin(data) {
  */
 export async function getPatientData(token) {
     try {
-        const response = await fetch(`${PATIENT_API}/${token}`);
+        const response = await fetch(`${PATIENTS_API}/${token}`);
         if (!response.ok) {
             console.error('Failed to get patient data:', response.statusText);
             return null;
@@ -139,7 +139,7 @@ export async function getPatientData(token) {
  */
 export async function getPatientAppointments(id, token, user) {
     try {
-        const url = `${PATIENT_API}/${id}/${user}/${token}`;
+        const url = `${PATIENTS_API}/${id}/${user}/${token}`;
         const response = await fetch(url);
         if (!response.ok) {
             console.error('Failed to get appointments:', response.statusText);
@@ -163,7 +163,7 @@ export async function getPatientAppointments(id, token, user) {
  */
 export async function filterAppointments(condition, name, token) {
     try {
-        const url = `${PATIENT_API}/filter/${encodeURIComponent(condition)}/${encodeURIComponent(name)}/${encodeURIComponent(token)}`;
+        const url = `${PATIENTS_API}/filter/${encodeURIComponent(condition)}/${encodeURIComponent(name)}/${encodeURIComponent(token)}`;
         const response = await fetch(url);
         if (!response.ok) {
             console.error('Failed to filter appointments:', response.statusText);
