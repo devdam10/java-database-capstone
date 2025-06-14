@@ -53,9 +53,9 @@
 */
 
 // doctorServices.js
-import { BASE_API_URL } from '../config/config.js';  // Adjust path as needed
+import { DOCTORS_API } from '../config/config.js';  // Adjust path as needed
 
-const DOCTOR_API = `${BASE_API_URL}/doctor`;
+// const DOCTOR_API = `${BASE_API_URL}/doctor`;
 
 /**
  * Fetch all doctors from the API.
@@ -63,15 +63,17 @@ const DOCTOR_API = `${BASE_API_URL}/doctor`;
  */
 export async function getDoctors() {
     try {
-        const response = await fetch(DOCTOR_API);
+        const response = await fetch(DOCTORS_API);
+
         if (!response.ok) {
-            console.error('Failed to fetch doctors:', response.statusText);
+            console.error('Failed to fetch doctors: ', response.statusText);
             return [];
         }
         const data = await response.json();
         return data.doctors || [];
-    } catch (error) {
-        console.error('Error fetching doctors:', error);
+    }
+    catch (error) {
+        console.error('Error fetching doctors: ', error);
         return [];
     }
 }
@@ -84,7 +86,7 @@ export async function getDoctors() {
  */
 export async function deleteDoctor(id, token) {
     try {
-        const url = `${DOCTOR_API}/delete/${id}/${token}`;
+        const url = `${DOCTORS_API}/delete/${id}/${token}`;
         const response = await fetch(url, { method: 'DELETE' });
 
         if (!response.ok) {
@@ -112,7 +114,7 @@ export async function deleteDoctor(id, token) {
  */
 export async function saveDoctor(doctor, token) {
     try {
-        const url = `${DOCTOR_API}/save/${token}`;
+        const url = `${DOCTORS_API}/save/${token}`;
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -150,7 +152,7 @@ export async function filterDoctors(name = '', time = '', specialty = '') {
         const t = time || 'null';
         const s = specialty || 'null';
 
-        const url = `${DOCTOR_API}/filter/${encodeURIComponent(n)}/${encodeURIComponent(t)}/${encodeURIComponent(s)}`;
+        const url = `${DOCTORS_API}/filter/${encodeURIComponent(n)}/${encodeURIComponent(t)}/${encodeURIComponent(s)}`;
 
         const response = await fetch(url);
         if (!response.ok) {
@@ -160,7 +162,8 @@ export async function filterDoctors(name = '', time = '', specialty = '') {
 
         const data = await response.json();
         return { doctors: data.doctors || [] };
-    } catch (error) {
+    }
+    catch (error) {
         alert('Failed to filter doctors. Please try again.');
         console.error('Error filtering doctors:', error);
         return { doctors: [] };

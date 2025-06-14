@@ -1,4 +1,4 @@
-/* 
+/*
  Functions Overview:
    - `selectRole(role)`: Handles role-based redirection after a user selects a specific role.
    - `renderContent()`: Manages the content rendering process based on the user’s role.
@@ -6,7 +6,7 @@
  `selectRole(role)`:
    - The function handles role-based redirection after a user logs in or selects a role.
    - `role`: Determines where the user will be redirected after role selection. This can be `admin`, `patient`, `doctor`, or `loggedPatient`.
-   
+
    Steps:
    - First, retrieve the `token` from `localStorage` for role validation and navigation.
    - If the `role` is "admin", the user is redirected to the admin dashboard using their token.
@@ -18,8 +18,8 @@
    - This function renders content based on the user’s role.
    - First, retrieve the user's role using `getRole()`.
    - If no role is found, redirect the user to the role selection page (home page).
-   - Role-specific content would be handled after determining the role. 
-   
+   - Role-specific content would be handled after determining the role.
+
  Error Handling:
    - Both functions ensure proper routing based on the user's role, ensuring they cannot access pages they shouldn’t.
 
@@ -29,15 +29,21 @@
 
 */
 
-// Handles redirection after user selects or logs in with a role
+
+import { getRole } from "./util.js";
+
 export function selectRole(role) {
+    // Handles redirection after user selects or logs in with a role
     const token = localStorage.getItem("token");
 
     switch (role) {
         case "admin":
             if (token) {
-                window.location.href = `adminDashboard.html?token=${token}`;
-            } else {
+                // window.location.href = `admin/adminDashboard.html?token=${token}`;
+                // window.location.href = `/dashboard/adminDashboard?token=${token}`;
+                window.location.href = `/adminDashboard/${token}`;
+            }
+            else {
                 alert("Authentication token missing for admin access.");
                 window.location.href = "login.html";
             }
@@ -81,6 +87,8 @@ export function renderContent() {
     // Example:
     switch (role) {
         case "admin":
+            console.log("admin already logged in");
+
             // Load admin-specific content or redirect
             break;
         case "patient":
@@ -97,3 +105,11 @@ export function renderContent() {
             break;
     }
 }
+
+// Make it accessible globally
+window.renderContent = renderContent;
+
+// // Run when DOM is fully loaded
+// document.addEventListener("DOMContentLoaded", () => {
+//     renderContent();
+// });

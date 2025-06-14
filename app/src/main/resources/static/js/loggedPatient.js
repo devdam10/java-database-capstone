@@ -64,14 +64,15 @@
 */
 
 // Imports
-import { getDoctors, filterDoctors, bookAppointment } from "../services/doctorService.js";
-import { createDoctorCard } from "../components/doctorCard.js";
+import { getDoctors, filterDoctors } from "./services/doctorServices.js";
+import { bookAppointment } from "./services/appointmentRecordService.js";
+import { createDoctorCard } from "./components/doctorCard.js";
 
 // DOM Elements
-const contentContainer = document.getElementById("doctorCardsContainer");
+const contentContainer = document.getElementById("content");
 const searchInput = document.getElementById("searchBar");
-const timeDropdown = document.getElementById("timeDropdown");
-const specialtyDropdown = document.getElementById("specialtyDropdown");
+const timeDropdown = document.getElementById("timeFilter");
+const specialtyDropdown = document.getElementById("specialtyFilter");
 
 // Load all doctor cards on page load
 document.addEventListener("DOMContentLoaded", loadDoctorCards);
@@ -80,15 +81,16 @@ document.addEventListener("DOMContentLoaded", loadDoctorCards);
 async function loadDoctorCards() {
     try {
         const doctors = await getDoctors();
-        renderDoctorCards(doctors);
-    } catch (error) {
+        await renderDoctorCards(doctors);
+    }
+    catch (error) {
         console.error("Failed to load doctors:", error);
         contentContainer.innerHTML = `<p class="text-red-500">Unable to load doctors at this time.</p>`;
     }
 }
 
 // Render doctor cards
-function renderDoctorCards(doctors) {
+async function renderDoctorCards(doctors) {
     contentContainer.innerHTML = "";
 
     if (!doctors || doctors.length === 0) {
@@ -96,14 +98,19 @@ function renderDoctorCards(doctors) {
         return;
     }
 
-    doctors.forEach((doctor) => {
-        const card = createDoctorCard(doctor, showBookingOverlay);
+    // doctors.forEach((doctor) => {
+    //     const card = createDoctorCard(doctor, showBookingOverlay);
+    //     contentContainer.appendChild(card);
+    // });
+
+    for (const doctor of doctors) {
+        const card = await createDoctorCard(doctor); // ✅ await the async function
         contentContainer.appendChild(card);
-    });
+    }
 }
 
 // Display booking overlay/modal
-function showBookingOverlay(doctor, event) {
+export function showBookingOverlay(doctor, event) {
     const ripple = document.createElement("div");
     ripple.className = "ripple";
     ripple.style.left = `${event.clientX}px`;
@@ -184,7 +191,8 @@ function filterDoctorsOnChange() {
         .then((doctors) => {
             if (doctors && doctors.length > 0) {
                 renderDoctorCards(doctors);
-            } else {
+            }
+            else {
                 contentContainer.innerHTML = `<p class="text-gray-500">No doctors found with the given filters.</p>`;
             }
         })

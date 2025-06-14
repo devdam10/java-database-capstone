@@ -16,7 +16,6 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class TokenService {
-
     private final AdminRepository adminRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
@@ -60,7 +59,7 @@ public class TokenService {
             if (email == null) return false;
 
             return switch (role.toLowerCase()) {
-                case "admin" -> adminRepository.existsByEmail(email);
+                case "admin" -> adminRepository.existsByUsername(email);
                 case "doctor" -> doctorRepository.existsByEmail(email);
                 case "patient" -> patientRepository.existsByEmail(email);
                 default -> false;

@@ -9,5 +9,5 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
     Admin findByUsername(String username);
 
     // Used in TokenService for token validation
-    boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
 }

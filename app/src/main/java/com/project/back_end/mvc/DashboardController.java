@@ -14,6 +14,7 @@ public class DashboardController {
     @GetMapping("/adminDashboard/{token}")
     public String adminDashboard(@PathVariable String token) {
         boolean isValid = tokenService.validateToken(token, "admin");
+
         if (isValid) {
             return "admin/adminDashboard"; // Thymeleaf template view
         }
@@ -25,6 +26,7 @@ public class DashboardController {
     @GetMapping("/doctorDashboard/{token}")
     public String doctorDashboard(@PathVariable String token) {
         boolean isValid = tokenService.validateToken(token, "doctor");
+
         if (isValid) {
             return "doctor/doctorDashboard";
         }
@@ -32,4 +34,16 @@ public class DashboardController {
             return "redirect:/";
         }
     }
+
+//    @GetMapping("/patientDashboard/{token}")
+//    public String patientDashboard(@PathVariable String token) {
+//        boolean isValid = tokenService.validateToken(token, "patient");
+//
+//        if (isValid) {
+//            return "patient/patientDashboard";
+//        }
+//        else {
+//            return "redirect:/";
+//        }
+//    }
 }

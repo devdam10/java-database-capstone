@@ -169,20 +169,24 @@ export function renderHeader() {
         headerContent += `
       <button id="addDocBtn" class="adminBtn" onclick="openModal('addDoctor')">Add Doctor</button>
       <a href="#" id="logoutBtn">Logout</a>`;
-    } else if (role === "doctor") {
+    }
+    else if (role === "doctor") {
         headerContent += `
       <button id="homeBtn" class="adminBtn" onclick="selectRole('doctor')">Home</button>
       <a href="#" id="logoutBtn">Logout</a>`;
-    } else if (role === "patient") {
+    }
+    else if (role === "patient") {
         headerContent += `
       <button id="patientLogin" class="adminBtn">Login</button>
       <button id="patientSignup" class="adminBtn">Sign Up</button>`;
-    } else if (role === "loggedPatient") {
+    }
+    else if (role === "loggedPatient") {
         headerContent += `
       <button id="homeBtn" class="adminBtn" onclick="window.location.href='/pages/loggedPatientDashboard.html'">Home</button>
       <button id="patientAppointments" class="adminBtn" onclick="window.location.href='/pages/patientAppointments.html'">Appointments</button>
       <a href="#" id="logoutPatientBtn">Logout</a>`;
-    } else {
+    }
+    else {
         // No role found, default to showing login/signup for patients
         headerContent += `
       <button id="patientLogin" class="adminBtn">Login</button>

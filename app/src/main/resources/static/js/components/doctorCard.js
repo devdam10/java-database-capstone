@@ -71,7 +71,9 @@ export async function createDoctorCard(doctor) {
 
     // Availability - assume doctor.availability is an array of strings
     const availability = document.createElement("p");
-    availability.textContent = `Availability: ${doctor.availability.join(", ")}`;
+    // availability.textContent = `Availability: ${doctor.availability.join(", ")}`;
+    availability.textContent = `Availability: ${doctor.availableTimes?.join(", ") || "Not Available"}`;
+
 
     // Append info elements to infoDiv
     infoDiv.appendChild(name);
@@ -107,7 +109,8 @@ export async function createDoctorCard(doctor) {
             }
         });
         actionsDiv.appendChild(removeBtn);
-    } else if (role === "patient") {
+    }
+    else if (role === "patient") {
         // Book Now button for non-logged in patients
         const bookNow = document.createElement("button");
         bookNow.textContent = "Book Now";
@@ -115,7 +118,8 @@ export async function createDoctorCard(doctor) {
             alert("Please log in to book an appointment.");
         });
         actionsDiv.appendChild(bookNow);
-    } else if (role === "loggedPatient") {
+    }
+    else if (role === "loggedPatient") {
         // Book Now button for logged-in patients
         const bookNow = document.createElement("button");
         bookNow.textContent = "Book Now";

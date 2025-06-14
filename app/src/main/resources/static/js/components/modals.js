@@ -1,6 +1,7 @@
 // modals.js
 export function openModal(type) {
   let modalContent = '';
+
   if (type === 'addDoctor') {
     modalContent = `
          <h2>Add Doctor</h2>
@@ -41,11 +42,12 @@ export function openModal(type) {
         </form>
         -->
       `;
-  } else if (type === 'patientLogin') {
+  }
+  else if (type === 'patientLogin') {
     modalContent = `
         <h2>Patient Login</h2>
-        <input type="text" id="email" placeholder="Email" class="input-field">
-        <input type="password" id="password" placeholder="Password" class="input-field">
+        <input type="text" id="patientEmail" placeholder="Email" class="input-field">
+        <input type="password" id="patientPassword" placeholder="Password" class="input-field">
         <button class="dashboard-btn" id="loginBtn">Login</button>
       `;
   }
@@ -59,19 +61,20 @@ export function openModal(type) {
       <input type="text" id="address" placeholder="Address" class="input-field">
       <button class="dashboard-btn" id="signupBtn">Signup</button>
     `;
-
-  } else if (type === 'adminLogin') {
+  }
+  else if (type === 'adminLogin') {
     modalContent = `
         <h2>Admin Login</h2>
-        <input type="text" id="username" name="username" placeholder="Username" class="input-field">
-        <input type="password" id="password" name="password" placeholder="Password" class="input-field">
+        <input type="text" id="adminUsername" name="username" placeholder="Username" class="input-field">
+        <input type="password" id="adminPassword" name="password" placeholder="Password" class="input-field">
         <button class="dashboard-btn" id="adminLoginBtn" >Login</button>
       `;
-  } else if (type === 'doctorLogin') {
+  }
+  else if (type === 'doctorLogin') {
     modalContent = `
         <h2>Doctor Login</h2>
-        <input type="text" id="email" placeholder="Email" class="input-field">
-        <input type="password" id="password" placeholder="Password" class="input-field">
+        <input type="text" id="doctorEmail" placeholder="Email" class="input-field">
+        <input type="password" id="doctorPassword" placeholder="Password" class="input-field">
         <button class="dashboard-btn" id="doctorLoginBtn" >Login</button>
       `;
   }
@@ -79,7 +82,7 @@ export function openModal(type) {
   document.getElementById('modal-body').innerHTML = modalContent;
   document.getElementById('modal').style.display = 'block';
 
-  document.getElementById('closeModal').onclick = () => {
+  document.getElementById('close-modal').onclick = () => {
     document.getElementById('modal').style.display = 'none';
   };
 
@@ -88,7 +91,8 @@ export function openModal(type) {
   }
 
   if(type === "patientLogin"){
-    document.getElementById("loginBtn").addEventListener("click" , loginPatient);
+    // document.getElementById("loginBtn").addEventListener("click" , loginPatient);
+    document.getElementById("loginBtn").addEventListener("click" , patientLoginHandler);
   }
 
   if(type === 'addDoctor'){

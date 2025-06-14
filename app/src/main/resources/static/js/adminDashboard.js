@@ -72,7 +72,7 @@
 */
 // adminDashboard.js
 
-import { openModal } from '../components/modals.js';
+import { openModal } from './components/modals.js';
 import { getDoctors, filterDoctors, saveDoctor } from './services/doctorServices.js';
 import { createDoctorCard } from './components/doctorCard.js';
 
@@ -86,8 +86,8 @@ window.addEventListener('DOMContentLoaded', loadDoctorCards);
 
 // Attach listeners for search and filters
 document.getElementById('searchBar').addEventListener('input', filterDoctorsOnChange);
-document.getElementById('filterTime').addEventListener('change', filterDoctorsOnChange);
-document.getElementById('filterSpecialty').addEventListener('change', filterDoctorsOnChange);
+document.getElementById('timeFilter').addEventListener('change', filterDoctorsOnChange);
+document.getElementById('specialtyFilter').addEventListener('change', filterDoctorsOnChange);
 
 /**
  * Fetch all doctors and display them as cards
@@ -99,10 +99,16 @@ async function loadDoctorCards() {
         const contentDiv = document.getElementById('content');
         contentDiv.innerHTML = '';
 
-        doctors.forEach(doctor => {
-            const card = createDoctorCard(doctor);
+        // doctors.forEach(doctor => {
+        //     const card = createDoctorCard(doctor);
+        //     contentDiv.appendChild(card);
+        // });
+
+        for (const doctor of doctors) {
+            const card = await createDoctorCard(doctor);
             contentDiv.appendChild(card);
-        });
+        }
+
     } catch (error) {
         console.error('Error loading doctors:', error);
     }
@@ -143,6 +149,7 @@ async function filterDoctorsOnChange() {
 function renderDoctorCards(doctors) {
     const contentDiv = document.getElementById('content');
     contentDiv.innerHTML = '';
+
     doctors.forEach(doctor => {
         const card = createDoctorCard(doctor);
         contentDiv.appendChild(card);

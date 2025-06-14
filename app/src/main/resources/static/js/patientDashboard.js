@@ -255,10 +255,12 @@ window.loginPatient = async function () {
       // Optional: Handle user role before redirecting
       // selectRole('loggedPatient'); // Only if this function is defined
       window.location.href = '/pages/loggedPatientDashboard.html';
-    } else {
+    }
+    else {
       alert('❌ Invalid credentials!');
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Login failed:", error);
     alert("❌ Failed to login. Please try again.");
   }

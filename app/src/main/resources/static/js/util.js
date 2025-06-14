@@ -1,4 +1,4 @@
-/* 
+/*
  Function Overview:
    - `setRole(role)`: Stores the user's role in `localStorage`.
    - `getRole()`: Retrieves the user's role from `localStorage`.
@@ -7,16 +7,16 @@
  Functions Breakdown:
    - **`setRole(role)`**:
      - **Purpose**: Stores the user's role in `localStorage`. This is typically called after a user logs in to set their role (e.g., admin, patient, doctor).
-     - **Input**: 
+     - **Input**:
        - `role` (String): The role of the user. Examples: "admin", "patient", "doctor".
      - **Output**: No return value. This function simply stores the role in the `localStorage` under the key `"userRole"`.
-  
+
    - **`getRole()`**:
      - **Purpose**: Retrieves the current user's role from `localStorage`.
      - **Input**: None.
      - **Output**: A string representing the user's role (e.g., "admin", "patient", "doctor") or `null` if no role is set.
      - **Use Case**: This function is useful for checking the user's role to determine what kind of content to display or which page to redirect them to.
-  
+
    - **`clearRole()`**:
      - **Purpose**: Clears the user's role from `localStorage`. This is useful for logging out users and removing any session data.
      - **Input**: None.
@@ -47,3 +47,4 @@ export function getRole() {
 export function clearRole() {
     localStorage.removeItem("userRole");
 }
+

@@ -80,7 +80,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("${api.path}doctor")
+@RequestMapping("${api.path}doctors")
 @RequiredArgsConstructor
 public class DoctorController {
     private final DoctorService doctorService;

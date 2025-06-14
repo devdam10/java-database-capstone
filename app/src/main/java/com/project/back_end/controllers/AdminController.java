@@ -43,6 +43,7 @@ public class AdminController {
     private final CentralService centralService;
 
     @PostMapping("/login")
+    @ResponseBody
     public ResponseEntity<Map<String, String>> adminLogin(@RequestBody Admin admin) {
         return centralService.validateAdmin(admin);
     }

@@ -60,22 +60,32 @@
 // File: app/src/main/resources/static/js/services/index.js
 
 import { openModal } from "../components/modals.js";
+import { DOCTORS_API, PATIENTS_API, ADMIN_API } from "../config/config.js";
+import {renderContent, selectRole } from "../render.js";
+
 // Assuming base API URL is set elsewhere or use relative paths here
-const ADMIN_API = '/admin';
 const DOCTOR_API = '/doctor/login';
 
 window.onload = function () {
-  const adminBtn = document.getElementById('adminLogin');
+  const adminBtn = document.getElementById('adminBtn');
+
   if (adminBtn) {
     adminBtn.addEventListener('click', () => {
       openModal('adminLogin');
     });
   }
 
-  const doctorBtn = document.getElementById('doctorLogin');
+  const doctorBtn = document.getElementById('doctorBtn');
   if (doctorBtn) {
     doctorBtn.addEventListener('click', () => {
       openModal('doctorLogin');
+    });
+  }
+
+  const patientBtn = document.getElementById('patientBtn');
+  if (patientBtn) {
+    patientBtn.addEventListener('click', () => {
+      openModal('patientLogin');
     });
   }
 };
@@ -96,7 +106,7 @@ window.adminLoginHandler = async function () {
 
     const admin = { username, password };
 
-    const response = await fetch(ADMIN_API, {
+    const response = await fetch(ADMIN_API + "/login", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(admin),
@@ -105,11 +115,17 @@ window.adminLoginHandler = async function () {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem('token', data.token);
-      selectRole('admin');
-    } else {
+      localStorage.setItem('userRole', 'admin');
+
+      setTimeout(function () {
+        selectRole('admin');
+      }, 2000);
+    }
+    else {
       alert("Invalid credentials!");
     }
-  } catch (error) {
+  }
+  catch (error) {
     alert("An error occurred during login. Please try again.");
     console.error(error);
   }
@@ -131,7 +147,7 @@ window.doctorLoginHandler = async function () {
 
     const doctor = { email, password };
 
-    const response = await fetch(DOCTOR_API, {
+    const response = await fetch(DOCTORS_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(doctor),
@@ -141,18 +157,57 @@ window.doctorLoginHandler = async function () {
       const data = await response.json();
       localStorage.setItem('token', data.token);
       selectRole('doctor');
-    } else {
+    }
+    else {
       alert("Invalid credentials!");
     }
-  } catch (error) {
+  }
+  catch (error) {
+    alert("An error occurred during login. Please try again.");
+    console.error(error);
+  }
+};
+
+// Patient Login Handler
+window.patientLoginHandler = async function () {
+  try {
+    const emailInput = document.getElementById('patientEmail');
+    const passwordInput = document.getElementById('patientPassword');
+
+    if (!emailInput || !passwordInput) {
+      alert("Login inputs not found");
+      return;
+    }
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    const doctor = { email, password };
+
+    const response = await fetch(PATIENTS_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(doctor),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      selectRole('doctor');
+    }
+    else {
+      alert("Invalid credentials!");
+    }
+  }
+  catch (error) {
     alert("An error occurred during login. Please try again.");
     console.error(error);
   }
 };
 
 // Helper function to save role and proceed (assumed imported or globally defined elsewhere)
-function selectRole(role) {
-  localStorage.setItem('userRole', role);
-  // Add any page redirection or UI changes needed after login here
-  // e.g. window.location.href = '/dashboard';
-}
+// function selectRole(role) {
+//   localStorage.setItem('userRole', role);
+//   // Add any page redirection or UI changes needed after login here
+//   // e.g. window.location.href = '/dashboard';
+// }
