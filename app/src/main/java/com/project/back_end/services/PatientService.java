@@ -112,7 +112,7 @@ public class PatientService {
             }
 
             List<AppointmentDTO> appointments = appointmentRepository
-                    .findByPatientId(id)
+                    .findByPatientIdOrderByAppointmentTime(id)
                     .stream()
                     .map(this::convertAppointmentToDTO)
                     .collect(Collectors.toList());
@@ -161,7 +161,7 @@ public class PatientService {
         Map<String, Object> response = new HashMap<>();
         try {
             List<AppointmentDTO> appointments = appointmentRepository
-                    .filterByDoctorNameAndPatientId(name, patientId)
+                    .filterByDoctorNameContainingIgnoreCaseAndPatientIdOrderByAppointmentTime(name, patientId)
                     .stream()
                     .map(this::convertAppointmentToDTO)
                     .collect(Collectors.toList());
@@ -191,7 +191,7 @@ public class PatientService {
             }
 
             List<AppointmentDTO> appointments = appointmentRepository
-                    .filterByDoctorNameAndPatientIdAndStatus(name, patientId, status)
+                    .filterByDoctorNameContainingIgnoreCaseAndPatientIdAndStatusOrderByAppointmentTime(name, patientId, status)
                     .stream()
                     .map(this::convertAppointmentToDTO)
                     .collect(Collectors.toList());
@@ -230,7 +230,7 @@ public class PatientService {
     public ResponseEntity<Map<String, Object>> filterByPatientId(Long patientId) {
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
+            List<Appointment> appointments = appointmentRepository.findByPatientIdOrderByAppointmentTime(patientId);
 
             response.put("appointments", appointments);
             return ResponseEntity.ok(response);

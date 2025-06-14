@@ -45,7 +45,7 @@ export function selectRole(role) {
             }
             else {
                 alert("Authentication token missing for admin access.");
-                window.location.href = "login.html";
+                window.location.href = "/";
             }
             break;
 
@@ -55,10 +55,12 @@ export function selectRole(role) {
 
         case "doctor":
             if (token) {
-                window.location.href = `doctorDashboard.html?token=${token}`;
-            } else {
+                // window.location.href = `doctorDashboard.html?token=${token}`;
+                window.location.href = `/doctorDashboard/${token}`;
+            }
+            else {
                 alert("Authentication token missing for doctor access.");
-                window.location.href = "login.html";
+                window.location.href = "/";
             }
             break;
 

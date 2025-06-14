@@ -39,8 +39,8 @@
 
 */
 
-import { getAppointments } from "./components/appointmentRow.js";
-import { getAppointmentRecord } from "./services/appointmentRecordService.js";
+import { createAppointmentRow } from "./components/appointmentRow.js";
+import { getAllAppointments } from "./services/appointmentRecordService.js";
 
 // Get DOM references
 const tableBody = document.querySelector("#appointmentsTable tbody");
@@ -49,10 +49,10 @@ const filterDropdown = document.getElementById("filterDropdown");
 // Load and display appointments
 async function loadAppointments(filter = "upcoming") {
     const token = localStorage.getItem("token");
-    const doctorId = localStorage.getItem("doctorId");
 
     try {
-        const appointments = await getAppointmentRecord(doctorId, token);
+        // const appointments = await getAllAppointments(doctorId, token);
+        const appointments = await getAllAppointments('null', 'null', token);
 
         if (!appointments || appointments.length === 0) {
             tableBody.innerHTML = `
@@ -84,7 +84,7 @@ async function loadAppointments(filter = "upcoming") {
         // Clear table and repopulate
         tableBody.innerHTML = "";
         filtered.forEach((appointment) => {
-            const row = getAppointments(appointment);
+            const row = createAppointmentRow(appointment);
             tableBody.appendChild(row);
         });
 
@@ -97,11 +97,16 @@ async function loadAppointments(filter = "upcoming") {
     }
 }
 
-// Attach filter listener
-filterDropdown.addEventListener("change", (e) => {
-    const selected = e.target.value;
-    loadAppointments(selected);
-});
 
-// Initial load
-loadAppointments("upcoming");
+// Run when DOM is fully loaded
+document.addEventListener("DOMContentLoaded", () => {
+    // Attach filter listener
+    filterDropdown.addEventListener("change", (e) => {
+        const selected = e.target.value;
+        loadAppointments(selected);
+    });
+
+    // Initial load
+    loadAppointments("upcoming");
+
+});

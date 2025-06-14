@@ -40,7 +40,7 @@ export function createPatientRow(patient, appointmentId, doctorId) {
     <td>${patient.email}</td>
     <td>
       <img 
-        src="/assets/icons/prescription.svg" 
+        src="/assets/images/addPrescriptionIcon/addPrescription.png" 
         alt="Add Prescription" 
         class="prescription-btn" 
         data-id="${patient.id}" 

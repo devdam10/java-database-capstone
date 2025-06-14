@@ -48,7 +48,7 @@ html, body {
     border: none;
     padding: 10px;
     margin-right: 10px;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;
@@ -70,7 +70,7 @@ html, body {
 
 /* === 4. Table Styling === */
 .table-header {
-    font-size: 24px;
+    font-size: 16px;
     color: #015c5d;
     margin-bottom: 30px;
 }

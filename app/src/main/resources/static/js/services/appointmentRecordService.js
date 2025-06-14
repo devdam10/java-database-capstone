@@ -64,19 +64,36 @@ import { APPOINTMENTS_API } from "../config/config.js";
 
 /**
  * Fetch all appointments for a doctor filtered by date and patient name.
- * @param {string} date - The selected appointment date.
+ * @param {null} date - The selected appointment date.
  * @param {string} patientName - The name of the patient to filter by.
  * @param {string} token - The authentication token.
  * @returns {Promise<Object>} - The list of appointments or an error.
  */
 export async function getAllAppointments(date, patientName, token) {
     try {
-        const url = `${APPOINTMENTS_API}?date=${encodeURIComponent(date)}&patientName=${encodeURIComponent(patientName)}`;
+        // const url = `${APPOINTMENTS_API}?date=${encodeURIComponent(date)}&patientName=${encodeURIComponent(patientName)}`;
+        // const response = await fetch(url, {
+        //     method: "GET",
+        //     headers: {
+        //         Authorization: `Bearer ${token}`
+        //     }
+        // });
+
+        // const url = `${APPOINTMENTS_API}/${encodeURIComponent(date)}/${encodeURIComponent(patientName)}/${token}`;
+        let url = null;
+
+        if(date == null){
+            url = `${APPOINTMENTS_API}/${encodeURIComponent(patientName)}/${token}`;
+        }
+        else{
+            url = `${APPOINTMENTS_API}/${encodeURIComponent(date)}/${encodeURIComponent(patientName)}/${token}`;
+        }
+
         const response = await fetch(url, {
             method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+            // headers: {
+            //     Authorization: `Bearer ${token}`
+            // }
         });
 
         if (!response.ok) {
@@ -84,7 +101,8 @@ export async function getAllAppointments(date, patientName, token) {
         }
 
         return await response.json();
-    } catch (error) {
+    }
+    catch (error) {
         console.error("getAllAppointments error:", error);
         throw error;
     }

@@ -124,7 +124,7 @@ public class DoctorService {
         if (doctorOpt.isEmpty()) return Collections.emptyList();
 
         List<String> allSlots = doctorOpt.get().getAvailableTimes();
-        List<String> bookedSlots = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(
+        List<String> bookedSlots = appointmentRepository.findByDoctorIdAndAppointmentTimeBetweenOrderByAppointmentTime(
                 doctorId,
                 date.atStartOfDay(),
                 date.atTime(23, 59)

@@ -54,6 +54,8 @@ import com.project.back_end.repo.DoctorRepository;
 import com.project.back_end.repo.PatientRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +66,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class AppointmentService {
+    private static final Logger log = LoggerFactory.getLogger(AppointmentService.class);
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
@@ -136,32 +139,63 @@ public class AppointmentService {
         return ResponseEntity.ok(response);
     }
 
-    @Transactional
-    public Map<String, Object> getAppointment(String patientName, LocalDate date, String token) {
-        Map<String, Object> response = new HashMap<>();
+//    @Transactional
+//    public Map<String, Object> getAppointment(String patientName, LocalDate date, String token) {
+//        Map<String, Object> response = new HashMap<>();
+//
+//        String email = tokenService.extractEmail(token);
+//        Doctor doctor = doctorRepository.findByEmail(email);
+//
+//        if (doctor == null) {
+//            response.put("message", "Doctor not found");
+//            return response;
+//        }
+//
+//        LocalDateTime start = date.atStartOfDay();
+//        LocalDateTime end = date.plusDays(1).atStartOfDay();
+//
+//        List<Appointment> appointments;
+//        if (patientName != null && !patientName.isEmpty() && patientName.trim().equalsIgnoreCase("null")) {
+//            appointments = appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(doctor.getId(), patientName, start, end);
+//        }
+//        else {
+//            appointments = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doctor.getId(), start, end);
+//        }
+//
+//        response.put("appointments", appointments);
+//        return response;
+//    }
 
+    @Transactional
+    public List<Appointment> getAppointment(String patientName, LocalDate date, String token) {
         String email = tokenService.extractEmail(token);
         Doctor doctor = doctorRepository.findByEmail(email);
 
-        if (doctor == null) {
-            response.put("message", "Doctor not found");
-            return response;
-        }
-
-        LocalDateTime start = date.atStartOfDay();
-        LocalDateTime end = date.plusDays(1).atStartOfDay();
+        if (doctor == null) return new ArrayList<>();
 
         List<Appointment> appointments;
-        if (patientName != null && !patientName.isBlank()) {
-            appointments = appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(doctor.getId(), patientName, start, end);
+        if (patientName != null && !patientName.isEmpty() && !patientName.trim().equalsIgnoreCase("null") && date != null) {
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = date.plusDays(1).atStartOfDay();
+
+            appointments = appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetweenOrderByAppointmentTime(doctor.getId(), patientName, start, end);
+        }
+        else if (patientName != null && !patientName.isEmpty() && !patientName.trim().equalsIgnoreCase("null")) {
+            appointments = appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseOrderByAppointmentTime(doctor.getId(), patientName);
+        }
+        else if (date != null) {
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = date.plusDays(1).atStartOfDay();
+
+            appointments = appointmentRepository.findByDoctorIdAndAppointmentTimeBetweenOrderByAppointmentTime(doctor.getId(), start, end);
         }
         else {
-            appointments = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doctor.getId(), start, end);
+            appointments = appointmentRepository.findByDoctorIdOrderByAppointmentTime(doctor.getId());
         }
 
-        response.put("appointments", appointments);
-        return response;
+        return appointments;
     }
+
 
     @Transactional
     public void changeStatus(int status, long id) {

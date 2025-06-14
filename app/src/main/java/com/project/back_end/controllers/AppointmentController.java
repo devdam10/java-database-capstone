@@ -7,7 +7,6 @@ import java.util.Objects;
 
 import com.project.back_end.services.CentralService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,24 +25,38 @@ import com.project.back_end.services.AppointmentService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/appointments")
+@RequestMapping("${api.path}appointments")
 @RequiredArgsConstructor
 public class AppointmentController {
     private final AppointmentService appointmentService;
     private final CentralService centralService;
 
     @GetMapping("/{date}/{patientName}/{token}")
-    public ResponseEntity<Map <String,Object>> getAppointments(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @PathVariable String patientName,@PathVariable String token) {
+    public ResponseEntity<?> getAppointments(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @PathVariable String patientName,@PathVariable String token) {
         Map<String, Object> map;
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "doctor");
 
-        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty()) {
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
             map = new HashMap<>(tempMap.getBody());
             return new ResponseEntity<>(map, tempMap.getStatusCode());
         }
 
-        map = appointmentService.getAppointment(patientName, date, token);
-        return ResponseEntity.status(HttpStatus.OK).body(map);
+        // map = appointmentService.getAppointment(patientName, date, token);
+        return ResponseEntity.status(HttpStatus.OK).body(appointmentService.getAppointment(patientName, date, token));
+    }
+
+    @GetMapping("/{patientName}/{token}")
+    public ResponseEntity<?> getAppointments(@PathVariable String patientName, @PathVariable String token) {
+        Map<String, Object> map;
+        ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "doctor");
+
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
+            map = new HashMap<>(tempMap.getBody());
+            return new ResponseEntity<>(map, tempMap.getStatusCode());
+        }
+
+        // map = appointmentService.getAppointment(patientName, date, token);
+        return ResponseEntity.status(HttpStatus.OK).body(appointmentService.getAppointment(patientName, null, token));
     }
 
 

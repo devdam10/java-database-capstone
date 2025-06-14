@@ -63,9 +63,6 @@ import { openModal } from "../components/modals.js";
 import { DOCTORS_API, PATIENTS_API, ADMIN_API } from "../config/config.js";
 import {renderContent, selectRole } from "../render.js";
 
-// Assuming base API URL is set elsewhere or use relative paths here
-const DOCTOR_API = '/doctor/login';
-
 window.onload = function () {
   const adminBtn = document.getElementById('adminBtn');
 
@@ -147,7 +144,7 @@ window.doctorLoginHandler = async function () {
 
     const doctor = { email, password };
 
-    const response = await fetch(DOCTORS_API, {
+    const response = await fetch(DOCTORS_API + '/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(doctor),
@@ -156,7 +153,11 @@ window.doctorLoginHandler = async function () {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem('token', data.token);
-      selectRole('doctor');
+      localStorage.setItem('userRole', 'doctor');
+
+      setTimeout(function () {
+        selectRole('doctor');
+      }, 2000);
     }
     else {
       alert("Invalid credentials!");

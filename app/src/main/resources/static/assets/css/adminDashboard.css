@@ -61,8 +61,8 @@ button:hover {
 
 /* 6. Admin Button */
 .adminBtn {
-    background-color: transparent;
-    color: #333;
+    background-color: #015c5d;
+    color: white;
     font-weight: bold;
     border-radius: 5px;
     padding: 10px 20px;
@@ -75,8 +75,7 @@ button:hover {
 
 .adminBtn:hover {
     color: white;
-    background-color: #003e3e;
-    /*background-color: #A62B1F;*/
+    background-color: #017d7e;
 }
 
 /* 7. Search and Filters */
@@ -94,11 +93,19 @@ button:hover {
 #timeFilter:focus,
 #specialtyFilter:focus {
     outline: none;
-    border-color: #A62B1F;
+    border-color: #017d7e;
 }
 
-#searchBar{
+/*#searchBar{*/
+/*    width: 50%;*/
+/*}*/
+
+.searchBar, #searchBar {
     width: 50%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
 }
 
 /* 8. Modal Styles */
@@ -161,7 +168,7 @@ button:hover {
 
 .modal-content input:focus,
 .modal-content select:focus {
-    border-color: #A62B1F;
+    border-color: #017d7e;
     outline: none;
 }
 

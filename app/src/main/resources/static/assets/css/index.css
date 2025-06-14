@@ -72,7 +72,8 @@ button {
 }
 
 button:hover {
-    background-color: #A62B1F;
+    /*background-color: #A62B1F;*/
+    background-color: #017d7e;
 }
 
 /* Dashboard-specific buttons */

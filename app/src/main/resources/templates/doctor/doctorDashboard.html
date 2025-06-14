@@ -17,13 +17,13 @@
     <link rel="stylesheet" th:href="@{/assets/css/style.css}" />
 
     <!-- JavaScript Files -->
-    <script type="module" th:src="@{/assets/js/utils/render.js}" defer></script>
-    <script type="module" th:src="@{/assets/js/utils/util.js}" defer></script>
-    <script type="module" th:src="@{/assets/js/components/header.js}" defer></script>
-    <script type="module" th:src="@{/assets/js/components/footer.js}" defer></script>
-    <script type="module" th:src="@{/assets/js/components/patientRows.js}" defer></script>
-    <script type="module" th:src="@{/assets/js/services/patientServices.js}" defer></script>
-    <script type="module" th:src="@{/assets/js/pages/doctorDashboard.js}" defer></script>
+    <script type="module" th:src="@{/js/render.js}" defer></script>
+    <script type="module" th:src="@{/js/util.js}" defer></script>
+    <script type="module" th:src="@{/js/components/header.js}" defer></script>
+    <script type="module" th:src="@{/js/components/footer.js}" defer></script>
+    <script type="module" th:src="@{/js/components/patientRows.js}" defer></script>
+    <script type="module" th:src="@{/js/services/patientServices.js}" defer></script>
+    <script type="module" th:src="@{/js/doctorDashboard.js}" defer></script>
 </head>
 
 <body onload="renderContent()">
@@ -48,7 +48,7 @@
 
                 <!-- Patient Table -->
                 <table id="patientTable">
-                    <thead>
+                    <thead class="table-header">
                     <tr>
                         <th>Patient ID</th>
                         <th>Name</th>
@@ -65,7 +65,6 @@
 
             <!-- Footer Section -->
             <div id="footer"></div>
-
         </div>
     </div>
 </body>
