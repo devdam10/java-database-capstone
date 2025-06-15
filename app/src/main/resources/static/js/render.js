@@ -70,7 +70,7 @@ export function selectRole(role) {
 
         default:
             // If role unknown, redirect to home or login
-            window.location.href = "index.html";
+            window.location.href = "/";
             break;
     }
 }
@@ -81,7 +81,7 @@ export function renderContent() {
 
     if (!role) {
         // No role found, redirect to role selection or login page
-        window.location.href = "index.html";
+        window.location.href = "/";
         return;
     }
 
@@ -89,21 +89,23 @@ export function renderContent() {
     // Example:
     switch (role) {
         case "admin":
-            console.log("admin already logged in");
-
             // Load admin-specific content or redirect
+            //selectRole("admin");
             break;
         case "patient":
             // Load patient-specific content or redirect
+            //selectRole("patient");
             break;
         case "doctor":
             // Load doctor-specific content or redirect
+            //selectRole("doctor");
             break;
         case "loggedPatient":
             // Load logged-in patient content
+            //selectRole("loggedPatient");
             break;
         default:
-            window.location.href = "index.html";
+            window.location.href = "/";
             break;
     }
 }

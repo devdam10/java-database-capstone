@@ -37,9 +37,7 @@
   Step 5: Catch and log any errors, and rethrow them so the caller can handle them
 */
 
-import { API_BASE_URL } from "../config/config.js";
-
-const PRESCRIPTION_API = `${API_BASE_URL}/prescription`;
+import { PRESCRIPTIONS_API } from "../config/config.js";
 
 /**
  * Save a new prescription to the backend.
@@ -49,7 +47,7 @@ const PRESCRIPTION_API = `${API_BASE_URL}/prescription`;
  */
 export async function savePrescription(prescription, token) {
     try {
-        const response = await fetch(`${PRESCRIPTION_API}/${token}`, {
+        const response = await fetch(`${PRESCRIPTIONS_API}/${token}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -58,7 +56,6 @@ export async function savePrescription(prescription, token) {
         });
 
         const data = await response.json();
-
         return {
             success: response.ok,
             message: data.message || "Prescription saved"
@@ -80,7 +77,7 @@ export async function savePrescription(prescription, token) {
  */
 export async function getPrescription(appointmentId, token) {
     try {
-        const response = await fetch(`${PRESCRIPTION_API}/${appointmentId}/${token}`, {
+        const response = await fetch(`${PRESCRIPTIONS_API}/${appointmentId}/${token}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -92,9 +89,10 @@ export async function getPrescription(appointmentId, token) {
             throw new Error(errorData.message || "Failed to fetch prescription");
         }
 
-        const prescription = await response.json();
-        return prescription;
-    } catch (error) {
+        const data = await response.json();
+        return data.prescriptions;
+    }
+    catch (error) {
         console.error("getPrescription error:", error);
         throw error;
     }

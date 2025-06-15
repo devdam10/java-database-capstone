@@ -43,6 +43,7 @@ import com.project.back_end.services.CentralService;
 import com.project.back_end.services.PrescriptionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +53,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("${api.path}prescription")
+@RequestMapping("${api.path}prescriptions")
 @RequiredArgsConstructor
 public class PrescriptionController {
     private final PrescriptionService prescriptionService;
@@ -67,7 +68,7 @@ public class PrescriptionController {
         // Validate token for 'doctor' role
         ResponseEntity<Map<String, String>> tokenValidation = centralService.validateToken(token, "doctor");
 
-        if (!Objects.requireNonNull(tokenValidation.getBody()).isEmpty()) {
+        if (!Objects.requireNonNull(tokenValidation.getBody()).isEmpty() && tokenValidation.getStatusCode() != HttpStatus.OK) {
             return tokenValidation;
         }
 
@@ -94,7 +95,7 @@ public class PrescriptionController {
         // Validate token for 'doctor' role
         ResponseEntity<Map<String, String>> tokenValidation = centralService.validateToken(token, "doctor");
 
-        if (!Objects.requireNonNull(tokenValidation.getBody()).isEmpty()) {
+        if (!Objects.requireNonNull(tokenValidation.getBody()).isEmpty() && tokenValidation.getStatusCode() != HttpStatus.OK) {
             return tokenValidation;
         }
 

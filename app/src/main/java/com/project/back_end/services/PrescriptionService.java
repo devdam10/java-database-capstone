@@ -85,12 +85,7 @@ public class PrescriptionService {
         try {
             List<Prescription> prescriptions = prescriptionRepository.findByAppointmentId(appointmentId);
 
-            if (prescriptions.isEmpty()) {
-                response.put("message", "No prescription found for this appointment.");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-
-            response.put("prescription", prescriptions.get(0));
+            response.put("prescriptions", prescriptions);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch (Exception e) {

@@ -49,16 +49,18 @@
         - Show an error alert with the message
 */
 
-import { savePrescription, getPrescription } from "../services/prescriptionService.js";
+import { savePrescription, getPrescription } from "./services/prescriptionServices.js";
+import { selectRole } from "./render.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     // Get references to form elements
     const heading = document.getElementById("form-heading");
     const patientNameInput = document.getElementById("patientName");
-    const medicationInput = document.getElementById("medication");
-    const dosageInput = document.getElementById("dosage");
-    const notesInput = document.getElementById("notes");
+    const medicationInput = document.getElementById("medicineNames");
+    const dosageInput = document.getElementById("dosageInstructions");
+    const notesInput = document.getElementById("additionalNotes");
     const saveBtn = document.getElementById("saveBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
 
     // Extract query parameters
     const urlParams = new URLSearchParams(window.location.search);
@@ -82,14 +84,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Fetch and populate prescription data if available
     if (appointmentId && token) {
         try {
-            const response = await getPrescription(appointmentId, token);
-            if (response && Array.isArray(response.prescription) && response.prescription.length > 0) {
-                const data = response.prescription[0];
+            const prescriptions = await getPrescription(appointmentId, token);
+
+            if (prescriptions && Array.isArray(prescriptions) && prescriptions.length > 0) {
+                const data = prescriptions[0];
                 medicationInput.value = data.medication || "";
                 dosageInput.value = data.dosage || "";
                 notesInput.value = data.notes || "";
             }
-        } catch (err) {
+        }
+        catch (err) {
             console.error("No prescription found or error retrieving it:", err);
         }
     }
@@ -102,11 +106,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (notesInput) notesInput.disabled = true;
         if (saveBtn) saveBtn.style.display = "none";
     }
+    else {
+        if (saveBtn) saveBtn.style.display = "inline-block";
+    }
 
     // Save button click handler
     if (saveBtn) {
         saveBtn.addEventListener("click", async (e) => {
             e.preventDefault();
+
+            const patientName = patientNameInput.value.trim();
+            const medications = medicationInput.value.trim();
+            const dosage = dosageInput.value.trim();
+            const notes = notesInput.value.trim();
+
+            // If empty fields then show alert
+            if(patientName.length === 0 || medications.length === 0 || dosage.length === 0) {
+                alert("Please enter all required fields!");
+                return;
+            }
 
             const prescription = {
                 appointmentId,
@@ -117,16 +135,35 @@ document.addEventListener("DOMContentLoaded", async () => {
             };
 
             const result = await savePrescription(prescription, token);
+
             if (result.success) {
                 alert("Prescription saved successfully.");
                 // Redirect or go back to doctor view
                 if (typeof selectRole === "function") {
                     selectRole("doctor");
-                } else {
-                    window.location.href = "dashboard.html"; // fallback
                 }
-            } else {
+                else {
+                    //window.location.href = "dashboard.html"; // fallback
+                    window.location.href = `/doctorDashboard/${token}`;
+                }
+            }
+            else {
                 alert("Error saving prescription: " + result.message);
+            }
+        });
+    }
+
+    // Cancel button handler
+    if(cancelBtn){
+        cancelBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            if (typeof selectRole === "function") {
+                selectRole("doctor");
+            }
+            else {
+                //window.location.href = "dashboard.html"; // fallback
+                window.location.href = `/doctorDashboard/${token}`;
             }
         });
     }

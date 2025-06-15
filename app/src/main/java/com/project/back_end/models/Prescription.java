@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @AllArgsConstructor
@@ -23,6 +24,7 @@ public class Prescription {
     @Size(min = 3, max = 200)
     private String patientName;
 
+    @Indexed(unique = true) // ensure one appointment per prescription
     @NotNull(message = "Appoint id is required!")
     private Long appointmentId;
 

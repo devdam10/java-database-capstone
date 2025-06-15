@@ -126,6 +126,8 @@
 // header.js
 
 // Render the header dynamically based on user role and session
+import { selectRole } from "../render.js";
+
 export function renderHeader() {
     const headerDiv = document.getElementById("header");
 
@@ -134,12 +136,12 @@ export function renderHeader() {
         localStorage.removeItem("userRole");
         localStorage.removeItem("token");
         headerDiv.innerHTML = `
-      <header class="header">
-        <div class="logo-section">
-          <img src="../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
-          <span class="logo-title">Hospital CMS</span>
-        </div>
-      </header>`;
+          <header class="header">
+            <div class="logo-section">
+              <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+              <span class="logo-title">Hospital CMS</span>
+            </div>
+          </header>`;
         return;
     }
 
@@ -151,7 +153,7 @@ export function renderHeader() {
     let headerContent = `
     <header class="header">
       <div class="logo-section">
-        <img src="../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
+        <img src="/assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
         <span class="logo-title">Hospital CMS</span>
       </div>
       <nav>`;
@@ -172,7 +174,7 @@ export function renderHeader() {
     }
     else if (role === "doctor") {
         headerContent += `
-      <button id="homeBtn" class="adminBtn" onclick="selectRole('doctor')">Home</button>
+      <button id="homeBtn" class="adminBtn">Home</button>
       <a href="#" id="logoutBtn">Logout</a>`;
     }
     else if (role === "patient") {
@@ -246,6 +248,8 @@ function attachHeaderButtonListeners() {
     if (homeBtn) {
         homeBtn.addEventListener("click", () => {
             // You can define behavior if needed, else inline onclick is enough
+            const role = localStorage.getItem("userRole");
+            selectRole(role);
         });
     }
 
@@ -277,11 +281,11 @@ function openModal(modalName) {
     console.log(`Open modal: ${modalName}`);
 }
 
-// Dummy selectRole function if used by doctor home button
-function selectRole(role) {
-    localStorage.setItem("userRole", role);
-    window.location.href = "/pages/doctorDashboard.html"; // adjust as needed
-}
+// // Dummy selectRole function if used by doctor home button
+// function selectRole(role) {
+//     localStorage.setItem("userRole", role);
+//     window.location.href = "/pages/doctorDashboard.html"; // adjust as needed
+// }
 
 // Call renderHeader on script load
 renderHeader();

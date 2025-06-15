@@ -106,8 +106,7 @@ async function loadAppointments(selectedDate = null) {
                 phone: p.phone,
                 email: p.email
             };
-            //const row = createAppointmentRow(appointment);
-            const row = createPatientRow(patient);
+            const row = createPatientRow(patient, appointment.id, appointment.doctor.id);
             tableBody.appendChild(row);
         });
     } catch (error) {
@@ -146,7 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Date picker changes selected date
     document.getElementById('datePicker').addEventListener('change', (e) => {
         selectedDate = e.target.value;
-        loadAppointments();
+        //loadAppointments();
+
+        loadAppointments(selectedDate);
     });
 
     renderContent();

@@ -111,72 +111,72 @@ This file creates a user interface for doctors to input and manage patient presc
     <link rel="stylesheet" href="../assets/css/style.css" />
 
     <!-- JavaScript Files -->
-    <script src="../assets/js/render.js" defer></script>
-    <script src="../assets/js/util.js" defer></script>
-    <script src="../assets/js/header.js" defer></script>
-    <script src="../assets/js/footer.js" defer></script>
-    <script type="module" src="../assets/js/addPrescription.js" defer></script>
+    <script type="module" src="../js/render.js" defer></script>
+    <script type="module" src="../js/util.js" defer></script>
+    <script type="module" src="../js/components/header.js" defer></script>
+    <script type="module" src="../js/components/footer.js" defer></script>
+    <script type="module" src="../js/addPrescription.js" defer></script>
 </head>
+
 <body onload="renderContent()">
-<div class="container">
-    <div class="wrapper">
-        <!-- Header will be dynamically injected here -->
-        <div id="header"></div>
+    <div class="container">
+        <div class="wrapper">
+            <!-- Header will be dynamically injected here -->
+            <div id="header"></div>
 
-        <div class="main-content">
-            <div class="form-container">
-                <h2 id="heading">Add <span>Prescription</span></h2>
-                <form id="addPrescriptionForm">
-                    <label for="patientName">Patient Name</label>
-                    <input
-                            type="text"
-                            id="patientName"
-                            name="patientName"
-                            disabled
-                            placeholder="Patient Name"
-                    />
+            <div class="main-content">
+                <div class="form-container">
+                    <h2 id="form-heading">Add <span>Prescription</span></h2>
+                    <form id="addPrescriptionForm">
+                        <label for="patientName">Patient Name</label>
+                        <input
+                                type="text"
+                                id="patientName"
+                                name="patientName"
+                                disabled
+                                placeholder="Patient Name"
+                        />
 
-                    <label for="medicineNames">Medicine Names</label>
-                    <input
-                            type="text"
-                            id="medicineNames"
-                            name="medicineNames"
-                            placeholder="Enter medicine names separated by commas"
-                            required
-                    />
+                        <label for="medicineNames">Medicine Names</label>
+                        <input
+                                type="text"
+                                id="medicineNames"
+                                name="medicineNames"
+                                placeholder="Enter medicine names separated by commas"
+                                required
+                        />
 
-                    <label for="dosageInstructions">Dosage Instructions</label>
-                    <textarea
-                            id="dosageInstructions"
-                            name="dosageInstructions"
-                            placeholder="Enter dosage instructions"
-                            required
-                    ></textarea>
+                        <label for="dosageInstructions">Dosage Instructions</label>
+                        <textarea
+                                id="dosageInstructions"
+                                name="dosageInstructions"
+                                placeholder="Enter dosage instructions"
+                                required
+                        ></textarea>
 
-                    <label for="additionalNotes">Additional Notes (Optional)</label>
-                    <textarea
-                            id="additionalNotes"
-                            name="additionalNotes"
-                            placeholder="Add any extra notes here"
-                    ></textarea>
+                        <label for="additionalNotes">Additional Notes (Optional)</label>
+                        <textarea
+                                id="additionalNotes"
+                                name="additionalNotes"
+                                placeholder="Add any extra notes here"
+                        ></textarea>
 
-                    <div class="form-buttons">
-                        <button type="submit" class="btn-submit">Save Prescription</button>
-                        <button
-                                type="button"
-                                class="btn-cancel"
-                                onclick="selectRole('doctor')"
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </form>
+                        <div class="form-buttons">
+                            <button type="submit" class="form-btn btn-submit" id="saveBtn">Save Prescription</button>
+                            <button
+                                    type="button"
+                                    id="cancelBtn"
+                                    class="form-btn btn-cancel">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
 
-        <!-- Footer will be dynamically injected here -->
-        <div id="footer"></div>
+            <!-- Footer will be dynamically injected here -->
+            <div id="footer"></div>
+        </div>
     </div>
-</div>
 </body>
 </html>

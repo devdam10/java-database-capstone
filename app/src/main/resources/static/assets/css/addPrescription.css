@@ -154,7 +154,7 @@ textarea:focus {
     padding: 14px;
     width: 100%;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -180,6 +180,27 @@ textarea:focus {
 
 .btn.secondary:hover {
     color: white;
+}
+
+.form-btn {
+    background-color: #015c5d;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: 200px;
+    border: none;
+    cursor: pointer;
+
+    transition: background-color 0.3s ease;
+}
+
+.form-btn:hover {
+    color: white;
+    background-color: #017d7e;
+}
+
+#saveBtn {
+    display: none;
 }
 
 /* Fade In Animation */

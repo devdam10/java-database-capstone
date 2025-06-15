@@ -100,8 +100,10 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<scope>annotationProcessor</scope>
+			<version>1.18.30</version> <!-- or latest -->
+			<scope>provided</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
