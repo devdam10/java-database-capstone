@@ -158,13 +158,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         cancelBtn.addEventListener("click", async (e) => {
             e.preventDefault();
 
-            if (typeof selectRole === "function") {
-                selectRole("doctor");
-            }
-            else {
-                //window.location.href = "dashboard.html"; // fallback
-                window.location.href = `/doctorDashboard/${token}`;
-            }
+            window.history.back();
         });
     }
 });

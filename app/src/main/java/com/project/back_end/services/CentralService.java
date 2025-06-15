@@ -82,6 +82,7 @@ import java.util.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 @RequiredArgsConstructor
@@ -92,6 +93,7 @@ public class CentralService {
     private final AdminRepository adminRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
+    private final AppointmentRepository appointmentRepository;
     private final DoctorService doctorService;
     private final PatientService patientService;
 
@@ -324,6 +326,33 @@ public class CentralService {
         catch (Exception e) {
             logger.error("Error filtering patient appointments: {}", e.getMessage());
             response.put("message", "Error filtering appointments.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<Map<String, Object>> filterPatient(Long patientId, @PathVariable Long doctorId, String token) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String email = tokenService.extractEmail(token);
+
+            if (doctorRepository.findByEmail(email) == null) {
+                response.put("message", "Doctor not found.");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+
+            if (patientRepository.findById(patientId).isEmpty()) {
+                response.put("message", "Patient not found.");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+
+            response.put("appointments", appointmentRepository.findByDoctorIdAndPatientIdOrderByAppointmentTime(doctorId, patientId));
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            logger.error("Error filtering patient appointments: {}", e.getMessage());
+            response.put("message", "Error filtering appointments.");
+
+            System.out.println("flag 6");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

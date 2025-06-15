@@ -48,3 +48,9 @@ export function clearRole() {
     localStorage.removeItem("userRole");
 }
 
+export function convertDate(inputDate) {
+    const date = new Date(inputDate);
+
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}

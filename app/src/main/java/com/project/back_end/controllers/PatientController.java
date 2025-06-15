@@ -71,8 +71,8 @@ import java.util.Objects;
 @RequestMapping("${api.path}patients")
 @RequiredArgsConstructor
 public class PatientController {
-    private PatientService patientService;
-    private CentralService centralService;
+    private final PatientService patientService;
+    private final CentralService centralService;
 
     @GetMapping("/{token}")
     public ResponseEntity<?> getPatient(@PathVariable String token) {
@@ -122,7 +122,7 @@ public class PatientController {
     public ResponseEntity<?> getPatientAppointment(@PathVariable Long id, @PathVariable String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
 
-        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty()) {
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
             return tempMap;
         }
 
@@ -133,10 +133,21 @@ public class PatientController {
     public ResponseEntity<?> filterPatientAppointment(@PathVariable String condition, @PathVariable String name, @PathVariable String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
 
-        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty()) {
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
             return tempMap;
         }
 
         return centralService.filterPatient(condition, name, token);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<?> filterPatientAppointmentByDoctor(@RequestParam Long patientId, @RequestParam Long doctorId, @RequestParam String token) {
+        ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "doctor");
+
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
+            return tempMap;
+        }
+
+        return centralService.filterPatient(patientId, doctorId, token);
     }
 }

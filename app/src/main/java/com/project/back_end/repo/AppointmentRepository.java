@@ -104,4 +104,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     List<Appointment> findByDoctorIdOrderByAppointmentTime(Long doctorId);
     List<Appointment> findByDoctorIdAndPatient_NameContainingIgnoreCaseOrderByAppointmentTime(Long doctorId, String patientName);
+
+    List<Appointment> findByDoctorIdAndPatientIdOrderByAppointmentTime(Long doctorId, Long patientId);
 }

@@ -85,18 +85,6 @@ async function loadAppointments(selectedDate = null) {
             return;
         }
 
-        // // Render each appointment as a row
-        // appointments.forEach(app => {
-        //     const patient = {
-        //         id: app.patientId,
-        //         name: app.patientName,
-        //         phone: app.patientPhone,
-        //         email: app.patientEmail
-        //     };
-        //     const row = createPatientRow(patient);
-        //     tableBody.appendChild(row);
-        // });
-
         // Render each appointment as a row
         appointments.forEach(appointment => {
             const p = appointment.patient;

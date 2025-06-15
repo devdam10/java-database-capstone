@@ -91,40 +91,41 @@ This HTML document allows doctors to view detailed records of their patients, in
     <link rel="stylesheet" href="../assets/css/style.css" />
 
     <!-- JavaScript Files -->
-    <script src="../assets/js/render.js" defer></script>
-    <script src="../assets/js/util.js" defer></script>
-    <script src="../assets/js/header.js" defer></script>
-    <script src="../assets/js/footer.js" defer></script>
-    <script src="../assets/js/patientRecordRow.js" defer></script>
-    <script src="../assets/js/patientRecordServices.js" defer></script>
+    <script type="module" src="../js/render.js" defer></script>
+    <script type="module" src="../js/util.js" defer></script>
+    <script type="module" src="../js/components/header.js" defer></script>
+    <script type="module" src="../js/components/footer.js" defer></script>
+    <script type="module" src="../js/components/patientRecordRow.js" defer></script>
+    <script type="module" src="../js/patientRecordServices.js" defer></script>
 </head>
+
 <body onload="renderContent()">
-<div class="container">
-    <div class="wrapper">
-        <!-- Dynamic header -->
-        <div id="header"></div>
+    <div class="container">
+        <div class="wrapper">
+            <!-- Dynamic header -->
+            <div id="header"></div>
 
-        <div class="main-content">
-            <h2>Patient <span>Record</span></h2>
+            <div class="main-content">
+                <h2>Patient <span>Record</span></h2>
 
-            <table class="patient-record-table">
-                <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Appointment ID</th>
-                    <th>Patient ID</th>
-                    <th>Prescription</th>
-                </tr>
-                </thead>
-                <tbody id="patientTableBody">
-                <!-- Patient records rows injected here -->
-                </tbody>
-            </table>
+                <table class="patient-record-table">
+                    <thead class="table-header">
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Appointment ID</th>
+                        <th>Date</th>
+                        <th>Prescription</th>
+                    </tr>
+                    </thead>
+                    <tbody id="patientTableBody">
+                    <!-- Patient records rows injected here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Dynamic footer -->
+            <div id="footer"></div>
         </div>
-
-        <!-- Dynamic footer -->
-        <div id="footer"></div>
     </div>
-</div>
 </body>
 </html>

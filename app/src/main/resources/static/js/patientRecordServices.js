@@ -30,11 +30,11 @@
 */
 
 // Import necessary modules
-import { getPatientAppointments } from "../services/patientService.js";
-import { createPatientRecordRow } from "../utils/tableRowFactory.js";
+import { getPatientAppointments } from "./services/patientServices.js";
+import { createPatientRecordRow, createPatientRecordRow2 } from "./components/patientRecordRow.js";
 
 // DOM references
-const tableBody = document.querySelector("#patientAppointmentsTable tbody");
+const tableBody = document.getElementById("patientTableBody");
 const token = localStorage.getItem("token");
 
 // Extract URL parameters for filtering
@@ -57,15 +57,10 @@ async function initializePage() {
 
     try {
         // Fetch appointments for the patient with role "doctor" for backend access
-        const appointments = await getPatientAppointments(patientId, token, "doctor");
-
-        // Filter by doctorId from URL
-        const filteredAppointments = appointments.filter(
-            (appt) => appt.doctorId === doctorId
-        );
-
-        renderAppointments(filteredAppointments);
-    } catch (error) {
+        const appointments = await getPatientAppointments(patientId, doctorId, token);
+        renderAppointments(appointments);
+    }
+    catch (error) {
         console.error("Error loading patient appointments:", error);
         alert("Failed to load patient appointments. Please try again later.");
     }
@@ -90,7 +85,7 @@ function renderAppointments(appointments) {
 
     appointments.forEach((appointment) => {
         // createPatientRecordRow returns a <tr> element for each appointment
-        const row = createPatientRecordRow(appointment);
+        const row = createPatientRecordRow2(appointment);
         tableBody.appendChild(row);
     });
 }

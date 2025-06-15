@@ -87,7 +87,8 @@ export async function patientSignup(data) {
         }
 
         return { success: true, message: result.message || 'Signup successful' };
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Signup error:', error);
         return { success: false, message: error.message || 'Signup error' };
     }
@@ -132,15 +133,24 @@ export async function getPatientData(token) {
 
 /**
  * Get patient appointments (for patient or doctor).
- * @param {string} id - User ID (patient or doctor)
+ * @param {string} patientId - patient
  * @param {string} token - Authentication token
- * @param {string} user - 'patient' or 'doctor'
+ * @param {string} doctorId - doctor
  * @returns {Promise<Array|null>} Appointments array or null on failure
  */
-export async function getPatientAppointments(id, token, user) {
+export async function getPatientAppointments(patientId, doctorId, token) {
     try {
-        const url = `${PATIENTS_API}/${id}/${user}/${token}`;
-        const response = await fetch(url);
+        // const url = `${PATIENTS_API}/${id}/${user}/${token}`;
+        const url = `${PATIENTS_API}/filter?patientId=${patientId}&doctorId=${doctorId}&token=${token}`;
+        //const response = await fetch(url);
+
+        const response = await fetch(url, {
+            method: "GET",
+            // headers: {
+            //     Authorization: `Bearer ${token}`
+            // }
+        });
+
         if (!response.ok) {
             console.error('Failed to get appointments:', response.statusText);
             return null;

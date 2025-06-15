@@ -34,7 +34,7 @@ export function createPatientRow(patient, appointmentId, doctorId) {
 
     // Set the row's inner HTML with the specified columns
     row.innerHTML = `
-        <td class="patient-id" style="cursor: pointer; color: blue;">${patient.id}</td>
+        <td class="patient-id" style="cursor: pointer; color: blue;" title="View Patient's Record">${patient.id}</td>
         <td>${patient.name}</td>
         <td>${patient.phone}</td>
         <td>${patient.email}</td>
@@ -63,7 +63,8 @@ export function createPatientRow(patient, appointmentId, doctorId) {
     const patientIdCell = row.querySelector('.patient-id');
     if (patientIdCell) {
         patientIdCell.addEventListener('click', () => {
-            window.location.href = `patientRecord.html?patientId=${patient.id}&doctorId=${doctorId}`;
+            //window.location.href = `patientRecord.html?patientId=${patient.id}&doctorId=${doctorId}`;
+            window.location.href = `../../pages/patientRecord.html?patientId=${patient.id}&doctorId=${doctorId}`;
         });
     }
 
