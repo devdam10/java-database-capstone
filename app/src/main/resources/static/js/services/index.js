@@ -82,7 +82,10 @@ window.onload = function () {
   const patientBtn = document.getElementById('patientBtn');
   if (patientBtn) {
     patientBtn.addEventListener('click', () => {
-      openModal('patientLogin');
+      // openModal('patientLogin');
+      localStorage.setItem("userRole", "patient");
+
+      window.location.href = `../../pages/patientDashboard.html`;
     });
   }
 };
@@ -170,41 +173,45 @@ window.doctorLoginHandler = async function () {
 };
 
 // Patient Login Handler
-window.patientLoginHandler = async function () {
-  try {
-    const emailInput = document.getElementById('patientEmail');
-    const passwordInput = document.getElementById('patientPassword');
-
-    if (!emailInput || !passwordInput) {
-      alert("Login inputs not found");
-      return;
-    }
-
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-
-    const doctor = { email, password };
-
-    const response = await fetch(PATIENTS_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(doctor),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
-      selectRole('doctor');
-    }
-    else {
-      alert("Invalid credentials!");
-    }
-  }
-  catch (error) {
-    alert("An error occurred during login. Please try again.");
-    console.error(error);
-  }
-};
+// window.patientLoginHandler = async function () {
+//   try {
+//     const emailInput = document.getElementById('patientEmail');
+//     const passwordInput = document.getElementById('patientPassword');
+//
+//     if (!emailInput || !passwordInput) {
+//       alert("Login inputs not found");
+//       return;
+//     }
+//
+//     const email = emailInput.value.trim();
+//     const password = passwordInput.value;
+//
+//     const doctor = { email, password };
+//
+//     const response = await fetch(PATIENTS_API + '/login', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify(doctor),
+//     });
+//
+//     if (response.ok) {
+//       const data = await response.json();
+//       localStorage.setItem('token', data.token);
+//       localStorage.setItem('userRole', 'patient');
+//
+//       setTimeout(function () {
+//         selectRole('patient');
+//       }, 2000);
+//     }
+//     else {
+//       alert("Invalid credentials!");
+//     }
+//   }
+//   catch (error) {
+//     alert("An error occurred during login. Please try again.");
+//     console.error(error);
+//   }
+// };
 
 // Helper function to save role and proceed (assumed imported or globally defined elsewhere)
 // function selectRole(role) {

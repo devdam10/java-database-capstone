@@ -8,10 +8,11 @@
     <link rel = "stylesheet" href = "../assets/css/adminDashboard.css">
     <link rel = "stylesheet" href = "../assets/css/style.css">
     <link rel = "stylesheet" href = "../assets/css/patientDashboard.css">
-    <script src = "../js/render.js" defer></script>
-    <script src = "../js/util.js" defer></script>
-    <script src = "../js/components/header.js" defer></script>
-    <script src = "../js/components/footer.js" defer></script>
+
+    <script type = "module" src = "../js/render.js" defer></script>
+    <script type = "module" src = "../js/util.js" defer></script>
+    <script type = "module" src = "../js/components/header.js" defer></script>
+    <script type = "module" src = "../js/components/footer.js" defer></script>
     <script type = "module" src="../js/components/modals.js"></script>
 </head>
 
@@ -21,39 +22,43 @@
             <div id="header"></div>
             <main class="main-content">
                 <input type="text" id="searchBar" class="searchBar" placeholder="Search Bar for custom output" />
+
                 <div class="filter-wrapper">
                     <select class="filter-select" id="filterTime">
                         <option value="">Sort by Time</option>
                         <option value="AM">AM</option>
                         <option value="PM">PM</option>
                     </select>
+
                     <select class="filter-select" id="filterSpecialty">
                         <option value="">Filter by Specialty</option>
-                        <option value="Cardiologist">Cardiologist</option>
-                        <option value="Dermatologist">Dermatologist</option>
-                        <option value="Neurologist">Neurologist</option>
-                        <option value="Pediatrician">Pediatrician</option>
-                        <option value="Orthopedic">Orthopedic</option>
-                        <option value="Gynecologist">Gynecologist</option>
-                        <option value="Psychiatrist">Psychiatrist</option>
-                        <option value="Dentist">Dentist</option>
-                        <option value="Ophthalmologist">Ophthalmologist</option>
-                        <option value="Ent">ENT Specialist</option>
-                        <option value="Urologist">Urologist</option>
-                        <option value="Oncologist">Oncologist</option>
-                        <option value="Gastroenterologist">Gastroenterologist</option>
-                        <option value="General">General Physician</option>
+                        <option value="cardiology">Cardiology</option>
+                        <option value="dentistry">Dentistry</option>
+                        <option value="dermatology">Dermatology</option>
+                        <option value="ent">ENT Specialist</option>
+                        <option value="gastroenterology">Gastroenterology</option>
+                        <option value="general">General Physician</option>
+                        <option value="gynecology">Gynecology</option>
+                        <option value="neurology">Neurology</option>
+                        <option value="oncology">Oncology</option>
+                        <option value="ophthalmology">Ophthalmology</option>
+                        <option value="orthopedics">Orthopedics</option>
+                        <option value="pediatrics">Pediatrics</option>
+                        <option value="psychiatry">Psychiatry</option>
+                        <option value="urology">Urology</option>
                     </select>
                 </div>
+
                 <div id="content"></div>
             </main>
+
             <div id="footer"></div>
         </div>
     </div>
 
     <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
+            <span class="close" id="close-modal">&times;</span>
             <div id="modal-body"></div>
         </div>
     </div>

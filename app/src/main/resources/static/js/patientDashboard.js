@@ -207,13 +207,14 @@ async function filterDoctorsOnChange() {
 }
 
 // === Reusable Render Function ===
-export function renderDoctorCards(doctors) {
+export async function renderDoctorCards(doctors) {
   const contentDiv = document.getElementById("content");
   contentDiv.innerHTML = "";
-  doctors.forEach(doctor => {
+
+  for (const doctor of doctors) {
     const card = createDoctorCard(doctor);
-    contentDiv.appendChild(card);
-  });
+    contentDiv.appendChild(await card);
+  }
 }
 
 // === Patient Signup Handler ===
@@ -254,7 +255,7 @@ window.loginPatient = async function () {
       localStorage.setItem('token', result.token);
       // Optional: Handle user role before redirecting
       // selectRole('loggedPatient'); // Only if this function is defined
-      window.location.href = '/pages/loggedPatientDashboard.html';
+      window.location.href = '../pages/loggedPatientDashboard.html';
     }
     else {
       alert('❌ Invalid credentials!');

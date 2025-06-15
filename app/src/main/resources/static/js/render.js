@@ -39,8 +39,6 @@ export function selectRole(role) {
     switch (role) {
         case "admin":
             if (token) {
-                // window.location.href = `admin/adminDashboard.html?token=${token}`;
-                // window.location.href = `/dashboard/adminDashboard?token=${token}`;
                 window.location.href = `/adminDashboard/${token}`;
             }
             else {
@@ -50,12 +48,11 @@ export function selectRole(role) {
             break;
 
         case "patient":
-            window.location.href = "patientDashboard.html";
+            //window.location.href = `../pages/patientDashboard.html`;
             break;
 
         case "doctor":
             if (token) {
-                // window.location.href = `doctorDashboard.html?token=${token}`;
                 window.location.href = `/doctorDashboard/${token}`;
             }
             else {

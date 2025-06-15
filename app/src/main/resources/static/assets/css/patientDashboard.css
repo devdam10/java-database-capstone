@@ -234,3 +234,22 @@ html, body {
     width: 95%;
   }
 }
+
+.patientBtn {
+  background-color: #015c5d;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 10px 20px;
+  width: 200px;
+  border: none;
+  cursor: pointer;
+
+  transition: background-color 0.3s ease;
+}
+
+.patientBtn:hover {
+  color: white;
+  background-color: #017d7e;
+}
+
