@@ -75,11 +75,11 @@ function renderAppointments(appointments) {
 
     if (!appointments.length) {
         tableBody.innerHTML = `
-      <tr>
-        <td colspan="6" class="text-center text-gray-600">
-          No Appointments Found.
-        </td>
-      </tr>`;
+          <tr>
+            <td colspan="6" class="text-center text-gray-600">
+              No Appointments Found.
+            </td>
+          </tr>`;
         return;
     }
 

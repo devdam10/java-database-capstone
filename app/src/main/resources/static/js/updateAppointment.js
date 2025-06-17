@@ -42,7 +42,10 @@
 
 */
 
-import { getDoctors, updateAppointment } from "./appointmentService.js";
+// import { getDoctors, updateAppointment } from "./components/appointmentServices.js";
+
+import { getDoctor, getDoctors } from "./services/doctorServices.js";
+import { updateAppointment } from "./services/appointmentRecordService.js";
 
 const urlParams = new URLSearchParams(window.location.search);
 const token = localStorage.getItem("token");
@@ -64,7 +67,8 @@ const errorMsg = document.getElementById("errorMessage");
 
 async function initializePage() {
     if (!token || !patientId) {
-        window.location.href = "patientAppointments.html";
+        // window.location.href = "patientAppointments.html";
+        window.history.back();
         return;
     }
 
@@ -73,8 +77,7 @@ async function initializePage() {
     appointmentDateInput.value = appointmentDate || "";
 
     try {
-        const doctors = await getDoctors(token);
-        const doctor = doctors.find((doc) => doc.id === doctorId);
+        const doctor = await getDoctor(doctorId);
 
         if (!doctor) {
             alert("Selected doctor not found.");
@@ -87,10 +90,12 @@ async function initializePage() {
             const option = document.createElement("option");
             option.value = time;
             option.textContent = time;
+            
             if (time === appointmentTime) option.selected = true;
             appointmentTimeSelect.appendChild(option);
         });
-    } catch (error) {
+    }
+    catch (error) {
         console.error("Failed to load doctors:", error);
         alert("Failed to load doctor information. Please try again later.");
     }
@@ -119,11 +124,13 @@ updateForm.addEventListener("submit", async (e) => {
         const response = await updateAppointment(updatedAppointment, token);
         if (response.success) {
             alert("Appointment updated successfully.");
-            window.location.href = "patientAppointments.html";
-        } else {
+            window.location.href = "../pages/patientAppointments.html";
+        } 
+        else {
             alert(`Update failed: ${response.message || "Unknown error"}`);
         }
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("Error updating appointment:", error);
         alert("An error occurred while updating the appointment. Please try again.");
     }

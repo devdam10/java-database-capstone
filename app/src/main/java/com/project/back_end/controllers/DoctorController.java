@@ -62,6 +62,7 @@
 
 package com.project.back_end.controllers;
 
+import com.project.back_end.DTO.DoctorDTO;
 import com.project.back_end.DTO.Login;
 import com.project.back_end.models.Doctor;
 import com.project.back_end.services.CentralService;
@@ -109,6 +110,18 @@ public class DoctorController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("doctors", doctors);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getDoctor(@PathVariable Long id) {
+        DoctorDTO doctorDTO = new DoctorDTO();
+
+        doctorDTO.copy(doctorService.findDoctorById(id));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("doctor", doctorDTO);
 
         return ResponseEntity.ok(response);
     }

@@ -101,7 +101,6 @@ export async function patientSignup(data) {
  */
 export async function patientLogin(data) {
     // Logging can be added here during development, but remove before production
-    // console.log('Login data:', data);
 
     return fetch(`${PATIENTS_API}/login`, {
         method: 'POST',

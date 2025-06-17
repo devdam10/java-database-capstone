@@ -69,8 +69,29 @@ export async function getDoctors() {
             console.error('Failed to fetch doctors: ', response.statusText);
             return [];
         }
+
         const data = await response.json();
         return data.doctors || [];
+    }
+    catch (error) {
+        console.error('Error fetching doctors: ', error);
+        return [];
+    }
+}
+
+export async function getDoctor(id) {
+    try {
+        const response = await fetch(DOCTORS_API + `/${id}`, {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            console.error('Failed to fetch doctor: ', response.statusText);
+            return [];
+        }
+
+        const data = await response.json();
+        return data.doctor;
     }
     catch (error) {
         console.error('Error fetching doctors: ', error);

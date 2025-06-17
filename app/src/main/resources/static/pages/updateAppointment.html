@@ -97,54 +97,55 @@ This HTML file provides an interface for doctors to update patient appointments,
     <link rel="stylesheet" href="../assets/css/style.css" />
 
     <!-- JavaScript Files -->
-    <script src="../assets/js/render.js" defer></script>
-    <script src="../assets/js/util.js" defer></script>
-    <script src="../assets/js/header.js" defer></script>
-    <script src="../assets/js/footer.js" defer></script>
-    <script src="../assets/js/updateAppointment.js" defer></script>
+    <script type="module" src="../js/render.js" defer></script>
+    <script type="module" src="../js/util.js" defer></script>
+    <script type="module" src="../js/components/header.js" defer></script>
+    <script type="module" src="../js/components/footer.js" defer></script>
+    <script type="module" src="../js/updateAppointment.js" defer></script>
 </head>
+
 <body onload="renderContent()">
-<div class="container">
-    <div class="wrapper">
-        <!-- Dynamic header -->
-        <div id="header"></div>
+   <div class="container">
+      <div class="wrapper">
+         <!-- Dynamic header -->
+         <div id="header"></div>
 
-        <div class="main-content">
-            <h2>Update <span>Appointment</span></h2>
+         <div class="main-content">
+               <h2>Update <span>Appointment</span></h2>
 
-            <form id="updateAppointmentForm">
-                <div class="form-group">
-                    <label for="patientName">Patient Name</label>
-                    <input type="text" id="patientName" name="patientName" disabled />
-                </div>
+               <form id="updateAppointmentForm">
+                  <div class="form-group">
+                     <label for="patientName">Patient Name</label>
+                     <input type="text" id="patientName" name="patientName" disabled />
+                  </div>
 
-                <div class="form-group">
-                    <label for="doctorName">Doctor Name</label>
-                    <input type="text" id="doctorName" name="doctorName" disabled />
-                </div>
+                  <div class="form-group">
+                     <label for="doctorName">Doctor Name</label>
+                     <input type="text" id="doctorName" name="doctorName" disabled />
+                  </div>
 
-                <div class="form-group">
-                    <label for="appointmentDate">Date</label>
-                    <input type="date" id="appointmentDate" name="appointmentDate" required />
-                </div>
+                  <div class="form-group">
+                     <label for="appointmentDate">Date</label>
+                     <input type="date" id="appointmentDate" name="appointmentDate" required />
+                  </div>
 
-                <div class="form-group">
-                    <label for="appointmentTime">Time</label>
-                    <select id="appointmentTime" name="appointmentTime" required>
-                        <!-- Time options populated dynamically -->
-                    </select>
-                </div>
+                  <div class="form-group">
+                     <label for="appointmentTime">Time</label>
+                     <select id="appointmentTime" name="appointmentTime" required>
+                           <!-- Time options populated dynamically -->
+                     </select>
+                  </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <button type="button" class="btn btn-secondary" onclick="selectRole('doctor')">Cancel</button>
-                </div>
-            </form>
-        </div>
+                  <div class="form-actions">
+                     <button type="submit" class="btn btn-primary">Update</button>
+                     <button type="button" class="btn btn-secondary" onclick="selectRole('doctor')">Cancel</button>
+                  </div>
+               </form>
+         </div>
 
-        <!-- Dynamic footer -->
-        <div id="footer"></div>
-    </div>
-</div>
+         <!-- Dynamic footer -->
+         <div id="footer"></div>
+      </div>
+   </div>
 </body>
 </html>

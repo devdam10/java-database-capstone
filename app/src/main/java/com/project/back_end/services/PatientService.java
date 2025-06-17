@@ -75,7 +75,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -282,7 +281,7 @@ public class PatientService {
     private AppointmentDTO convertAppointmentToDTO(Appointment appointment) {
         AppointmentDTO appointmentDTO = new AppointmentDTO();
 
-        appointmentDTO.setPatientId(appointment.getId());
+        appointmentDTO.setId(appointment.getId());
         appointmentDTO.setStatus(appointment.getStatus());
         // appointmentDTO.setAppointmentTime(LocalDateTime.from(appointment.getAppointmentTime()));
         appointmentDTO.setAppointmentTime(appointment.getEndTime().minusHours(1));
@@ -292,6 +291,7 @@ public class PatientService {
         appointmentDTO.setDoctorName(appointment.getDoctor().getName());
 
         // Patient's Info
+        appointmentDTO.setPatientId(appointment.getPatient().getId());
         appointmentDTO.setPatientName(appointment.getPatient().getName());
         appointmentDTO.setPatientEmail(appointment.getPatient().getEmail());
         appointmentDTO.setPatientPhone(appointment.getPatient().getPhone());

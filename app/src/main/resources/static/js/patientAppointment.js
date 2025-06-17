@@ -132,18 +132,22 @@ function renderAppointments(appointments) {
 }
 
 // Redirect to appointment edit page with query params
-function redirectToEdit(appt) {
+function redirectToEdit(appointment) {
+    const appointmentDateTime = new Date(appointment.appointmentTime);
+
     const params = new URLSearchParams({
-        appointmentId: appt.id,
+        appointmentId: appointment.id,
         patientId: patientId,
-        patientName: "You",
-        doctorName: appt.doctorName,
-        doctorId: appt.doctorId,
-        date: appt.date,
-        time: appt.time,
+        patientName: appointment.patientName,
+        doctorName: appointment.doctorName,
+        doctorId: appointment.doctorId,
+        // date: appointment.date,
+        // time: appointment.time,
+        date: appointmentDateTime.toISOString().split("T")[0], // "yyyy-MM-dd"
+        time: appointmentDateTime.toTimeString().split(" ")[0], // "HH:mm:ss"
     });
 
-    window.location.href = `updateAppointment.html?${params.toString()}`;
+    window.location.href = `../pages/updateAppointment.html?${params.toString()}`;
 }
 
 // Filtering on search input and dropdown change
@@ -156,9 +160,9 @@ async function handleFilterChange() {
 
     try {
         const filtered = await filterAppointments(searchTerm, filteredCondition, token);
-
         renderAppointments(filtered);
-    } catch (error) {
+    }
+    catch (error) {
         console.error("Failed to filter appointments:", error);
         tableBody.innerHTML = `<tr><td colspan="6" class="text-red-600">Failed to load filtered appointments.</td></tr>`;
     }
