@@ -152,7 +152,7 @@ filterDropdown.addEventListener("change", handleFilterChange);
 
 async function handleFilterChange() {
     const searchTerm = searchInput.value.trim() || '';
-    const filteredCondition = filterDropdown.value || "all";
+    const filteredCondition = filterDropdown.value || '';
 
     try {
         const filtered = await filterAppointments(searchTerm, filteredCondition, token);

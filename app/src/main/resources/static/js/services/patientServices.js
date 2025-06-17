@@ -206,6 +206,7 @@ export async function filterAppointments(searchTerm, condition, token) {
         }
 
         const data = await response.json();
+
         return data.appointments || [];
     } 
     catch (error) {

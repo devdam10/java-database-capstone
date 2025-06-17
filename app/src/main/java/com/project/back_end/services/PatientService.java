@@ -261,7 +261,13 @@ public class PatientService {
     public ResponseEntity<Map<String, Object>> filterByPatientId(Long patientId) {
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Appointment> appointments = appointmentRepository.findByPatientIdOrderByAppointmentTime(patientId);
+            //List<Appointment> appointments = appointmentRepository.findByPatientIdOrderByAppointmentTime(patientId);
+
+            List<AppointmentDTO> appointments = appointmentRepository
+                    .findByPatientIdOrderByAppointmentTime(patientId)
+                    .stream()
+                    .map(this::convertAppointmentToDTO)
+                    .collect(Collectors.toList());
 
             response.put("appointments", appointments);
             return ResponseEntity.ok(response);
