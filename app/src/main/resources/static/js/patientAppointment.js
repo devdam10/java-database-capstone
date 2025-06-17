@@ -127,6 +127,14 @@ function renderAppointments(appointments) {
             );
         }
 
+        // If the user is a doctor, show the edit button
+        // const role = localStorage.getItem("userRole");
+        // if (role === "doctor") {
+        //   tr.querySelector(".edit-btn").addEventListener("click", () =>
+        //       redirectToEdit(appointment)
+        //   );
+        // }
+
         tableBody.appendChild(tr);
     });
 }

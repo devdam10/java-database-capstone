@@ -71,6 +71,7 @@ import com.project.back_end.DTO.Login;
 import com.project.back_end.models.*;
 import com.project.back_end.repo.*;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -228,6 +229,7 @@ public class CentralService {
     }
 
 
+    @Transactional
     public int validateAppointment(Appointment appointment) {
         try {
             Optional<Doctor> doctorOpt = doctorRepository.findById(appointment.getDoctor().getId());
@@ -239,6 +241,7 @@ public class CentralService {
             List<String> availableSlots = doctorService.getDoctorAvailability(doctor.getId(), appointment.getAppointmentDate());
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
             return availableSlots.contains(appointment.getAppointmentTime().format(formatter) + "-" + appointment.getEndTime().format(formatter)) ? 1 : 0;
         }
         catch (Exception e) {

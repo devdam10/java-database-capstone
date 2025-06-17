@@ -148,11 +148,11 @@ export async function bookAppointment(appointment, token) {
  */
 export async function updateAppointment(appointment, token) {
     try {
-        const response = await fetch(APPOINTMENTS_API, {
+        const response = await fetch(APPOINTMENTS_API + `/${token}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+                // Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(appointment)
         });
@@ -163,7 +163,8 @@ export async function updateAppointment(appointment, token) {
             success: response.ok,
             message: data.message || "Failed to update appointment."
         };
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("updateAppointment error:", error);
         return {
             success: false,

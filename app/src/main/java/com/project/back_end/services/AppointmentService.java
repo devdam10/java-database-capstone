@@ -46,6 +46,7 @@
 
 package com.project.back_end.services;
 
+import com.project.back_end.DTO.AppointmentDTO;
 import com.project.back_end.models.Appointment;
 import com.project.back_end.models.Doctor;
 import com.project.back_end.models.Patient;
@@ -94,9 +95,9 @@ public class AppointmentService {
             return ResponseEntity.badRequest().body(response);
         }
 
-        Appointment existing = optional.get();
-
-        if (!Objects.equals(existing.getPatient().getId(), appointment.getPatient().getId())) {
+        // Appointment existing = optional.get();
+        Appointment existingAppointment = optional.get();
+        if (!Objects.equals(existingAppointment.getPatient().getId(), appointment.getPatient().getId())) {
             response.put("message", "Unauthorized update attempt");
             return ResponseEntity.status(403).body(response);
         }
@@ -107,6 +108,45 @@ public class AppointmentService {
         }
 
         appointmentRepository.save(appointment);
+
+        response.put("message", "Appointment updated successfully");
+        return ResponseEntity.ok(response);
+    }
+
+    @Transactional
+    public ResponseEntity<Map<String, String>> updateAppointment(AppointmentDTO appointmentDTO) {
+        Map<String, String> response = new HashMap<>();
+
+        Optional<Appointment> optional = appointmentRepository.findById(appointmentDTO.getId());
+
+        if (optional.isEmpty()) {
+            response.put("message", "Appointment not found");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        Appointment existingAppointment = optional.get();
+        if (!Objects.equals(existingAppointment.getPatient().getId(), appointmentDTO.getPatientId())) {
+            response.put("message", "Unauthorized update attempt");
+            return ResponseEntity.status(403).body(response);
+        }
+
+        if (!Objects.equals(existingAppointment.getDoctor().getId(), appointmentDTO.getDoctorId())) {
+            response.put("message", "Unauthorized update attempt");
+            return ResponseEntity.status(403).body(response);
+        }
+
+        // Update appointment details
+        existingAppointment.setAppointmentTime(appointmentDTO.getAppointmentTime());
+
+        if (centralService.validateAppointment(existingAppointment) != 1) {
+            response.put("message", "Invalid appointment time or conflict");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        System.out.println("flag 1");
+        appointmentRepository.save(existingAppointment);
+
+        System.out.println("flag 2");
         response.put("message", "Appointment updated successfully");
         return ResponseEntity.ok(response);
     }

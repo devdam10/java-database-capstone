@@ -109,7 +109,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
+// import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -121,9 +121,13 @@ public class DoctorService {
     @Transactional
     public List<String> getDoctorAvailability(Long doctorId, LocalDate date) {
         Optional<Doctor> doctorOpt = doctorRepository.findById(doctorId);
+
         if (doctorOpt.isEmpty()) return Collections.emptyList();
 
-        List<String> allSlots = doctorOpt.get().getAvailableTimes();
+        List<String> allSlots = new ArrayList<>(doctorOpt.get().getAvailableTimes());
+
+        System.out.println("allSlots = " + allSlots);
+
         List<String> bookedSlots = appointmentRepository.findByDoctorIdAndAppointmentTimeBetweenOrderByAppointmentTime(
                 doctorId,
                 date.atStartOfDay(),
@@ -133,7 +137,22 @@ public class DoctorService {
             return appointment.getAppointmentTime().format(formatter) + "-" + appointment.getEndTime().format(formatter);
         }).toList();
 
-        return allSlots.stream().filter(slot -> !bookedSlots.contains(slot)).collect(Collectors.toList());
+        System.out.println("bookedSlots = " + bookedSlots);
+
+        // Filter out booked slots from all available slots and update doctor's available times
+        // if (!bookedSlots.isEmpty()){
+        //     doctorOpt.get().setAvailableTimes(
+        //         allSlots.stream()
+        //                 .filter(slot -> !bookedSlots.contains(slot))
+        //                 .collect(Collectors.toList())
+        //     );
+
+        //     doctorRepository.save(doctorOpt.get());
+        // };
+
+        // return allSlots.stream().filter(slot -> !bookedSlots.contains(slot)).collect(Collectors.toList());
+
+        return allSlots;
     }
 
     public int saveDoctor(Doctor doctor) {

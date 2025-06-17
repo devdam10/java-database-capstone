@@ -91,7 +91,7 @@ public class DoctorController {
     public ResponseEntity<Map<String, Object>> getDoctorAvailability(@PathVariable String user, @PathVariable Long doctorId, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @PathVariable String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, user);
 
-        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty()) {
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
             // Return early with validation error (already wrapped as a response)
             return new ResponseEntity<>(new HashMap<>(tempMap.getBody()), tempMap.getStatusCode());
         }

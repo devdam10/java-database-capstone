@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.back_end.DTO.AppointmentDTO;
 import com.project.back_end.models.Appointment;
 import com.project.back_end.services.AppointmentService;
 
@@ -92,12 +93,13 @@ public class AppointmentController {
     }
 
     @PutMapping("/{token}")
-    public ResponseEntity<Map<String, String>> updateAppointment(@PathVariable String token, @RequestBody @Valid Appointment appointment) {
-        ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
+    public ResponseEntity<Map<String, String>> updateAppointment(@PathVariable String token, @RequestBody @Valid AppointmentDTO appointmentDTO) {
+        // ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
+        ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "doctor");
 
         if (isTokenInvalid(tempMap)) return tempMap;
 
-        return appointmentService.updateAppointment(appointment);
+        return appointmentService.updateAppointment(appointmentDTO);
     }
 
     @DeleteMapping("/{id}/{token}")
@@ -110,7 +112,7 @@ public class AppointmentController {
     }
 
     private boolean isTokenInvalid(ResponseEntity<Map<String, String>> validationResponse) {
-        return !Objects.requireNonNull(validationResponse.getBody()).isEmpty();
+        return !Objects.requireNonNull(validationResponse.getBody()).isEmpty() && validationResponse.getStatusCode() != HttpStatus.OK;
     }
 
 }

@@ -750,3 +750,42 @@ span {
   color: white;
   background-color: #017d7e;
 }
+
+.update-btn{
+    background-color: #015c5d;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: 200px;
+    border: none;
+    cursor: pointer;
+
+    transition: background-color 0.3s ease;
+}
+
+.update-btn:hover {
+    color: white;
+    background-color: #017d7e;
+}
+
+
+.cancel-btn {
+    background-color: transparent;
+    color: #333;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: 200px;
+    cursor: pointer;
+    margin-top: 12px;
+    cursor: pointer;
+
+    transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+    color: #fff;
+    background-color: #015c5d;
+}
