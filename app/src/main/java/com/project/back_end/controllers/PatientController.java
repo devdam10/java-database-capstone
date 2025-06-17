@@ -78,7 +78,7 @@ public class PatientController {
     public ResponseEntity<?> getPatient(@PathVariable String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
 
-        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty()) {
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
             return tempMap;
         }
 
@@ -129,15 +129,26 @@ public class PatientController {
         return patientService.getPatientAppointment(id, token);
     }
 
-    @GetMapping("/filter/{condition}/{name}/{token}")
-    public ResponseEntity<?> filterPatientAppointment(@PathVariable String condition, @PathVariable String name, @PathVariable String token) {
+    @GetMapping("/appointments")
+    public ResponseEntity<?> getPatientAppointments(@RequestParam Long id, @RequestParam String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
 
         if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
             return tempMap;
         }
 
-        return centralService.filterPatient(condition, name, token);
+        return patientService.getPatientAppointment(id, token);
+    }
+
+    @GetMapping("/filter/appointments")
+    public ResponseEntity<?> filterPatientAppointment(@RequestParam String name, @RequestParam String condition, @RequestParam String token) {
+        ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
+
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
+            return tempMap;
+        }
+
+        return centralService.filterPatient(name, condition, token);
     }
 
     @GetMapping("/filter")

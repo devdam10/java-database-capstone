@@ -117,7 +117,15 @@ export async function patientLogin(data) {
  */
 export async function getPatientData(token) {
     try {
-        const response = await fetch(`${PATIENTS_API}/${token}`);
+        //const response = await fetch(`${PATIENTS_API}/${token}`);
+
+        const response = await fetch(`${PATIENTS_API}/${token}`, {
+            method: "GET",
+            // headers: {
+            //     Authorization: `Bearer ${token}`
+            // }
+        });
+
         if (!response.ok) {
             console.error('Failed to get patient data:', response.statusText);
             return null;
@@ -141,7 +149,16 @@ export async function getPatientData(token) {
 export async function getPatientAppointments(patientId, doctorId, token) {
     try {
         // const url = `${PATIENTS_API}/${id}/${user}/${token}`;
-        const url = `${PATIENTS_API}/filter?patientId=${patientId}&doctorId=${doctorId}&token=${token}`;
+        // const url = `${PATIENTS_API}/filter?patientId=${patientId}&doctorId=${doctorId}&token=${token}`;
+        let url = null;
+
+        if(doctorId && doctorId !== null) {
+            url = `${PATIENTS_API}/filter?patientId=${patientId}&doctorId=${doctorId}&token=${token}`
+        }
+        else{
+            url = `${PATIENTS_API}/appointments?id=${patientId}&token=${token}`;
+        }
+
         //const response = await fetch(url);
 
         const response = await fetch(url, {
@@ -167,14 +184,22 @@ export async function getPatientAppointments(patientId, doctorId, token) {
 /**
  * Filter appointments by condition and patient name.
  * @param {string} condition - Appointment status filter ('pending', 'consulted', etc.)
- * @param {string} name - Patient name filter
+ * @param {string} filter - Dropdown filter
  * @param {string} token - Authentication token
  * @returns {Promise<Array>} Filtered appointments or empty array on failure
  */
-export async function filterAppointments(condition, name, token) {
+export async function filterAppointments(searchTerm, condition, token) {
     try {
-        const url = `${PATIENTS_API}/filter/${encodeURIComponent(condition)}/${encodeURIComponent(name)}/${encodeURIComponent(token)}`;
-        const response = await fetch(url);
+        // const url = `${PATIENTS_API}/filter/${encodeURIComponent(condition)}/${encodeURIComponent(filter)}/${encodeURIComponent(token)}`;
+        const url = `${PATIENTS_API}/filter/appointments?name=${searchTerm ? encodeURIComponent(searchTerm) : ''}&condition=${condition ? encodeURIComponent(condition): ''}&token=${encodeURIComponent(token)}`;
+
+        const response = await fetch(url, {
+            method: "GET",
+            // headers: {
+            //     Authorization: `Bearer ${token}`
+            // }
+        });
+
         if (!response.ok) {
             console.error('Failed to filter appointments:', response.statusText);
             return [];
@@ -182,7 +207,8 @@ export async function filterAppointments(condition, name, token) {
 
         const data = await response.json();
         return data.appointments || [];
-    } catch (error) {
+    } 
+    catch (error) {
         alert('Failed to filter appointments. Please try again.');
         console.error('Error filtering appointments:', error);
         return [];

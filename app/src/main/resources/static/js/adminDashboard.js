@@ -109,8 +109,8 @@ async function loadDoctorCards() {
 async function filterDoctorsOnChange() {
     try {
         const name = document.getElementById('searchBar').value.trim() || null;
-        const time = document.getElementById('timeFilter').value || null;
-        const specialty = document.getElementById('specialtyFilter').value || null;
+        const time = document.getElementById('timeFilter')?.value || document.getElementById('filterTime')?.value || null;
+        const specialty = document.getElementById('specialtyFilter')?.value || document.getElementById('filterSpecialty')?.value || null;
 
         const filteredDoctors = await filterDoctors(name, time, specialty);
 

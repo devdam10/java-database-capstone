@@ -148,6 +148,7 @@ import { createDoctorCard } from './components/doctorCard.js';
 import { openModal } from './components/modals.js';
 import { filterDoctors, getDoctors } from './services/doctorServices.js';
 import { patientLogin, patientSignup } from './services/patientServices.js';
+import { selectRole } from "./render.js";
 
 // === Page Load ===
 document.addEventListener("DOMContentLoaded", () => {
@@ -177,8 +178,9 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadDoctorCards() {
   try {
     const doctors = await getDoctors();
-    renderDoctorCards(doctors);
-  } catch (error) {
+    await renderDoctorCards(doctors);
+  }
+  catch (error) {
     console.error("Failed to load doctors:", error);
     document.getElementById("content").innerHTML = "<p>❌ Failed to load doctors. Please try again later.</p>";
   }
@@ -233,7 +235,8 @@ window.signupPatient = async function () {
       alert(message);
       document.getElementById("modal").style.display = "none";
       window.location.reload();
-    } else {
+    }
+    else {
       alert(message);
     }
   } catch (error) {
@@ -245,17 +248,18 @@ window.signupPatient = async function () {
 // === Patient Login Handler ===
 window.loginPatient = async function () {
   try {
-    const email = document.getElementById("email")?.value;
-    const password = document.getElementById("password")?.value;
+    const email = document.getElementById("patientEmail")?.value;
+    const password = document.getElementById("patientPassword")?.value;
 
     const response = await patientLogin({ email, password });
 
     if (response.ok) {
       const result = await response.json();
+
       localStorage.setItem('token', result.token);
-      // Optional: Handle user role before redirecting
-      // selectRole('loggedPatient'); // Only if this function is defined
-      window.location.href = '../pages/loggedPatientDashboard.html';
+      localStorage.setItem('userRole', 'loggedPatient');
+
+      selectRole('loggedPatient');
     }
     else {
       alert('❌ Invalid credentials!');

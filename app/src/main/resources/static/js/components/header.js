@@ -174,18 +174,18 @@ export function renderHeader() {
     }
     else if (role === "doctor") {
         headerContent += `
-      <button id="homeBtn" class="adminBtn">Home</button>
+      <button id="homeBtn" class="doctorBtn">Home</button>
       <a href="#" id="logoutBtn">Logout</a>`;
     }
     else if (role === "patient") {
         headerContent += `
-      <button id="patientLogin" class="adminBtn">Login</button>
-      <button id="patientSignup" class="adminBtn">Sign Up</button>`;
+      <button id="patientLogin" class="patientBtn">Login</button>
+      <button id="patientSignup" class="patientBtn">Sign Up</button>`;
     }
     else if (role === "loggedPatient") {
         headerContent += `
-      <button id="homeBtn" class="adminBtn" onclick="window.location.href='/pages/loggedPatientDashboard.html'">Home</button>
-      <button id="patientAppointments" class="adminBtn" onclick="window.location.href='/pages/patientAppointments.html'">Appointments</button>
+      <button id="homeBtn" class="patientBtn">Home</button>
+      <button id="patientAppointments" class="patientBtn">Appointments</button>
       <a href="#" id="logoutPatientBtn">Logout</a>`;
     }
     else {
@@ -257,6 +257,8 @@ function attachHeaderButtonListeners() {
     if (patientAppointmentsBtn) {
         patientAppointmentsBtn.addEventListener("click", () => {
             // Same as above, inline navigation covers this
+
+            window.location.href='../../pages/patientAppointments.html';
         });
     }
 }
@@ -272,7 +274,7 @@ function logout() {
 function logoutPatient() {
     localStorage.removeItem("token");
     localStorage.setItem("userRole", "patient");
-    window.location.href = "/pages/patientDashboard.html";
+    window.location.href = "../../pages/patientDashboard.html";
 }
 
 // Dummy openModal function (replace with your modal code)

@@ -71,8 +71,8 @@ import { createDoctorCard } from "./components/doctorCard.js";
 // DOM Elements
 const contentContainer = document.getElementById("content");
 const searchInput = document.getElementById("searchBar");
-const timeDropdown = document.getElementById("timeFilter");
-const specialtyDropdown = document.getElementById("specialtyFilter");
+const timeDropdown = document.getElementById("filterTime");
+const specialtyDropdown = document.getElementById("filterSpecialty");
 
 // Fetch and display all doctors
 async function loadDoctorCards() {
@@ -195,7 +195,7 @@ async function filterDoctorsOnChange() {
 
     filterDoctors(name, time, specialty)
         .then((data) => {
-            console.log("data: " + data);
+            //console.log("data: " + data);
 
             if (data.doctors && data.doctors.length > 0) {
                 renderDoctorCards(data.doctors);
@@ -205,7 +205,7 @@ async function filterDoctorsOnChange() {
             }
         })
         .catch((error) => {
-            console.error("Error filtering doctors:", error);
+            //console.error("Error filtering doctors:", error);
             contentContainer.innerHTML = `<p class="text-red-500">Failed to fetch filtered doctors.</p>`;
         });
 }
@@ -215,8 +215,8 @@ async function filterDoctorsOnChange() {
 // Attach listeners for search and filters
 document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.getElementById("searchBar");
-    const timeDropdown = document.getElementById("timeFilter");
-    const specialtyDropdown = document.getElementById("specialtyFilter");
+    const timeDropdown = document.getElementById("timeFilter") || document.getElementById("filterTime");
+    const specialtyDropdown = document.getElementById("specialtyFilter") || document.getElementById("filterSpecialty");
 
     if (searchInput) searchInput.addEventListener("input", filterDoctorsOnChange);
     if (timeDropdown) timeDropdown.addEventListener("change", filterDoctorsOnChange);

@@ -117,8 +117,8 @@ html, body {
 /* === 4. Filter Section === */
 .filter-wrapper {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  /*flex-wrap: wrap;*/
+  /*gap: 10px;*/
   margin-bottom: 25px;
   justify-content: center;
 }
@@ -253,3 +253,20 @@ html, body {
   background-color: #017d7e;
 }
 
+.edit-btn {
+  background-color: #015c5d;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 10px 20px;
+  width: 100px;
+  border: none;
+  cursor: pointer;
+
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn:hover {
+  color: white;
+  background-color: #017d7e;
+}

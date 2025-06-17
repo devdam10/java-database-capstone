@@ -287,7 +287,7 @@ public class CentralService {
         }
     }
 
-    public ResponseEntity<Map<String, Object>> filterPatient(String condition, String name, String token) {
+    public ResponseEntity<Map<String, Object>> filterPatient(String name, String condition, String token) {
         Map<String, Object> response = new HashMap<>();
         try {
             String email = tokenService.extractEmail(token);
@@ -301,20 +301,37 @@ public class CentralService {
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
 
-            if (condition != null && name != null) {
-                //appointments = patientService.filterByDoctorAndCondition(condition, name, patient.getId());
-                appointmentsResponse = patientService.filterByDoctorAndCondition(condition, name, patient.getId());
+            // if (isNotNullOrEmpty(condition) && isNotNullOrEmpty(name)) {
+            //     //appointments = patientService.filterByDoctorAndCondition(condition, name, patient.getId());
+            //     appointmentsResponse = patientService.filterByDoctorAndCondition(condition, name, patient.getId());
+            // }
+            // else if (isNotNullOrEmpty(condition)) {
+            //     // appointments = patientService.filterByCondition(condition, patient.getId());
+            //     appointmentsResponse = patientService.filterByCondition(condition, patient.getId());
+            // }
+            // else if (isNotNullOrEmpty(name)) {
+            //     // appointments = patientService.filterByDoctor(name, patient.getId());
+            //     appointmentsResponse = patientService.filterByDoctor(name, patient.getId());
+            // }
+            // else {
+            //     // appointments = patientService.filterByPatientId(patient.getId());
+            //     appointmentsResponse = patientService.filterByPatientId(patient.getId());
+            // }
+
+            if (isNotNullOrEmpty(name) && isNotNullOrEmpty(condition)) {
+                System.out.println("flag 1");
+                appointmentsResponse = patientService.filterByDoctorNameAndCondition(name, condition, patient.getId());
             }
-            else if (condition != null) {
-                // appointments = patientService.filterByCondition(condition, patient.getId());
-                appointmentsResponse = patientService.filterByCondition(condition, patient.getId());
-            }
-            else if (name != null) {
-                // appointments = patientService.filterByDoctor(name, patient.getId());
+            else if (isNotNullOrEmpty(name)) {
+                System.out.println("flag 2");
                 appointmentsResponse = patientService.filterByDoctor(name, patient.getId());
             }
+            else if (isNotNullOrEmpty(condition)) {
+                System.out.println("flag 3");
+                appointmentsResponse = patientService.filterByCondition(condition, patient.getId());
+            }
             else {
-                // appointments = patientService.filterByPatientId(patient.getId());
+                System.out.println("flag 4");
                 appointmentsResponse = patientService.filterByPatientId(patient.getId());
             }
 

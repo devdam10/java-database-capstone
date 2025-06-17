@@ -206,6 +206,37 @@ public class PatientService {
         }
     }
 
+    public ResponseEntity<Map<String, Object>> filterByDoctorNameAndCondition(String name, String condition, long patientId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            int status = switch (condition.toLowerCase()) {
+                case "future" -> 0;
+                case "past" -> 1;
+                default -> 0; // Default to future if condition is invalid
+            };
+
+            // if(status == -1){
+            //     response.put("error", "Invalid condition: must be 'past' or 'future'");
+            //     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            // }
+
+            List<AppointmentDTO> appointments = appointmentRepository
+                    .filterByDoctorNameContainingIgnoreCaseAndPatientIdAndStatusOrderByAppointmentTime(name, patientId, status)
+                    .stream()
+                    .map(this::convertAppointmentToDTO)
+                    .collect(Collectors.toList());
+
+            response.put("appointments", appointments);
+            return ResponseEntity.ok(response);
+        }
+        catch (Exception e) {
+            logger.error("Error filtering by doctor and condition: {}", e.getMessage());
+            response.put("error", "Failed to filter appointments");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     public ResponseEntity<Map<String, Object>> getPatientDetails(String token) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -247,7 +278,8 @@ public class PatientService {
 
         appointmentDTO.setPatientId(appointment.getId());
         appointmentDTO.setStatus(appointment.getStatus());
-        appointmentDTO.setAppointmentTime(LocalDateTime.from(appointment.getAppointmentTime()));
+        // appointmentDTO.setAppointmentTime(LocalDateTime.from(appointment.getAppointmentTime()));
+        appointmentDTO.setAppointmentTime(appointment.getEndTime().minusHours(1));
 
         // Doctor's Info
         appointmentDTO.setDoctorId(appointment.getDoctor().getId());

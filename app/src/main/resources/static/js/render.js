@@ -62,7 +62,13 @@ export function selectRole(role) {
             break;
 
         case "loggedPatient":
-            window.location.href = "loggedPatientDashboard.html";
+            if (token) {
+                window.location.href = "../pages/loggedPatientDashboard.html";
+            }
+            else {
+                alert("Authentication token missing for logged in patient access.");
+                window.location.href = "/";
+            }
             break;
 
         default:

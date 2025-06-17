@@ -52,10 +52,12 @@ import {
     getPatientAppointments,
     getPatientData,
     filterAppointments,
-} from "../services/patientService.js";
+} from "./services/patientServices.js";
+
+import { convertDate } from "./util.js"; // Import utility function for date formatting
 
 // DOM Elements & Variables
-const tableBody = document.querySelector("#appointmentsTable tbody");
+const tableBody = document.getElementById("patientTableBody");
 const searchInput = document.getElementById("searchBar");
 const filterDropdown = document.getElementById("appointmentFilter");
 
@@ -74,16 +76,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         patientId = patientData.id;
 
         // Fetch all appointments linked to this patient
-        allAppointments = await getPatientAppointments(token);
-
-        // Filter only appointments for this patient
-        filteredAppointments = allAppointments.filter(
-            (appt) => appt.patientId === patientId
-        );
+        allAppointments = await getPatientAppointments(patientId, null, token);
 
         // Render initial appointments list
-        renderAppointments(filteredAppointments);
-    } catch (error) {
+        renderAppointments(allAppointments);
+    }
+    catch (error) {
         console.error("Failed to load patient data or appointments:", error);
         tableBody.innerHTML = `<tr><td colspan="6" class="text-red-600">Failed to load appointments.</td></tr>`;
     }
@@ -102,29 +100,30 @@ function renderAppointments(appointments) {
         return;
     }
 
-    appointments.forEach((appt) => {
+    appointments.forEach((appointment) => {
         const tr = document.createElement("tr");
 
         // Columns: Patient ("You"), Doctor, Date, Time, Status, Actions
         tr.innerHTML = `
-      <td>You</td>
-      <td>${appt.doctorName}</td>
-      <td>${appt.date}</td>
-      <td>${appt.time}</td>
-      <td>${appt.status === 0 ? "Editable" : "Locked"}</td>
-      <td class="actions">
-        ${
-            appt.status === 0
-                ? `<button class="edit-btn" data-id="${appt.id}">✏️ Edit</button>`
-                : `<span>—</span>`
-        }
-      </td>
-    `;
+          <!--<td>You</td>-->
+          <td>${appointment.patientName}</td>
+          <td>${appointment.doctorName}</td>
+          <td>${convertDate(appointment.appointmentTime)}</td>
+          <td>${convertDate(null, appointment.appointmentTime)}</td>
+          <!--<td>${appointment.status === 0 ? "Editable" : "Locked"}</td>-->
+          <td class="actions">
+            ${
+                appointment.status === 0
+                    ? `<button class="edit-btn" data-id="${appointment.id}">✏️ Edit</button>`
+                    : `<span>—</span>`
+            }
+          </td>
+        `;
 
         // Attach click listener on edit button if editable
-        if (appt.status === 0) {
+        if (appointment.status === 0) {
             tr.querySelector(".edit-btn").addEventListener("click", () =>
-                redirectToEdit(appt)
+                redirectToEdit(appointment)
             );
         }
 
@@ -152,18 +151,13 @@ searchInput.addEventListener("input", handleFilterChange);
 filterDropdown.addEventListener("change", handleFilterChange);
 
 async function handleFilterChange() {
-    const searchTerm = searchInput.value.trim();
-    const filter = filterDropdown.value;
+    const searchTerm = searchInput.value.trim() || '';
+    const filteredCondition = filterDropdown.value || "all";
 
     try {
-        const filtered = await filterAppointments(searchTerm, filter, token);
+        const filtered = await filterAppointments(searchTerm, filteredCondition, token);
 
-        // Only show appointments for current patient
-        const patientFiltered = filtered.filter(
-            (appt) => appt.patientId === patientId
-        );
-
-        renderAppointments(patientFiltered);
+        renderAppointments(filtered);
     } catch (error) {
         console.error("Failed to filter appointments:", error);
         tableBody.innerHTML = `<tr><td colspan="6" class="text-red-600">Failed to load filtered appointments.</td></tr>`;

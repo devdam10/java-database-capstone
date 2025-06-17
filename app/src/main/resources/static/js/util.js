@@ -48,9 +48,19 @@ export function clearRole() {
     localStorage.removeItem("userRole");
 }
 
-export function convertDate(inputDate) {
+// Convert date and time to a readable format
+export function convertDate(inputDate = null, inputTime = null) {
+  if(inputDate){
     const date = new Date(inputDate);
 
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
+  }
+
+  if(inputTime){
+    const time = new Date(inputTime);
+    return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  
+  return '';
 }
