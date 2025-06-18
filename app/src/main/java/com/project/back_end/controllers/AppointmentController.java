@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.back_end.DTO.AppointmentDTO;
-import com.project.back_end.models.Appointment;
 import com.project.back_end.services.AppointmentService;
 
 import jakarta.validation.Valid;
@@ -60,37 +59,6 @@ public class AppointmentController {
         // map = appointmentService.getAppointment(patientName, date, token);
         return ResponseEntity.status(HttpStatus.OK).body(appointmentService.getAppointment(patientName, null, token));
     }
-
-    // @PostMapping("/{token}")
-    // public ResponseEntity<Map<String, String>> bookAppointment(@RequestBody @Valid Appointment appointment, @PathVariable String token) {
-    //     ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
-
-    //     if (isTokenInvalid(tempMap)) return tempMap;
-
-    //     Map<String, String> response = new HashMap<>();
-    //     int out = centralService.validateAppointment(appointment);
-
-    //     if (out == 1) {
-    //         int res = appointmentService.bookAppointment(appointment);
-
-    //         if (res == 1) {
-    //             response.put("message", "Appointment Booked Successfully");
-    //             return ResponseEntity.status(HttpStatus.CREATED).body(response); // 201 Created
-
-    //         }
-    //         response.put("message", "Internal Server Error");
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // 409 Conflict
-
-    //     }
-    //     else if (out == -1) {
-    //         response.put("message", "Invalid doctor id");
-    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    //     }
-
-    //     response.put("message", "Appointment already booked for given time or Doctor not available");
-    //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-
-    // }
 
     @PostMapping
     public ResponseEntity<Map<String, String>> bookAppointment(@RequestBody @Valid AppointmentDTO appointmentDTO, @RequestHeader("Authorization") String authorizationHeader) {

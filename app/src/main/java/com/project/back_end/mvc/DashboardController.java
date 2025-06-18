@@ -34,16 +34,4 @@ public class DashboardController {
             return "redirect:/";
         }
     }
-
-//    @GetMapping("/patientDashboard/{token}")
-//    public String patientDashboard(@PathVariable String token) {
-//        boolean isValid = tokenService.validateToken(token, "patient");
-//
-//        if (isValid) {
-//            return "patient/patientDashboard";
-//        }
-//        else {
-//            return "redirect:/";
-//        }
-//    }
 }

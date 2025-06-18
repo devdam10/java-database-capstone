@@ -31,7 +31,7 @@ public class Appointment {
     @NotNull(message = "Patient is required!")
     private Patient patient;
 
-    // @Future(message = "Appointment time must be in the future")
+    @Future(message = "Appointment time must be in the future")
     private LocalDateTime appointmentTime;
 
     @NotNull(message = "Status is required!")
