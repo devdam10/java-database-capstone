@@ -8,6 +8,7 @@ COPY src ./src
 
 RUN mvn clean package -DskipTests
 
+
 # Step 2: Use lightweight JRE 17 for running the app
 FROM eclipse-temurin:17.0.15_6-jre
 
