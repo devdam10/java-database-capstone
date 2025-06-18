@@ -3,10 +3,16 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8
+    restart: always
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: 12345
       MYSQL_DATABASE: cms
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-proot", "-e", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "3307:3306"
     volumes:
@@ -14,9 +20,15 @@ services:
 
   mongodb:
     image: mongo:6
+    restart: always
     container_name: mongodb
     ports:
       - "27018:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - mongo_data:/data/db
 
