@@ -4,34 +4,24 @@ import com.project.back_end.services.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
 public class DashboardController {
     private final TokenService tokenService;
 
-    @GetMapping("/adminDashboard/{token}")
-    public String adminDashboard(@PathVariable String token) {
+    @GetMapping("/adminDashboard")
+    public String adminDashboard(@RequestParam String token) {
         boolean isValid = tokenService.validateToken(token, "admin");
 
-        if (isValid) {
-            return "admin/adminDashboard"; // Thymeleaf template view
-        }
-        else {
-            return "redirect:/"; // Redirect to login or home
-        }
+        return isValid ? "admin/adminDashboard" : "redirect:/";
     }
 
-    @GetMapping("/doctorDashboard/{token}")
-    public String doctorDashboard(@PathVariable String token) {
+    @GetMapping("/doctorDashboard")
+    public String doctorDashboard(@RequestParam String token) {
         boolean isValid = tokenService.validateToken(token, "doctor");
 
-        if (isValid) {
-            return "doctor/doctorDashboard";
-        }
-        else {
-            return "redirect:/";
-        }
+        return isValid ? "doctor/doctorDashboard" : "redirect:/";
     }
 }

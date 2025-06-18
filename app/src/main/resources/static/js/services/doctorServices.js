@@ -83,10 +83,13 @@ export async function deleteDoctor(id, token) {
 export async function saveDoctor(doctor, token) {
     try {
         // const url = `${DOCTORS_API}/save/${token}`;
-        const url = `${DOCTORS_API}/${token}`;
+        const url = `${DOCTORS_API}`;
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`  // Include token in headers
+            },
             body: JSON.stringify(doctor),
         });
 

@@ -7,7 +7,7 @@ export function selectRole(role) {
     switch (role) {
         case "admin":
             if (token) {
-                window.location.href = `/adminDashboard/${token}`;
+                window.location.href = `/adminDashboard?token=${token}`;
             }
             else {
                 alert("Authentication token missing for admin access.");
@@ -21,7 +21,7 @@ export function selectRole(role) {
 
         case "doctor":
             if (token) {
-                window.location.href = `/doctorDashboard/${token}`;
+                window.location.href = `/doctorDashboard?token=${token}`;
             }
             else {
                 alert("Authentication token missing for doctor access.");

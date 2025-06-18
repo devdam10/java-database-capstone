@@ -64,8 +64,11 @@ public class DoctorController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{token}")
-    public ResponseEntity<Map<String, String>> saveDoctor(@RequestBody @Valid Doctor doctor, @PathVariable String token) {
+    @PostMapping
+    public ResponseEntity<Map<String, String>> saveDoctor(@RequestBody @Valid Doctor doctor, @RequestHeader("Authorization") String authorizationHeader) {
+        // Validate the token from the Authorization header
+        String token = authorizationHeader.replace("Bearer ", "").trim();
+
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "admin");
 
         if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
@@ -99,7 +102,7 @@ public class DoctorController {
     public ResponseEntity<Map<String, String>> updateDoctor(@RequestBody @Valid Doctor doctor, @PathVariable String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "admin");
 
-        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty()) {
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
             return tempMap;
         }
 
