@@ -183,6 +183,17 @@ html, body {
   z-index: 999;
 }
 
+.lpd-modal-content {
+  width: 600px !important;
+  max-width: 100%;
+}
+
+
+.lpd-modal-content .modal-content{
+  width: 500px !important;
+}
+
+
 .modalApp.active {
   bottom: 0;
 }
@@ -269,4 +280,16 @@ html, body {
 .edit-btn:hover {
   color: white;
   background-color: #017d7e;
+}
+
+.filter-wrapper2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px; /* Optional spacing between the items */
+    width: 100%;
+}
+
+.filter-wrapper2 label {
+    width: 50%;
 }

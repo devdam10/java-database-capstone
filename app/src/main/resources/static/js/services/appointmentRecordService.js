@@ -122,6 +122,7 @@ export async function bookAppointment(appointment, token) {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
             },
+            
             body: JSON.stringify(appointment)
         });
 
@@ -131,7 +132,8 @@ export async function bookAppointment(appointment, token) {
             success: response.ok,
             message: data.message || "Failed to book appointment."
         };
-    } catch (error) {
+    } 
+    catch (error) {
         console.error("bookAppointment error:", error);
         return {
             success: false,

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -60,18 +61,51 @@ public class AppointmentController {
         return ResponseEntity.status(HttpStatus.OK).body(appointmentService.getAppointment(patientName, null, token));
     }
 
+    // @PostMapping("/{token}")
+    // public ResponseEntity<Map<String, String>> bookAppointment(@RequestBody @Valid Appointment appointment, @PathVariable String token) {
+    //     ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
 
-    @PostMapping("/{token}")
-    public ResponseEntity<Map<String, String>> bookAppointment(@RequestBody @Valid Appointment appointment, @PathVariable String token) {
+    //     if (isTokenInvalid(tempMap)) return tempMap;
+
+    //     Map<String, String> response = new HashMap<>();
+    //     int out = centralService.validateAppointment(appointment);
+
+    //     if (out == 1) {
+    //         int res = appointmentService.bookAppointment(appointment);
+
+    //         if (res == 1) {
+    //             response.put("message", "Appointment Booked Successfully");
+    //             return ResponseEntity.status(HttpStatus.CREATED).body(response); // 201 Created
+
+    //         }
+    //         response.put("message", "Internal Server Error");
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // 409 Conflict
+
+    //     }
+    //     else if (out == -1) {
+    //         response.put("message", "Invalid doctor id");
+    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    //     }
+
+    //     response.put("message", "Appointment already booked for given time or Doctor not available");
+    //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    // }
+
+    @PostMapping
+    public ResponseEntity<Map<String, String>> bookAppointment(@RequestBody @Valid AppointmentDTO appointmentDTO, @RequestHeader("Authorization") String authorizationHeader) {
+        // Extract the token from the Authorization header
+        String token = authorizationHeader.replace("Bearer ", "");
+        
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
 
         if (isTokenInvalid(tempMap)) return tempMap;
 
         Map<String, String> response = new HashMap<>();
-        int out = centralService.validateAppointment(appointment);
+        int out = centralService.validateAppointment(appointmentDTO);
 
         if (out == 1) {
-            int res = appointmentService.bookAppointment(appointment);
+            int res = appointmentService.bookAppointment(appointmentDTO);
 
             if (res == 1) {
                 response.put("message", "Appointment Booked Successfully");
@@ -89,7 +123,6 @@ public class AppointmentController {
 
         response.put("message", "Appointment already booked for given time or Doctor not available");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-
     }
 
     @PutMapping("/{token}")

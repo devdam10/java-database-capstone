@@ -67,6 +67,7 @@
 
 package com.project.back_end.services;
 
+import com.project.back_end.DTO.AppointmentDTO;
 import com.project.back_end.DTO.Login;
 import com.project.back_end.models.*;
 import com.project.back_end.repo.*;
@@ -243,6 +244,27 @@ public class CentralService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
             return availableSlots.contains(appointment.getAppointmentTime().format(formatter) + "-" + appointment.getEndTime().format(formatter)) ? 1 : 0;
+        }
+        catch (Exception e) {
+            logger.error("Appointment validation error: {}", e.getMessage());
+            return 0;
+        }
+    }
+
+    @Transactional
+    public int validateAppointment(AppointmentDTO appointmentDTO) {
+        try {
+            Optional<Doctor> doctorOpt = doctorRepository.findById(appointmentDTO.getDoctorId());
+            if (doctorOpt.isEmpty()) {
+                return -1;
+            }
+
+            Doctor doctor = doctorOpt.get();
+            List<String> availableSlots = doctorService.getDoctorAvailability(doctor.getId(), appointmentDTO.getAppointmentDate());
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+            return availableSlots.contains(appointmentDTO.getAppointmentTime().format(formatter) + "-" + appointmentDTO.getEndTime().format(formatter)) ? 1 : 0;
         }
         catch (Exception e) {
             logger.error("Appointment validation error: {}", e.getMessage());

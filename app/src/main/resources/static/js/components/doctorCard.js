@@ -41,7 +41,7 @@ Import the overlay function for booking appointments from loggedPatient.js
 */
 
 // Import external functions assumed available from other modules
-import { showBookingOverlay } from "../loggedPatient.js";
+import { showBookingOverlay, showBookingOverlayBackup } from "../loggedPatient.js";
 import { deleteDoctor } from "../services/doctorServices.js";
 import { getPatientData } from "../services/patientServices.js";
 
@@ -125,7 +125,17 @@ export async function createDoctorCard(doctor) {
         const bookNow = document.createElement("button");
         bookNow.textContent = "Book Now";
         bookNow.addEventListener("click", async (e) => {
+            handleBookNowClick(e);
+        });
+
+        actionsDiv.appendChild(bookNow);
+        actionsDiv.addEventListener("click", async (e) => {
+            handleBookNowClick(e);
+        });
+
+        async function handleBookNowClick(e) {
             const token = localStorage.getItem("token");
+
             if (!token) {
                 alert("Session expired. Please log in again.");
                 // Optionally redirect to login page here
@@ -134,13 +144,23 @@ export async function createDoctorCard(doctor) {
 
             try {
                 const patientData = await getPatientData(token);
-                showBookingOverlay(e, doctor, patientData);
-            } catch (error) {
+                //showBookingOverlay(e, doctor, patientData);
+
+                const booking = {
+                    doctorId: doctor.id,
+                    appointmentTimes: doctor.availableTimes, // Default to first available time
+                    patientId: patientData.id,
+                    patientName: patientData.name,
+                };
+
+                // Call the booking overlay function with the booking and doctor details
+                showBookingOverlayBackup(booking, doctor, e);
+            } 
+            catch (error) {
                 alert("Failed to fetch patient data. Please try again.");
                 console.error(error);
             }
-        });
-        actionsDiv.appendChild(bookNow);
+        }
     }
 
     // Append info and actions containers to main card

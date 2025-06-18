@@ -117,6 +117,13 @@ async function renderDoctorCards(doctors) {
 
 // Display booking overlay/modal
 export function showBookingOverlay(doctor, event) {
+   try {
+        document.getElementsByClassName("ripple").forEach((ripple) => ripple.remove()); // Remove existing ripples
+        document.querySelector(".booking-modal")?.remove(); // Remove existing modals
+   } catch (error) {
+    
+   }
+
     const ripple = document.createElement("div");
     ripple.className = "ripple";
     ripple.style.left = `${event.clientX}px`;
@@ -125,26 +132,26 @@ export function showBookingOverlay(doctor, event) {
 
     // Build modal
     const modal = document.createElement("div");
-    modal.className = "booking-modal";
+    modal.className = "booking-modal modal";
     modal.innerHTML = `
-    <div class="modal-content">
-      <h2>Book Appointment</h2>
-      <label>Doctor: <input type="text" value="${doctor.name}" disabled></label>
-      <label>Patient: <input type="text" value="${localStorage.getItem("patientName")}" disabled></label>
-      <label>Date: <input type="date" id="appointmentDate"></label>
-      <label>Time: 
-        <select id="appointmentTime">
-          <option value="09:00">09:00 AM</option>
-          <option value="10:00">10:00 AM</option>
-          <option value="11:00">11:00 AM</option>
-          <option value="14:00">02:00 PM</option>
-          <option value="15:00">03:00 PM</option>
-        </select>
-      </label>
-      <button id="confirmBookingBtn">Confirm Booking</button>
-      <button class="modal-close">Cancel</button>
-    </div>
-  `;
+        <div class="modal-content">
+            <h2>Book Appointment</h2>
+            <label>Doctor: <input type="text" id="doctorNameInput" value="${doctor.name}" disabled></label>
+            <label>Patient: <input type="text" id"patientNameInput" value="${localStorage.getItem("patientName")}" disabled></label>
+            <label>Date: <input type="date" id="appointmentDate"></label>
+            <label>Time: 
+                <select id="appointmentTime">
+                    <option value="09:00">09:00 AM</option>
+                    <option value="10:00">10:00 AM</option>
+                    <option value="11:00">11:00 AM</option>
+                    <option value="14:00">02:00 PM</option>
+                    <option value="15:00">03:00 PM</option>
+                </select>
+            </label>
+            <button id="confirmBookingBtn">Confirm Booking</button>
+            <button class="modal-close">Cancel</button>
+        </div>
+    `;
 
     document.body.appendChild(modal);
 
@@ -187,6 +194,111 @@ export function showBookingOverlay(doctor, event) {
     });
 }
 
+
+// Display booking overlay/modal
+export function showBookingOverlayBackup(booking, doctor, event) {
+   try {
+        document.getElementsByClassName("ripple").forEach((ripple) => ripple.remove()); // Remove existing ripples
+        document.querySelector(".booking-modal")?.remove(); // Remove existing modals
+   } 
+   catch (error) {}
+
+   let modalContent = '';
+
+    const ripple = document.createElement("div");
+    ripple.className = "ripple";
+    ripple.style.left = `${event.clientX}px`;
+    ripple.style.top = `${event.clientY}px`;
+    document.body.appendChild(ripple);
+
+    const appointmentTimesString = String(booking.appointmentTimes || "");
+    const startTimes = appointmentTimesString
+        .split(",")
+        .map(slot => slot.trim().split("-")[0]);
+
+    const timeOptionsHtml = startTimes.map(time => 
+        `<option value="${time}">${formatTimeToAmPm(time)}</option>`
+    ).join("");
+
+
+    // Build modal
+    const modal = document.getElementById("modal");
+    modal.className = "modal";
+    modalContent = `
+        <div class="modal-content">
+            <h2>Book Appointment</h2>
+            <label>Doctor: <input type="text" id="doctorNameInput" value="${doctor.name}" disabled></label>
+            <label>Patient: <input type="text" id"patientNameInput" value="${booking.patientName}" disabled></label>
+
+            <div class="filter-wrapper2">
+                <label>Date: 
+                    <input type="date" id="appointmentDate" class="filter-select">
+                </label>
+                
+                <label>Time: 
+                    <select id="appointmentTime" class="filter-select">
+                        ${timeOptionsHtml}
+                    </select>
+                </label>
+            </div>
+            
+            <button id="confirmBookingBtn" class="patientBtn">Confirm Booking</button>
+            <button id="cancelBookingBtn" class="modal-close patientBtn">Cancel</button>
+        </div>
+    `;
+
+    document.getElementById('modal-body').innerHTML = modalContent;
+    document.getElementById('modal').style.display = 'block';
+
+    document.getElementById('close-modal').onclick = () => {
+        document.getElementById('modal').style.display = 'none';
+        ripple.remove();
+    };
+
+    // Event Listeners
+    modal.querySelector("#confirmBookingBtn").addEventListener("click", async () => {
+        const token = localStorage.getItem("token");
+        const date = modal.querySelector("#appointmentDate").value; // eg. 2023-10-01
+        const time = modal.querySelector("#appointmentTime").value; // eg. 10:00 AM
+
+        if (!date || !time) {
+            alert("Please select both date and time.");
+            return;
+        }
+
+        const appointmentDateTime = `${date}T${time}`;
+        const appointment = {
+            doctorId: doctor.id,
+            patientId: booking.patientId,
+            appointmentTime: appointmentDateTime,
+        };
+
+        try {
+            const result = await bookAppointment(appointment, token);
+
+            if (result.success) {
+                alert("Appointment booked successfully!");
+                document.getElementById('modal').style.display = 'none';
+                ripple.remove();
+            } 
+            else {
+                alert("Failed to book appointment: " + result.message);
+            }
+        } 
+        catch (error) {
+            console.error("Booking error:", error);
+            alert("An error occurred while booking the appointment.");
+        }
+    });
+
+    modal.querySelector("#cancelBookingBtn").addEventListener("click", async () => {
+        document.getElementById('modal').style.display = 'none';
+        ripple.remove();
+    });
+}
+
+
+
 // Filtering logic
 async function filterDoctorsOnChange() {
     const name = searchInput.value.trim() || null;
@@ -209,6 +321,18 @@ async function filterDoctorsOnChange() {
             contentContainer.innerHTML = `<p class="text-red-500">Failed to fetch filtered doctors.</p>`;
         });
 }
+
+
+function formatTimeToAmPm(time) {
+    const [hourStr, minuteStr] = time.split(":");
+    let hour = parseInt(hourStr);
+    const minute = parseInt(minuteStr);
+    const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
+    return `${hour.toString().padStart(2, "0")}:${minuteStr} ${ampm}`;
+}
+
+
 
 
 // Load all doctors on page load

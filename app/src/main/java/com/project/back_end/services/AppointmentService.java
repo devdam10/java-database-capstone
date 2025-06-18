@@ -68,6 +68,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AppointmentService {
     private static final Logger log = LoggerFactory.getLogger(AppointmentService.class);
+
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
@@ -76,6 +77,23 @@ public class AppointmentService {
 
     @Transactional
     public int bookAppointment(Appointment appointment) {
+        try {
+            appointmentRepository.save(appointment);
+            return 1;
+        }
+        catch (Exception e) {
+            return 0;
+        }
+    }
+
+    @Transactional
+    public int bookAppointment(AppointmentDTO appointmentDTO) {
+        Appointment appointment = new Appointment();
+        appointment.setDoctor(doctorRepository.findById(appointmentDTO.getDoctorId()).orElse(null));
+        appointment.setPatient(patientRepository.findById(appointmentDTO.getPatientId()).orElse(null));
+        appointment.setAppointmentTime(appointmentDTO.getAppointmentTime());
+        appointment.setStatus(0);
+
         try {
             appointmentRepository.save(appointment);
             return 1;
