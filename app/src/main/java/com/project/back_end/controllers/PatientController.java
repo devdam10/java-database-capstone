@@ -86,13 +86,21 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> createPatient(@RequestBody @Valid Patient patient) {
+    public ResponseEntity<Map<String, String>> createPatient(@RequestBody @Valid Patient patient, @RequestHeader("Authorization") String authorization) {
+        // String token = authorization.replace("Bearer ", "");
+
+        // ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
+
+        // if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
+        //     return tempMap;
+        // }
+        
         // Check if patient already exists
-        if (centralService.validatePatient(patient)) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", "Patient with email ID or phone number already exists"));
-        }
+        // if (centralService.validatePatient(patient)) {
+        //     return ResponseEntity
+        //             .status(HttpStatus.CONFLICT)
+        //             .body(Map.of("message", "Patient with email ID or phone number already exists"));
+        // }
 
         int status = patientService.createPatient(patient);
 

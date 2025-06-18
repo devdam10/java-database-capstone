@@ -69,15 +69,20 @@ import { PATIENTS_API } from '../config/config.js';  // Adjust path if needed
 
 /**
  * Register a new patient.
- * @param {Object} data - Patient signup details (name, email, password, etc.)
+ * @param {Object} patient - Patient signup details (name, email, password, etc.)
  * @returns {Promise<{success: boolean, message: string}>}
  */
-export async function patientSignup(data) {
+export async function patientSignup(patient) {
+    const token = localStorage.getItem('token'); // Example, adjust as needed
+
     try {
         const response = await fetch(PATIENTS_API, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include token if needed
+             },
+            body: JSON.stringify(patient),
         });
 
         const result = await response.json();

@@ -228,8 +228,8 @@ window.signupPatient = async function () {
     const phone = document.getElementById("phone")?.value;
     const address = document.getElementById("address")?.value;
 
-    const data = { name, email, password, phone, address };
-    const { success, message } = await patientSignup(data);
+    const patient = { name, email, password, phone, address };
+    const { success, message } = await patientSignup(patient);
 
     if (success) {
       alert(message);
