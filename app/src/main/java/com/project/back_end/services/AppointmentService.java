@@ -208,6 +208,16 @@ public class AppointmentService {
         return appointments;
     }
 
+    @Transactional
+    public List<Appointment> getAppointmentForPatient(String token) {
+        String email = tokenService.extractEmail(token);
+        Patient patient = patientRepository.findByEmail(email);
+
+        if (patient == null) return new ArrayList<>();
+
+        return appointmentRepository.findByPatientIdOrderByAppointmentTime(patient.getId());
+    }
+
 
     @Transactional
     public void changeStatus(int status, long id) {

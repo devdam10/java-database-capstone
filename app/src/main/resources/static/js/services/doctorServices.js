@@ -125,7 +125,8 @@ export async function filterDoctors(name, time, specialty) {
         const t = time || 'null';
         const s = specialty || 'null';
 
-        const url = `${DOCTORS_API}/filter/${encodeURIComponent(n)}/${encodeURIComponent(t)}/${encodeURIComponent(s)}`;
+        //const url = `${DOCTORS_API}/filter/${encodeURIComponent(n)}/${encodeURIComponent(t)}/${encodeURIComponent(s)}`;
+        const url = `${DOCTORS_API}/filter?name=${encodeURIComponent(n)}&time=${encodeURIComponent(t)}&specialty=${encodeURIComponent(s)}`;
 
         const response = await fetch(url);
         if (!response.ok) {

@@ -60,6 +60,25 @@ public class AppointmentController {
         return ResponseEntity.status(HttpStatus.OK).body(appointmentService.getAppointment(patientName, null, token));
     }
 
+    @GetMapping("/patient")
+    public ResponseEntity<?> getAppointmentsByPatient(@RequestHeader("Authorization") String authorizationHeader) {
+        // Extract the token from the Authorization header
+        String token = authorizationHeader.replace("Bearer ", "");
+        
+        ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "patient");
+
+        Map<String, Object> map;
+        //ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "doctor");
+
+        if (!Objects.requireNonNull(tempMap.getBody()).isEmpty() && tempMap.getStatusCode() != HttpStatus.OK) {
+            map = new HashMap<>(tempMap.getBody());
+            return new ResponseEntity<>(map, tempMap.getStatusCode());
+        }
+
+        // map = appointmentService.getAppointment(patientName, date, token);
+        return ResponseEntity.status(HttpStatus.OK).body(appointmentService.getAppointmentForPatient(token));
+    }
+
     @PostMapping
     public ResponseEntity<Map<String, String>> bookAppointment(@RequestBody @Valid AppointmentDTO appointmentDTO, @RequestHeader("Authorization") String authorizationHeader) {
         // Extract the token from the Authorization header
