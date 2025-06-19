@@ -15,6 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service class for managing prescriptions in the healthcare system.
+ * Provides methods to save and retrieve prescriptions.
+ */
 @Service
 @RequiredArgsConstructor
 public class PrescriptionService {
@@ -22,6 +26,13 @@ public class PrescriptionService {
 
     private final PrescriptionRepository prescriptionRepository;
 
+    /**
+     * Saves a prescription to the database.
+     * Checks if a prescription already exists for the given appointment ID.
+     *
+     * @param prescription the prescription to save
+     * @return ResponseEntity with a message indicating success or failure
+     */
     public ResponseEntity<Map<String, String>> savePrescription(Prescription prescription) {
         Map<String, String> response = new HashMap<>();
         try {
@@ -43,6 +54,12 @@ public class PrescriptionService {
         }
     }
 
+    /**
+     * Retrieves a prescription by appointment ID.
+     *
+     * @param appointmentId the ID of the appointment
+     * @return ResponseEntity containing the prescription details or an error message
+     */
     public ResponseEntity<Map<String, Object>> getPrescription(Long appointmentId) {
         Map<String, Object> response = new HashMap<>();
 

@@ -13,6 +13,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 
+/**
+ * Represents an Appointment entity in the healthcare system.
+ * Contains details such as doctor, patient, appointment time, and status.
+ */
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

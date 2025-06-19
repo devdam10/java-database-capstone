@@ -18,6 +18,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Service class for managing appointments.
+ * Provides methods to book, update, cancel, and retrieve appointments.
+ * Uses repositories for data access and a token service for authentication.
+ */
+
 @Service
 @RequiredArgsConstructor
 public class AppointmentService {
@@ -29,6 +35,11 @@ public class AppointmentService {
     private final TokenService tokenService;
     private final CentralService centralService;
 
+    /**
+     * Book an appointment using the provided Appointment object.
+     * @param appointment The Appointment object to be booked.
+     * @return 1 if booking is successful, 0 otherwise.
+     */
     @Transactional
     public int bookAppointment(Appointment appointment) {
         try {
@@ -40,6 +51,11 @@ public class AppointmentService {
         }
     }
 
+    /**
+     * Book an appointment using the provided AppointmentDTO object.
+     * @param appointmentDTO The AppointmentDTO object containing appointment details.
+     * @return 1 if booking is successful, 0 otherwise.
+     */
     @Transactional
     public int bookAppointment(AppointmentDTO appointmentDTO) {
         Appointment appointment = new Appointment();
@@ -57,6 +73,11 @@ public class AppointmentService {
         }
     }
 
+    /**
+     * Update an existing appointment using the provided Appointment object.
+     * @param appointment The Appointment object containing updated details.
+     * @return ResponseEntity with a message indicating success or failure.
+     */
     @Transactional
     public ResponseEntity<Map<String, String>> updateAppointment(Appointment appointment) {
         Map<String, String> response = new HashMap<>();
@@ -85,6 +106,11 @@ public class AppointmentService {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Update an existing appointment using the provided AppointmentDTO object.
+     * @param appointmentDTO The AppointmentDTO object containing updated details.
+     * @return ResponseEntity with a message indicating success or failure.
+     */
     @Transactional
     public ResponseEntity<Map<String, String>> updateAppointment(AppointmentDTO appointmentDTO) {
         Map<String, String> response = new HashMap<>();
@@ -115,14 +141,17 @@ public class AppointmentService {
             return ResponseEntity.badRequest().body(response);
         }
 
-        System.out.println("flag 1");
         appointmentRepository.save(existingAppointment);
-
-        System.out.println("flag 2");
         response.put("message", "Appointment updated successfully");
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Cancel an appointment by its ID and the patient's token.
+     * @param id The ID of the appointment to be cancelled.
+     * @param token The token of the patient requesting the cancellation.
+     * @return ResponseEntity with a message indicating success or failure.
+     */
     @Transactional
     public ResponseEntity<Map<String, String>> cancelAppointment(long id, String token) {
         Map<String, String> response = new HashMap<>();
@@ -178,8 +207,15 @@ public class AppointmentService {
 //        return response;
 //    }
 
+    /**
+     * Retrieve appointments for a doctor based on patient name and date.
+     * @param patientName The name of the patient to filter appointments.
+     * @param date The date to filter appointments.
+     * @param token The token of the doctor requesting the appointments.
+     * @return List of appointments matching the criteria.
+     */
     @Transactional
-    public List<Appointment> getAppointment(String patientName, LocalDate date, String token) {
+    public List<Appointment> getAppointments(String patientName, LocalDate date, String token) {
         String email = tokenService.extractEmail(token);
         Doctor doctor = doctorRepository.findByEmail(email);
 
@@ -208,8 +244,13 @@ public class AppointmentService {
         return appointments;
     }
 
+    /**
+     * Retrieve appointments for a patient based on their token.
+     * @param token The token of the patient requesting the appointments.
+     * @return List of appointments for the patient.
+     */
     @Transactional
-    public List<Appointment> getAppointmentForPatient(String token) {
+    public List<Appointment> getAppointmentsForPatient(String token) {
         String email = tokenService.extractEmail(token);
         Patient patient = patientRepository.findByEmail(email);
 
@@ -218,9 +259,14 @@ public class AppointmentService {
         return appointmentRepository.findByPatientIdOrderByAppointmentTime(patient.getId());
     }
 
-
+    /**
+     * Change the status of an appointment.
+     * @param status The new status to set for the appointment.
+     * @param appointmentId The ID of the appointment to update.
+     * @return void
+     */
     @Transactional
-    public void changeStatus(int status, long id) {
-        appointmentRepository.updateStatus(status, id);
+    public void changeStatus(int status, long appointmentId) {
+        appointmentRepository.updateStatus(status, appointmentId);
     }
 }

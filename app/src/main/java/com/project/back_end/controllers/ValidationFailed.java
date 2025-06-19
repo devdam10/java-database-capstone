@@ -11,9 +11,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Global exception handler for validation errors in the application.
+ * Catches MethodArgumentNotValidException and formats the error messages.
+ */
 @RestControllerAdvice
 public class ValidationFailed {
 
+    /**
+     * Handles MethodArgumentNotValidException and formats the error messages.
+     *
+     * @param ex the exception containing validation errors
+     * @return ResponseEntity with a map of error messages
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, String> response = new HashMap<>();

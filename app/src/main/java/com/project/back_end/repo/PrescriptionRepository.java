@@ -6,6 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository interface for managing Prescription entities.
+ * Provides methods to perform CRUD operations and custom queries.
+ * Extends MongoRepository for basic CRUD functionality.
+ */
+
 @Repository
 public interface PrescriptionRepository extends MongoRepository<Prescription, String> {
     List<Prescription> findByAppointmentId(Long appointmentId);

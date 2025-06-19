@@ -18,6 +18,10 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for managing patient-related operations.
+ * Provides methods to create patients, retrieve appointments, and filter appointments by various criteria.
+ */
 @Service
 @RequiredArgsConstructor
 public class PatientService {
@@ -27,6 +31,12 @@ public class PatientService {
     private final AppointmentRepository appointmentRepository;
     private final TokenService tokenService;
 
+    /**
+     * Creates a new patient in the system.
+     *
+     * @param patient The patient object to be created.
+     * @return 1 if the patient was created successfully, 0 otherwise.
+     */
     public int createPatient(Patient patient) {
         try {
             patientRepository.save(patient);
@@ -38,6 +48,13 @@ public class PatientService {
         }
     }
 
+    /**
+     * Retrieves all appointments for a specific patient.
+     *
+     * @param id    The ID of the patient.
+     * @param token The authentication token of the patient.
+     * @return A ResponseEntity containing a map with appointment details or an error message.
+     */
     @Transactional
     public ResponseEntity<Map<String, Object>> getPatientAppointment(Long id, String token) {
         Map<String, Object> response = new HashMap<>();
@@ -66,6 +83,13 @@ public class PatientService {
         }
     }
 
+    /**
+     * Filters appointments by a specific condition (future or past) for a given patient ID.
+     *
+     * @param condition The condition to filter by ("future" or "past").
+     * @param id        The ID of the patient.
+     * @return A ResponseEntity containing a map with filtered appointments or an error message.
+     */
     public ResponseEntity<Map<String, Object>> filterByCondition(String condition, Long id) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -96,6 +120,13 @@ public class PatientService {
         }
     }
 
+    /**
+     * Filters appointments by doctor's name for a given patient ID.
+     *
+     * @param name       The name of the doctor to filter by.
+     * @param patientId  The ID of the patient.
+     * @return A ResponseEntity containing a map with filtered appointments or an error message.
+     */
     public ResponseEntity<Map<String, Object>> filterByDoctor(String name, Long patientId) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -115,6 +146,14 @@ public class PatientService {
         }
     }
 
+    /**
+     * Filters appointments by doctor's name and a specific condition (future or past) for a given patient ID.
+     *
+     * @param condition  The condition to filter by ("future" or "past").
+     * @param name       The name of the doctor to filter by.
+     * @param patientId  The ID of the patient.
+     * @return A ResponseEntity containing a map with filtered appointments or an error message.
+     */
     public ResponseEntity<Map<String, Object>> filterByDoctorAndCondition(String condition, String name, long patientId) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -145,6 +184,14 @@ public class PatientService {
         }
     }
 
+    /**
+     * Filters appointments by doctor's name and a specific condition (future or past) for a given patient ID.
+     *
+     * @param condition  The condition to filter by ("future" or "past").
+     * @param name       The name of the doctor to filter by.
+     * @param patientId  The ID of the patient.
+     * @return A ResponseEntity containing a map with filtered appointments or an error message.
+     */
     public ResponseEntity<Map<String, Object>> filterByDoctorNameAndCondition(String name, String condition, long patientId) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -175,7 +222,12 @@ public class PatientService {
         }
     }
 
-
+    /**
+     * Retrieves patient details based on the provided token.
+     *
+     * @param token The authentication token of the patient.
+     * @return A ResponseEntity containing a map with patient details or an error message.
+     */
     public ResponseEntity<Map<String, Object>> getPatientDetails(String token) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -197,6 +249,12 @@ public class PatientService {
         }
     }
 
+    /**
+     * Filters appointments by patient ID and retrieves them in chronological order.
+     *
+     * @param patientId The ID of the patient whose appointments are to be retrieved.
+     * @return A ResponseEntity containing a map with appointments or an error message.
+     */
     public ResponseEntity<Map<String, Object>> filterByPatientId(Long patientId) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -218,6 +276,12 @@ public class PatientService {
         }
     }
 
+    /**
+     * Converts an Appointment entity to an AppointmentDTO.
+     *
+     * @param appointment The Appointment entity to be converted.
+     * @return An AppointmentDTO containing the appointment details.
+     */
     private AppointmentDTO convertAppointmentToDTO(Appointment appointment) {
         AppointmentDTO appointmentDTO = new AppointmentDTO();
 

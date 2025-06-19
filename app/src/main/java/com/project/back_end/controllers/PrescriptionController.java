@@ -17,6 +17,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Controller for managing prescriptions in the healthcare system.
+ * Provides endpoints for saving and retrieving prescriptions associated with appointments.
+ */
 @RestController
 @RequestMapping("${api.path}prescriptions")
 @RequiredArgsConstructor
@@ -27,6 +31,14 @@ public class PrescriptionController {
 
     private final AppointmentRepository appointmentRepository;
 
+    /**
+     * Saves a prescription for a specific appointment.
+     * Validates the token for 'doctor' role before processing the request.
+     *
+     * @param token        the authentication token
+     * @param prescription the prescription details to be saved
+     * @return ResponseEntity with a message indicating success or failure
+     */
     @PostMapping("/{token}")
     public ResponseEntity<Map<String, String>> savePrescription(@PathVariable String token, @RequestBody @Valid Prescription prescription) {
         // Validate token for 'doctor' role
@@ -53,6 +65,14 @@ public class PrescriptionController {
         return prescriptionService.savePrescription(prescription);
     }
 
+    /**
+     * Retrieves the prescription for a specific appointment.
+     * Validates the token for 'doctor' role before processing the request.
+     *
+     * @param appointmentId the ID of the appointment
+     * @param token         the authentication token
+     * @return ResponseEntity with the prescription details or an error message
+     */
     @GetMapping("/{appointmentId}/{token}")
     public ResponseEntity<?> getPrescription(@PathVariable Long appointmentId, @PathVariable String token) {
         // Validate token for 'doctor' role

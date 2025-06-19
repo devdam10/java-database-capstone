@@ -10,6 +10,12 @@ import lombok.Setter;
 
 import java.util.List;
 
+
+/**
+ * Represents a Doctor entity in the healthcare system.
+ * Contains details such as name, specialty, email, password, phone number, and available times
+ */
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

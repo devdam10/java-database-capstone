@@ -18,6 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Controller for managing doctors in the healthcare system.
+ * Provides endpoints for retrieving doctor availability, saving, updating, deleting doctors,
+ * and filtering doctors based on various criteria.
+ */
 @RestController
 @RequestMapping("${api.path}doctors")
 @RequiredArgsConstructor
@@ -25,6 +30,16 @@ public class DoctorController {
     private final DoctorService doctorService;
     private final CentralService centralService;
 
+    /**
+     * Retrieves the availability of a specific doctor for a given date.
+     * Validates the token before processing the request.
+     *
+     * @param user       the username of the user making the request
+     * @param doctorId   the ID of the doctor
+     * @param date       the date for which availability is requested
+     * @param token      the authentication token
+     * @return ResponseEntity with available times or an error message
+     */
     @GetMapping("/availability/{user}/{doctorId}/{date}/{token}")
     public ResponseEntity<Map<String, Object>> getDoctorAvailability(@PathVariable String user, @PathVariable Long doctorId, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @PathVariable String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, user);
@@ -42,6 +57,11 @@ public class DoctorController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Retrieves a list of all doctors.
+     *
+     * @return ResponseEntity containing a map with the list of doctors
+     */
     @GetMapping
     public ResponseEntity<Map<String, Object>> getDoctors() {
         List<Doctor> doctors = doctorService.getDoctors();
@@ -52,6 +72,12 @@ public class DoctorController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Retrieves a specific doctor by ID.
+     *
+     * @param id the ID of the doctor
+     * @return ResponseEntity containing a map with the doctor's details
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getDoctor(@PathVariable Long id) {
         DoctorDTO doctorDTO = new DoctorDTO();
@@ -64,6 +90,14 @@ public class DoctorController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Saves a new doctor to the database.
+     * Validates the token from the Authorization header before processing the request.
+     *
+     * @param doctor                the doctor to be saved
+     * @param authorizationHeader   the Authorization header containing the token
+     * @return ResponseEntity with a message indicating success or failure
+     */
     @PostMapping
     public ResponseEntity<Map<String, String>> saveDoctor(@RequestBody @Valid Doctor doctor, @RequestHeader("Authorization") String authorizationHeader) {
         // Validate the token from the Authorization header
@@ -93,11 +127,25 @@ public class DoctorController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
+    /**
+     * Validates the login credentials of a doctor.
+     *
+     * @param login the login credentials
+     * @return ResponseEntity with a message indicating success or failure
+     */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> doctorLogin(@RequestBody @Valid Login login) {
         return doctorService.validateDoctor(login);
     }
 
+    /**
+     * Updates an existing doctor's details.
+     * Validates the token before processing the request.
+     *
+     * @param doctor the doctor with updated details
+     * @param token  the authentication token
+     * @return ResponseEntity with a message indicating success or failure
+     */
     @PutMapping("/{token}")
     public ResponseEntity<Map<String, String>> updateDoctor(@RequestBody @Valid Doctor doctor, @PathVariable String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "admin");
@@ -123,6 +171,14 @@ public class DoctorController {
         }
     }
 
+    /**
+     * Deletes a doctor by ID.
+     * Validates the token before processing the request.
+     *
+     * @param id    the ID of the doctor to be deleted
+     * @param token the authentication token
+     * @return ResponseEntity with a message indicating success or failure
+     */
     @DeleteMapping("/{id}/{token}")
     public ResponseEntity<Map<String, String>> deleteDoctor(@PathVariable Long id, @PathVariable String token) {
         ResponseEntity<Map<String, String>> tempMap = centralService.validateToken(token, "admin");
@@ -153,6 +209,15 @@ public class DoctorController {
     //     return ResponseEntity.ok(centralService.filterDoctor(name, time, specialty));
     // }
 
+    /**
+     * Filters doctors based on name, time, and specialty.
+     * If any parameter is not provided, it will be ignored in the filtering process.
+     *
+     * @param name       the name of the doctor (optional)
+     * @param time       the available time of the doctor (optional)
+     * @param specialty  the specialty of the doctor (optional)
+     * @return ResponseEntity with a list of filtered doctors
+     */
     @GetMapping("/filter")
     public ResponseEntity<List<Doctor>> filterDoctors(@RequestParam(required = false) String name, @RequestParam(required = false) String time, @RequestParam(required = false) String specialty) {
         return ResponseEntity.ok(centralService.filterDoctor(name, time, specialty));

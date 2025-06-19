@@ -8,6 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository interface for managing Doctor entities.
+ * Provides methods to perform CRUD operations and custom queries.
+ * Extends JpaRepository for basic CRUD functionality.
+ */
+
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     Doctor findByEmail(String email);

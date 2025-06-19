@@ -12,6 +12,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents an Admin entity in the healthcare system.
+ * Contains details such as username and password.
+ */
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

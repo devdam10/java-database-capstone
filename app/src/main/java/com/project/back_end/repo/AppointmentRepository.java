@@ -9,6 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Repository interface for managing Appointment entities.
+ * Provides methods to perform CRUD operations and custom queries.
+ * Extends JpaRepository for basic CRUD functionality.
+ */
+
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     List<Appointment> findByDoctorIdAndAppointmentTimeBetweenOrderByAppointmentTime(Long doctorId, LocalDateTime start, LocalDateTime end);

@@ -19,6 +19,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 
+/**
+ * CentralService provides various functionalities related to token validation,
+ * admin and patient validation, doctor filtering, appointment validation,
+ * and patient appointment filtering.
+ */
 @Service
 @RequiredArgsConstructor
 public class CentralService {
@@ -32,6 +37,13 @@ public class CentralService {
     private final DoctorService doctorService;
     private final PatientService patientService;
 
+    /**
+     * Validates the provided token for the specified user.
+     *
+     * @param token the token to validate
+     * @param user  the user associated with the token
+     * @return a ResponseEntity containing validation result
+     */
     public ResponseEntity<Map<String, String>> validateToken(String token, String user) {
         Map<String, String> response = new HashMap<>();
         try {
@@ -52,6 +64,12 @@ public class CentralService {
         }
     }
 
+    /**
+     * Validates the provided admin credentials.
+     *
+     * @param receivedAdmin the admin credentials to validate
+     * @return a ResponseEntity containing the validation result
+     */
     public ResponseEntity<Map<String, String>> validateAdmin(Admin receivedAdmin) {
         Map<String, String> response = new HashMap<>();
         try {
@@ -80,6 +98,14 @@ public class CentralService {
         }
     }
 
+    /**
+     * Filters doctors based on the provided criteria.
+     *
+     * @param name       the name of the doctor
+     * @param time       the available time slot
+     * @param specialty  the specialty of the doctor
+     * @return a list of filtered doctors
+     */
     public List<Doctor> filterDoctor(String name, String time, String specialty) {
         Map <String, Object> doctors;
         List<Doctor> doctorList = new ArrayList<>();
@@ -87,22 +113,22 @@ public class CentralService {
         try {
 
             if (isNotNullOrEmpty(name) && isNotNullOrEmpty(time) && isNotNullOrEmpty(specialty)) {
-                doctors = doctorService.filterDoctorsByNameSpecialityAndTime(name, specialty, time);
+                doctors = doctorService.filterDoctorsByNameSpecialtyAndTime(name, specialty, time);
             }
             else if (isNotNullOrEmpty(name) && isNotNullOrEmpty(specialty)) {
-                doctors = doctorService.filterDoctorByNameAndSpeciality(name, specialty);
+                doctors = doctorService.filterDoctorByNameAndSpecialty(name, specialty);
             }
             else if (isNotNullOrEmpty(name) && isNotNullOrEmpty(time)) {
                 doctors = doctorService.filterDoctorByNameAndTime(name, time);
             }
             else if (isNotNullOrEmpty(specialty) && isNotNullOrEmpty(time)) {
-                doctors = doctorService.filterDoctorByTimeAndSpeciality(specialty, time);
+                doctors = doctorService.filterDoctorByTimeAndSpecialty(specialty, time);
             }
             else if (isNotNullOrEmpty(name)) {
                 doctors = doctorService.findDoctorByName(name);
             }
             else if (isNotNullOrEmpty(specialty)) {
-                doctors = doctorService.filterDoctorBySpeciality(specialty);
+                doctors = doctorService.filterDoctorBySpecialty(specialty);
             }
             else if (isNotNullOrEmpty(time)) {
                 doctors = doctorService.filterDoctorsByTime(time);
@@ -121,6 +147,12 @@ public class CentralService {
         return doctorList;
     }
 
+    /**
+     * Validates the provided appointment details.
+     *
+     * @param appointment the appointment to validate
+     * @return 1 if valid, 0 if invalid, -1 if doctor not found
+     */
     @Transactional
     public int validateAppointment(Appointment appointment) {
         try {
@@ -142,6 +174,12 @@ public class CentralService {
         }
     }
 
+    /**
+     * Validates the provided appointment details.
+     *
+     * @param appointmentDTO the appointment DTO to validate
+     * @return 1 if valid, 0 if invalid, -1 if doctor not found
+     */
     @Transactional
     public int validateAppointment(AppointmentDTO appointmentDTO) {
         try {
@@ -163,6 +201,12 @@ public class CentralService {
         }
     }
 
+    /**
+     * Validates the provided patient details.
+     *
+     * @param patient the patient to validate
+     * @return true if valid, false if invalid or an error occurs
+     */
     public boolean validatePatient(Patient patient) {
         try {
             Patient existing = patientRepository.findByEmailOrPhone(patient.getEmail(), patient.getPhone());
@@ -175,6 +219,12 @@ public class CentralService {
         }
     }
 
+    /**
+     * Validates the provided patient login credentials.
+     *
+     * @param login the login credentials to validate
+     * @return a ResponseEntity containing the validation result
+     */
     public ResponseEntity<Map<String, String>> validatePatientLogin(Login login) {
         Map<String, String> response = new HashMap<>();
         try {
@@ -203,6 +253,14 @@ public class CentralService {
         }
     }
 
+    /**
+     * Filters patient appointments based on the provided criteria.
+     *
+     * @param name     the name of the doctor
+     * @param condition the medical condition
+     * @param token    the authentication token
+     * @return a ResponseEntity containing the filtered appointments
+     */
     public ResponseEntity<Map<String, Object>> filterPatient(String name, String condition, String token) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -216,23 +274,6 @@ public class CentralService {
                 response.put("message", "Patient not found.");
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
-
-            // if (isNotNullOrEmpty(condition) && isNotNullOrEmpty(name)) {
-            //     //appointments = patientService.filterByDoctorAndCondition(condition, name, patient.getId());
-            //     appointmentsResponse = patientService.filterByDoctorAndCondition(condition, name, patient.getId());
-            // }
-            // else if (isNotNullOrEmpty(condition)) {
-            //     // appointments = patientService.filterByCondition(condition, patient.getId());
-            //     appointmentsResponse = patientService.filterByCondition(condition, patient.getId());
-            // }
-            // else if (isNotNullOrEmpty(name)) {
-            //     // appointments = patientService.filterByDoctor(name, patient.getId());
-            //     appointmentsResponse = patientService.filterByDoctor(name, patient.getId());
-            // }
-            // else {
-            //     // appointments = patientService.filterByPatientId(patient.getId());
-            //     appointmentsResponse = patientService.filterByPatientId(patient.getId());
-            // }
 
             if (isNotNullOrEmpty(name) && isNotNullOrEmpty(condition)) {
                 System.out.println("flag 1");
@@ -263,6 +304,14 @@ public class CentralService {
         }
     }
 
+    /**
+     * Filters patient appointments based on the provided patient ID and doctor ID.
+     *
+     * @param patientId the ID of the patient
+     * @param doctorId  the ID of the doctor
+     * @param token     the authentication token
+     * @return a ResponseEntity containing the filtered appointments
+     */
     public ResponseEntity<Map<String, Object>> filterPatient(Long patientId, @PathVariable Long doctorId, String token) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -290,6 +339,12 @@ public class CentralService {
         }
     }
 
+    /**
+     * Checks if the provided text is not null, not empty, and not equal to "null" (case-insensitive).
+     *
+     * @param text the text to check
+     * @return true if the text is valid, false otherwise
+     */
     private boolean isNotNullOrEmpty(String text){
         return text != null && !text.isEmpty() && !text.trim().equalsIgnoreCase("null");
     }

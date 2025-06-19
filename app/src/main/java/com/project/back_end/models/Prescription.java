@@ -11,6 +11,11 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * Represents a Prescription entity in the healthcare system.
+ * Contains details such as patient name, appointment ID, medication, dosage, and doctor notes.
+ */
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
