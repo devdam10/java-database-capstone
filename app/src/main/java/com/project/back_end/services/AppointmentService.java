@@ -180,35 +180,8 @@ public class AppointmentService {
         return ResponseEntity.ok(response);
     }
 
-//    @Transactional
-//    public Map<String, Object> getAppointment(String patientName, LocalDate date, String token) {
-//        Map<String, Object> response = new HashMap<>();
-//
-//        String email = tokenService.extractEmail(token);
-//        Doctor doctor = doctorRepository.findByEmail(email);
-//
-//        if (doctor == null) {
-//            response.put("message", "Doctor not found");
-//            return response;
-//        }
-//
-//        LocalDateTime start = date.atStartOfDay();
-//        LocalDateTime end = date.plusDays(1).atStartOfDay();
-//
-//        List<Appointment> appointments;
-//        if (patientName != null && !patientName.isEmpty() && patientName.trim().equalsIgnoreCase("null")) {
-//            appointments = appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(doctor.getId(), patientName, start, end);
-//        }
-//        else {
-//            appointments = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doctor.getId(), start, end);
-//        }
-//
-//        response.put("appointments", appointments);
-//        return response;
-//    }
-
     /**
-     * Retrieve appointments for a doctor based on patient name and date.
+     * Retrieve appointments for a doctor based on patient name and/or a specific date.
      * @param patientName The name of the patient to filter appointments.
      * @param date The date to filter appointments.
      * @param token The token of the doctor requesting the appointments.
@@ -222,22 +195,32 @@ public class AppointmentService {
         if (doctor == null) return new ArrayList<>();
 
         List<Appointment> appointments;
+
         if (patientName != null && !patientName.isEmpty() && !patientName.trim().equalsIgnoreCase("null") && date != null) {
+            // If both patientName and date are provided, filter by both
+            // Convert LocalDate to LocalDateTime for start and end of the day
+            // to ensure appointments are filtered correctly within the date range
             LocalDateTime start = date.atStartOfDay();
             LocalDateTime end = date.plusDays(1).atStartOfDay();
 
             appointments = appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetweenOrderByAppointmentTime(doctor.getId(), patientName, start, end);
         }
         else if (patientName != null && !patientName.isEmpty() && !patientName.trim().equalsIgnoreCase("null")) {
+            // If only patientName is provided, filter by patient name
             appointments = appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseOrderByAppointmentTime(doctor.getId(), patientName);
         }
         else if (date != null) {
+
+            // If only date is provided, filter by date
+            // Convert LocalDate to LocalDateTime for start and end of the day
+            // to ensure appointments are filtered correctly within the date range
             LocalDateTime start = date.atStartOfDay();
             LocalDateTime end = date.plusDays(1).atStartOfDay();
 
             appointments = appointmentRepository.findByDoctorIdAndAppointmentTimeBetweenOrderByAppointmentTime(doctor.getId(), start, end);
         }
         else {
+            // If neither patientName nor date is provided, return all appointments for the doctor
             appointments = appointmentRepository.findByDoctorIdOrderByAppointmentTime(doctor.getId());
         }
 

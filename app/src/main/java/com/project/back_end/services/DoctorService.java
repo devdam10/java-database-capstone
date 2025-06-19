@@ -42,31 +42,7 @@ public class DoctorService {
 
         if (doctorOpt.isEmpty()) return Collections.emptyList();
 
-        List<String> allSlots = new ArrayList<>(doctorOpt.get().getAvailableTimes());
-
-        // List<String> bookedSlots = appointmentRepository.findByDoctorIdAndAppointmentTimeBetweenOrderByAppointmentTime(
-        //         doctorId,
-        //         date.atStartOfDay(),
-        //         date.atTime(23, 59)
-        // ).stream().map(appointment -> {
-        //     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        //     return appointment.getAppointmentTime().format(formatter) + "-" + appointment.getEndTime().format(formatter);
-        // }).toList();
-
-        // Filter out booked slots from all available slots and update doctor's available times
-        // if (!bookedSlots.isEmpty()){
-        //     doctorOpt.get().setAvailableTimes(
-        //         allSlots.stream()
-        //                 .filter(slot -> !bookedSlots.contains(slot))
-        //                 .collect(Collectors.toList())
-        //     );
-
-        //     doctorRepository.save(doctorOpt.get());
-        // };
-
-        // return allSlots.stream().filter(slot -> !bookedSlots.contains(slot)).collect(Collectors.toList());
-
-        return allSlots;
+        return doctorOpt.get().getAvailableTimes();
     }
 
     /**
